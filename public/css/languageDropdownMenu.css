@@ -1,0 +1,26 @@
+.dropdown-content {
+  display: none;
+}
+
+.dropdown .dropdown-content {
+  display: block;
+  position: absolute;
+  background: #f3f3fd;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.language-item {
+  background: #f3f3fd;
+  margin-top: 15px;
+}
+
+.dropdown-item {
+  display: block;
+  background: #f3f3fd;
+}
+
+.dropdown-item:hover {
+  background: #ffffff;
+}
