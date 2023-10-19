@@ -84,6 +84,7 @@ class Slider {
         function () {
           this.#currentSlide = Number(dot.id);
           this._transitionSlide();
+          console.log(this);
           clearInterval(this._interval);
           this._autoMove();
           this._setActiveDot();
@@ -101,6 +102,7 @@ class Slider {
     newsContainer.addEventListener('mouseout', this._autoMove.bind(this));
   }
   _autoMove() {
+    clearInterval(this._interval);
     this._interval = setInterval(this._nextSlide.bind(this), this.#time);
   }
 
