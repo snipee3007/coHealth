@@ -84,7 +84,7 @@ class Slider {
         function () {
           this.#currentSlide = Number(dot.id);
           this._transitionSlide();
-          console.log(this);
+
           clearInterval(this._interval);
           this._autoMove();
           this._setActiveDot();
