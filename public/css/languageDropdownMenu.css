@@ -25,3 +25,20 @@
 .dropdown-item {
   display: block;
 }
+
+.language-content,
+.language-item {
+  font-family: Abhaya Libre Medium;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.btn--language {
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 0px;
+  display: block;
+}

@@ -62,12 +62,6 @@
 
 .language {
   color: #000;
-
-  font-family: Abhaya Libre Medium;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -76,24 +70,26 @@
 }
 
 .sign-in {
-  color: #4461f2;
   display: flex;
   justify-content: center;
   flex-direction: row;
   flex-wrap: wrap;
+
+  width: 80px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.sign-in-content {
+  color: #4461f2;
+
+  width: 80px;
+  margin-bottom: 1px;
   font-family: Abhaya Libre ExtraBold;
   font-size: 20px;
   font-style: normal;
   font-weight: 800;
   line-height: normal;
   letter-spacing: 1.002px;
-  width: 80px;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-.sign-in-content {
-  width: 80px;
-  margin-bottom: 1px;
 }
 
 .register {
@@ -120,7 +116,6 @@
 
 .btn {
   border: none;
-  text-decoration: none;
   cursor: pointer;
   background-color: transparent;
   padding: 0px;
