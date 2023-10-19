@@ -19,7 +19,7 @@ class Slider {
       ((dot) => {
         if (this.#currentSlide === Number(dot.id)) {
           dot.classList.add('active-dot');
-        } else if (this.#currentSlide !== dot.id) {
+        } else if (this.#currentSlide !== Number(dot.id)) {
           dot.classList.remove('active-dot');
         }
       }).bind(this)
