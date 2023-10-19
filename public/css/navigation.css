@@ -1,0 +1,122 @@
+.logo {
+  font-family: ABeeZee;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  background: linear-gradient(96deg, #3a8ef6 -10.84%, #6f3afa 196.74%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 30%;
+  margin-top: 5%;
+}
+.underline-box {
+  width: 300px;
+}
+
+.navigation-box {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+}
+
+.home,
+.aboutUs,
+.howToUse {
+  margin-left: 10px;
+  margin-right: 10px;
+  color: #404040;
+  font-family: Abhaya Libre Medium;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.underline {
+  border-style: groove;
+  border-width: 0.7px;
+  border-radius: 5px;
+  border-color: #3a8ef6;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+  left: 6.5%;
+  transition: transform 0.5s;
+}
+
+.language-content,
+.arrow {
+  display: inline-block;
+}
+
+.language {
+  color: #000;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.sign-in {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  width: 80px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.sign-in-content {
+  color: #4461f2;
+
+  width: 80px;
+  margin-bottom: 1px;
+  font-family: Abhaya Libre ExtraBold;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+  letter-spacing: 1.002px;
+}
+
+.register {
+  text-align: center;
+  height: 35px;
+  width: 90px;
+  border-radius: 14.506px;
+  background: linear-gradient(96deg, #3a8ef6 -10.84%, #6f3afa 196.74%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: Abhaya Libre ExtraBold;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+.register p {
+  margin: 0px;
+  padding: 0px;
+}
+
+.btn {
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 0px;
+}

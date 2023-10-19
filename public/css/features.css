@@ -1,0 +1,40 @@
+.features {
+  width: 90%;
+  margin: auto;
+}
+
+.features p.features-title {
+  font-family: Abhaya Libre SemiBold;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: 6.9px;
+  background: linear-gradient(96deg, #3a8ef6 -10.84%, #6f3afa 196.74%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.features-items {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.features img {
+  width: 40px;
+  height: 40px;
+}
+
+.features-item {
+  color: #000;
+
+  font-family: Abhaya Libre ExtraBold;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 50px; /* 148.148% */
+  width: 30%;
+}

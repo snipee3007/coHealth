@@ -1,0 +1,44 @@
+.dropdown-content {
+  display: none;
+}
+
+.arrow {
+  transition: transform 0.5s;
+}
+
+.dropdown .dropdown-content {
+  display: block;
+  position: absolute;
+  background-image: url("data:image/svg+xml,url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='627' height='695' viewBox='0 0 627 695' fill='none'%3E%3Cg filter='url(%2523filter0_f_1_825)'%3E%3Ccircle cx='480.14' cy='480.14' r='126.14' fill='%25234461F2'/%3E%3C/g%3E%3Cdefs%3E%3Cfilter id='filter0_f_1_825' x='0.139526' y='0.139526' width='960' height='960' filterUnits='userSpaceOnUse' color-interpolation-filters='sRGB'%3E%3CfeFlood flood-opacity='0' result='BackgroundImageFix'/%3E%3CfeBlend mode='normal' in='SourceGraphic' in2='BackgroundImageFix' result='shape'/%3E%3CfeGaussianBlur stdDeviation='176.93' result='effect1_foregroundBlur_1_825'/%3E%3C/filter%3E%3C/defs%3E%3C/svg%3E')");
+  background-repeat: no-repeat no-repeat;
+  background-position: center center;
+  background-size: cover;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.language-item {
+  margin-top: 15px;
+}
+
+.dropdown-item {
+  display: block;
+}
+
+.language-content,
+.language-item {
+  font-family: Abhaya Libre Medium;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.btn--language {
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  padding: 0px;
+  display: block;
+}
