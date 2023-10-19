@@ -10,12 +10,27 @@
     <link rel="stylesheet" href="../css/newsContainer.css" />
     <link rel="stylesheet" href="../css/features.css" />
     <link rel="stylesheet" href="../css/decoration.css" />
+
     <script type="module" defer src="../js/index.js"></script>
   </head>
   <body>
     <div class="decoration">
       <div class="eclipse-1"></div>
       <div class="eclipse-2"></div>
+      <div class="chat-icon">
+        <img
+          src="../images/png/chat-icon.png"
+          alt="Chat Icon"
+          style="
+            width: 30px;
+            height: 30px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+          "
+        />
+      </div>
     </div>
     <div class="border">
       <div class="navigation">
@@ -90,24 +105,36 @@
           <p>Register</p>
         </button>
       </div>
-      <div class="newsContainer"></div>
+      <div class="newsContainer">
+        <div class="sliderImagesContainer"></div>
+        <div class="dotsContainer"></div>
+      </div>
       <div class="features">
         <p class="features-title">FEATURES WE PROVIDE</p>
         <div class="features-items">
           <div class="features-item">
             Calculating BMI is easier
             <img
-              src="../image/png/heartMedical.png"
+              src="../images/png/heartMedical.png"
               style="margin-left: 25px"
+              alt="Medical Heart Icon"
             />
           </div>
           <div class="features-item" style="text-align: right">
-            <img src="../image/png/hospital.png" style="float: right" /><br />
+            <img
+              src="../images/png/hospital.png"
+              style="float: right"
+              alt="Hospital Icon"
+            /><br />
             Find nearby hospital
             <div style="clear: right"></div>
           </div>
           <div class="features-item" style="text-align: right">
-            <img src="../image/png/chatbot.png" style="float: right" /><br />
+            <img
+              src="../images/png/chatbot.png"
+              style="float: right"
+              alt="Chatbot Icon"
+            /><br />
             Interactive Chatbot
             <div style="clear: right"></div>
           </div>

@@ -1,0 +1,20 @@
+[
+  {
+    "id": 0,
+    "name": "Heart Attack",
+    "src": "images/slider/heart-attack-female.jfif",
+    "description": "A heart attack female"
+  },
+  {
+    "id": 1,
+    "name": "Testing",
+    "src": "images/slider/testing-1.png",
+    "description": "This is a testing image"
+  },
+  {
+    "id": 2,
+    "name": "Testing",
+    "src": "images/slider/testing-2.jpg",
+    "description": "This is another testing image"
+  }
+]
