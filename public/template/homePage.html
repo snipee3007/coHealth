@@ -7,27 +7,34 @@
     <link rel="stylesheet" href="../css/body.css" />
     <link rel="stylesheet" href="../css/navigation.css" />
     <link rel="stylesheet" href="../css/languageDropdownMenu.css" />
+    <link rel="stylesheet" href="../css/newsContainer.css" />
+    <link rel="stylesheet" href="../css/features.css" />
+    <link rel="stylesheet" href="../css/decoration.css" />
     <script type="module" defer src="../js/index.js"></script>
   </head>
   <body>
+    <div class="decoration">
+      <div class="eclipse-1"></div>
+      <div class="eclipse-2"></div>
+    </div>
     <div class="border">
       <div class="navigation">
         <div class="logo">coHealth</div>
 
         <div class="navigation-items">
           <div class="navigation-box">
-            <div class="home">
+            <button class="home btn">
               <!-- <div class="homeContent">Home</div> -->
               Home
-            </div>
-            <div class="aboutUs">
+            </button>
+            <button class="aboutUs btn">
               <!-- <div class="aboutUsContent">About Us</div> -->
               About Us
-            </div>
-            <div class="howToUse">
+            </button>
+            <button class="howToUse btn">
               <!-- <div class="howToUseContent">How to use</div> -->
               How to use
-            </div>
+            </button>
           </div>
 
           <div class="underline-box"><div class="underline"></div></div>
@@ -46,8 +53,8 @@
           <svg
             class="arrow down"
             xmlns="http://www.w3.org/2000/svg"
-            width="5"
-            height="3"
+            width="8"
+            height="5"
             viewBox="0 0 10 7"
             fill="none"
           >
@@ -71,8 +78,31 @@
             "
           ></div>
         </div>
-        <div class="register">
+        <button class="register btn">
           <p>Register</p>
+        </button>
+      </div>
+      <div class="newsContainer"></div>
+      <div class="features">
+        <p class="features-title">FEATURES WE PROVIDE</p>
+        <div class="features-items">
+          <div class="features-item">
+            Calculating BMI is easier
+            <img
+              src="../image/png/heartMedical.png"
+              style="margin-left: 25px"
+            />
+          </div>
+          <div class="features-item" style="text-align: right">
+            <img src="../image/png/hospital.png" style="float: right" /><br />
+            Find nearby hospital
+            <div style="clear: right"></div>
+          </div>
+          <div class="features-item" style="text-align: right">
+            <img src="../image/png/chatbot.png" style="float: right" /><br />
+            Interactive Chatbot
+            <div style="clear: right"></div>
+          </div>
         </div>
       </div>
     </div>

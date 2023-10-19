@@ -1,0 +1,12 @@
+.newsContainer {
+  background-color: #eadbdb;
+  margin-top: 15px;
+  z-index: 3;
+}
+
+.newsContainer {
+  border: 1px groove black;
+  border-radius: 1px;
+  width: 100%;
+  height: 25vw;
+}

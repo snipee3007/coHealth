@@ -2,6 +2,7 @@ const language = document.querySelector('.language');
 const languageContent = document.querySelector('.language-content');
 const arrow = document.querySelector('.arrow');
 const dropdownContent = document.querySelector('.dropdown-content');
+const body = document.querySelector('body');
 
 const spinArrow = function () {
   if (arrow.classList.contains('down')) {
@@ -13,19 +14,12 @@ const spinArrow = function () {
 };
 
 const renderLanguage = function () {
-  if (arrow.classList.contains('down')) {
-    spinArrow();
-    languageContent.textContent =
-      language.dataset.language[0].toUpperCase() +
-      language.dataset.language.slice(1);
-    dropdownContent.style.opacity = 1;
-  } else {
-    spinArrow();
-    languageContent.textContent =
-      language.dataset.language[0].toUpperCase() +
-      language.dataset.language.slice(1);
-    dropdownContent.style.opacity = 0;
-  }
+  dropdownContent.style.opacity = arrow.classList.contains('down') ? 1 : 0;
+
+  spinArrow();
+  languageContent.textContent =
+    language.dataset.language[0].toUpperCase() +
+    language.dataset.language.slice(1);
 };
 export default function () {
   language.addEventListener('click', renderLanguage);
