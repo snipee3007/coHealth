@@ -7,7 +7,8 @@ import slider from './sliderController.js';
 const init = function () {
   navigation.updateClick();
   slider.run();
-  underline.render(currentActive);
+  underline.run();
+
   dropdownMenu();
 };
 init();

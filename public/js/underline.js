@@ -1,29 +1,50 @@
-const home = document.querySelector('.home');
-const aboutUs = document.querySelector('.aboutUs');
-const howToUse = document.querySelector('.howToUse');
+import { currentActive } from './navigationController.js';
+
 const underlineContainer = document.querySelector('.underline');
 const underlineBox = document.querySelector('.underline-box');
-
-const width = [
-  0,
-  aboutUs.getBoundingClientRect().left - home.getBoundingClientRect().left,
-  howToUse.getBoundingClientRect().left - home.getBoundingClientRect().left,
-];
+const nav_items = Array.from(document.querySelectorAll('.nav-item'));
 
 class underline {
-  render(nav, i) {
-    underlineContainer.style.transform = `translateX(${width[i]}px)`;
-    underlineContainer.style.width = `${
-      Number.parseFloat(getComputedStyle(nav).width, 10) -
-      Number.parseFloat(getComputedStyle(nav)['margin-left'], 10) -
-      Number.parseFloat(getComputedStyle(nav)['margin-right'], 10)
+  index;
+  width() {
+    return nav_items.map((nav) => {
+      return (
+        Number(nav.getBoundingClientRect().left) -
+        Number(nav_items[0].getBoundingClientRect().left)
+      );
+    });
+  }
+
+  initPos() {
+    underlineContainer.style.left = `${
+      nav_items[0].getBoundingClientRect().left -
+      underlineBox.getBoundingClientRect().left
     }px`;
+  }
+  render() {
+    this.navUpdate(currentActive);
+    underlineContainer.style.width = `${Number.parseFloat(
+      getComputedStyle(currentActive).width,
+      10
+    )}px`;
+    this.initPos();
+    underlineContainer.style.transform = `translateX(${
+      this.width()[this.index]
+    }px)`;
+  }
+
+  windowResize() {
+    window.addEventListener('resize', this.render.bind(this));
+  }
+  navUpdate(nav) {
+    this.index = nav_items.findIndex(
+      (foundNav) => nav.classList === foundNav.classList
+    );
     nav.style = 'font-weight: bold';
-    underlineContainer.style.width = `${
-      Number.parseFloat(getComputedStyle(nav).width, 10) -
-      Number.parseFloat(getComputedStyle(nav)['margin-left'], 10) -
-      Number.parseFloat(getComputedStyle(nav)['margin-right'], 10)
-    }px`;
+  }
+  run() {
+    this.render();
+    this.windowResize();
   }
 }
 export default new underline();

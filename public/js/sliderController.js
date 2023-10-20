@@ -31,7 +31,7 @@ class Slider {
 
   _moveSlide(item) {
     const image = item.querySelector('.sliderImage');
-    image.style.transform = `translateX(-${90 * this.#currentSlide}vw)`;
+    image.style.transform = `translateX(-${100 * this.#currentSlide}vw)`;
     this._setActiveDot();
   }
   _transitionSlide() {
