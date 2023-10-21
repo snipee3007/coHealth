@@ -11,8 +11,8 @@ class Slider {
   #currentSlide;
   #time;
   _interval;
-  #leftFormatContent = `left: ${POSITION_SLIDER_CONTENT};`;
-  #rightFormatContent = `right: ${POSITION_SLIDER_CONTENT}; text-align: right`;
+  #leftFormatContent = `left: ${POSITION_SLIDER_CONTENT}; text-align: justify;`;
+  #rightFormatContent = `right: ${POSITION_SLIDER_CONTENT}; text-align: justify; direction: rtl`;
   _initActiveDot() {
     const activeDot = document.querySelector('.slider-dot');
     activeDot.classList.add('active-dot');
