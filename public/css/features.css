@@ -28,7 +28,7 @@
   height: 40px;
 }
 
-.features-item {
+.features-item-title {
   color: #000;
 
   font-family: Abhaya Libre ExtraBold;
@@ -36,5 +36,28 @@
   font-style: normal;
   font-weight: 800;
   line-height: 50px; /* 148.148% */
+  display: inline-block;
+}
+
+.features-item-icon {
+  display: inline-block;
+}
+
+.features-item-description {
+  color: #6f7cb2;
+
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px; /* 162.5% */
+}
+
+.features-item {
   width: 30%;
+}
+
+.features-item-content {
+  text-align: justify;
 }
