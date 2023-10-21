@@ -1,6 +1,9 @@
+import { POSITION_DOTS, POSITION_SLIDER_CONTENT } from './config.js';
+
 const sliderImagesContainer = document.querySelector('.sliderImagesContainer');
 const dotsContainer = document.querySelector('.dotsContainer');
 const newsContainer = document.querySelector('.newsContainer');
+
 class Slider {
   #images;
   #length;
@@ -8,9 +11,16 @@ class Slider {
   #currentSlide;
   #time;
   _interval;
+  #leftFormatContent = `left: ${POSITION_SLIDER_CONTENT};`;
+  #rightFormatContent = `right: ${POSITION_SLIDER_CONTENT}; text-align: right`;
   _initActiveDot() {
     const activeDot = document.querySelector('.slider-dot');
     activeDot.classList.add('active-dot');
+
+    dotsContainer.style = `bottom: calc(${
+      dotsContainer.getBoundingClientRect().top -
+      newsContainer.getBoundingClientRect().bottom
+    }px + ${POSITION_DOTS})`;
   }
   _setActiveDot() {
     const dots = document.querySelectorAll('.slider-dot');
@@ -34,9 +44,19 @@ class Slider {
     image.style.transform = `translateX(-${100 * this.#currentSlide}vw)`;
     this._setActiveDot();
   }
+  _moveContent(item) {
+    const sliderImageContent = item.querySelector('.sliderImageContent');
+    sliderImageContent.style.transform = `translateX(-${
+      100 * this.#currentSlide
+    }vw)`;
+  }
+  _move(item) {
+    this._moveSlide(item);
+    this._moveContent(item);
+  }
   _transitionSlide() {
     const sliderImagesItem = document.querySelectorAll('.sliderImagesItem');
-    sliderImagesItem.forEach((item) => this._moveSlide(item));
+    sliderImagesItem.forEach((item) => this._move(item));
   }
   _nextSlide() {
     ++this.#currentSlide;
@@ -57,18 +77,46 @@ class Slider {
 
   _createImage() {
     let html = '';
+
     this.#images.forEach(function (image) {
       html += `<div class="sliderImagesItem">
       <img
         class="sliderImage"
-        src="../${image.src}"
+        src="../${image.imageSRC}"
         alt="${image.alt}"
         id="${image.id}"
+        style="${image.imageFormat}"
       />
+      
+      <div class="sliderImageContent ${image.descriptionPosition}">
+        <div class="sliderImageTitle">${image.name}</div>
+            <div class="sliderImageDescription">
+              ${image.description}
+            </div>
+          <button class="btn-slider-image">Read more</button>
+        </div>;
       </div>`;
     });
     sliderImagesContainer.insertAdjacentHTML('afterbegin', html);
+
     this.#currentSlide = 0;
+  }
+  reAdjustContent() {
+    const sliderImageContent = document.querySelectorAll('.sliderImageContent');
+    sliderImageContent.forEach((content) => {
+      const contentHeight =
+        content.getBoundingClientRect().bottom -
+        content.getBoundingClientRect().top;
+      const containerHeight =
+        newsContainer.getBoundingClientRect().bottom -
+        newsContainer.getBoundingClientRect().top;
+
+      content.style = `top: ${(containerHeight - contentHeight) / 2}px; ${
+        content.classList.contains('left')
+          ? this.#leftFormatContent
+          : this.#rightFormatContent
+      }`;
+    });
   }
   async _loadImage() {
     await fetch(`./../../data/images-slider.json`)
@@ -112,8 +160,10 @@ class Slider {
     this._createDots();
     this.setTime(5);
     this._dotsInteract();
+
     this._autoMove();
     this._hovering();
+    this.reAdjustContent();
   }
 }
 

@@ -2,25 +2,27 @@
   {
     "id": 0,
     "name": "Heart Attack",
-    "src": "images/slider/heart-attack-female.jfif",
+    "imageSRC": "images/slider/heart-attack-female.jfif",
+    "imageFormat": "height: 70vh",
     "alt": "A heart attack female",
     "description": "A myocardial infarction occurs when an atherosclerotic plaque slowly builds up in the inner lining of a coronary artery and then suddenly ruptures, causing catastrophic thrombus formation, totally occluding the artery and preventing blood flow downstream to the heart muscle.",
-    "description-position": "left"
+    "descriptionPosition": "left",
+    "redirect": ""
   },
   {
     "id": 1,
     "name": "Testing",
-    "src": "images/slider/testing-1.png",
+    "imageSRC": "images/slider/testing-1.png",
     "alt": "This is a testing image",
-    "description": "",
-    "description-position": "left"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum..",
+    "descriptionPosition": "right"
   },
   {
     "id": 2,
     "name": "Testing",
-    "src": "images/slider/testing-2.jpg",
+    "imageSRC": "images/slider/testing-2.jpg",
     "alt": "This is another testing image",
-    "description": "",
-    "description-position": "left"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "descriptionPosition": "left"
   }
 ]
