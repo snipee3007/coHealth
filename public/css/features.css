@@ -5,7 +5,7 @@
 
 .features p.features-title {
   font-family: Abhaya Libre SemiBold;
-  font-size: 20px;
+  font-size: 3.5vh;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
@@ -32,7 +32,7 @@
   color: #000;
 
   font-family: Abhaya Libre ExtraBold;
-  font-size: 30px;
+  font-size: 4vh;
   font-style: normal;
   font-weight: 800;
   line-height: 50px; /* 148.148% */

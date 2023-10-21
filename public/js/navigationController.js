@@ -1,21 +1,18 @@
 import underline from './underline.js';
 
-const home = document.querySelector('.home');
-const aboutUs = document.querySelector('.aboutUs');
-const howToUse = document.querySelector('.howToUse');
+const nav_items = Array.from(document.querySelectorAll('.nav-item'));
 
-let currentActive = home;
+let currentActive = nav_items[0];
 
 class Navigation {
-  items = [home, aboutUs, howToUse];
+  items = nav_items;
   updateClick() {
     this.items.forEach((nav, i) =>
       nav.addEventListener('click', function () {
-        underline.render(nav, i);
-
-        currentActive.style = 'font-weight: normal';
-        currentActive = nav;
-        nav.style = 'font-weight: bold';
+        currentActive.style = 'font-weight: normal'; //Previous currentActive
+        currentActive = nav; //Change to real currrentActive
+        currentActive.style = 'font-weight: bold';
+        underline.render();
       })
     );
   }

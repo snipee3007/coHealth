@@ -1,11 +1,11 @@
 :root {
-  --newsContainerWidth: 90vw;
+  --newsContainerWidth: 100vw;
   --newsContainerHeight: 50vh;
 }
 
 .newsContainer {
   background-color: #eadbdb;
-  margin-top: 15px;
+  margin: 0px;
   z-index: 3;
   overflow: hidden;
 }
@@ -13,7 +13,6 @@
 .newsContainer {
   border: 1px groove black;
   border-radius: 1px;
-  max-width: 100rem;
   width: var(--newsContainerWidth);
   height: var(--newsContainerHeight);
 }
@@ -24,6 +23,7 @@
   height: var(--newsContainerHeight);
 
   width: var(--newsContainerWidth);
+  transition: transform 1s;
 }
 
 .dotsContainer {
