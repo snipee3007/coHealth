@@ -4,9 +4,9 @@ import { MAIN_TITLE_FEATURE_FONT_SIZE } from './config.js';
 class Features {
   #data;
   async fetchData() {
-    const data = await fetch('./../../data/features-data.json')
+    const data = await fetch('/data/getFeatures')
       .then((res) => res.json())
-      .then((res) => (this.#data = res))
+      .then((res) => (this.#data = res.data.featuresFound))
       .catch((err) => console.log('Could not read features data file', err));
   }
   renderContent(feature) {
@@ -51,7 +51,7 @@ class Features {
         return `<div class="features-item">${featureHTML}</div>`;
       })
       .join('');
-    feature_items.insertAdjacentHTML('afterbegin', initHTML);
+    feature_items?.insertAdjacentHTML('afterbegin', initHTML);
     const featureItemTitle = document.querySelector('.features-item-title');
     const iconMainFeature = document.querySelectorAll('.icon-main');
     iconMainFeature.forEach((icon) => {

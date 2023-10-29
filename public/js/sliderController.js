@@ -15,12 +15,14 @@ class Slider {
   #rightFormatContent = `right: ${POSITION_SLIDER_CONTENT}; text-align: justify; direction: rtl`;
   _initActiveDot() {
     const activeDot = document.querySelector('.slider-dot');
-    activeDot.classList.add('active-dot');
+    if (activeDot) {
+      activeDot?.classList.add('active-dot');
 
-    dotsContainer.style = `bottom: calc(${
-      dotsContainer.getBoundingClientRect().top -
-      newsContainer.getBoundingClientRect().bottom
-    }px + ${POSITION_DOTS})`;
+      dotsContainer.style = `bottom: calc(${
+        dotsContainer?.getBoundingClientRect().top -
+        newsContainer?.getBoundingClientRect().bottom
+      }px + ${POSITION_DOTS})`;
+    }
   }
   _setActiveDot() {
     const dots = document.querySelectorAll('.slider-dot');
@@ -71,7 +73,7 @@ class Slider {
     for (let i = 0; i < this.#length; ++i) {
       html += `<div class="slider-dot" id="${i}"></div>`;
     }
-    dotsContainer.insertAdjacentHTML('beforeend', html);
+    dotsContainer?.insertAdjacentHTML('beforeend', html);
     this._initActiveDot();
   }
 
@@ -82,10 +84,10 @@ class Slider {
       html += `<div class="sliderImagesItem">
       <img
         class="sliderImage"
-        src="../${image.imageSRC}"
+        src="../${image.imgSRC}"
         alt="${image.alt}"
         id="${image.id}"
-        style="${image.imageFormat}"
+        style="${image.imgFormat}"
       />
       
       <div class="sliderImageContent ${image.descriptionPosition}">
@@ -93,11 +95,11 @@ class Slider {
             <div class="sliderImageDescription">
               ${image.description}
             </div>
-          <button class="btn-slider-image">Read more</button>
+          <button class="btn-slider-image" tabindex=-1>Read more</button>
         </div>;
       </div>`;
     });
-    sliderImagesContainer.insertAdjacentHTML('afterbegin', html);
+    sliderImagesContainer?.insertAdjacentHTML('afterbegin', html);
 
     this.#currentSlide = 0;
   }
@@ -105,11 +107,11 @@ class Slider {
     const sliderImageContent = document.querySelectorAll('.sliderImageContent');
     sliderImageContent.forEach((content) => {
       const contentHeight =
-        content.getBoundingClientRect().bottom -
-        content.getBoundingClientRect().top;
+        content?.getBoundingClientRect().bottom -
+        content?.getBoundingClientRect().top;
       const containerHeight =
-        newsContainer.getBoundingClientRect().bottom -
-        newsContainer.getBoundingClientRect().top;
+        newsContainer?.getBoundingClientRect().bottom -
+        newsContainer?.getBoundingClientRect().top;
 
       content.style = `top: ${(containerHeight - contentHeight) / 2}px; ${
         content.classList.contains('left')
@@ -119,10 +121,10 @@ class Slider {
     });
   }
   async _loadImage() {
-    await fetch(`./../../data/images-slider.json`)
+    await fetch(`/data/get-6-nearest-news`)
       .then((res, err) => res.json())
-      .then((res, err) => (this.#images = res))
-      .catch((err) => console.log('Can not load images'));
+      .then((res, err) => (this.#images = res.data.newsFound))
+      .catch((err) => console.log('Can not load images', err));
   }
   _dotsInteract() {
     const dots = document.querySelectorAll('.slider-dot');
@@ -141,13 +143,13 @@ class Slider {
     );
   }
   _hovering() {
-    newsContainer.addEventListener(
+    newsContainer?.addEventListener(
       'mouseover',
       function () {
         clearInterval(this._interval);
       }.bind(this)
     );
-    newsContainer.addEventListener('mouseout', this._autoMove.bind(this));
+    newsContainer?.addEventListener('mouseout', this._autoMove.bind(this));
   }
   _autoMove() {
     clearInterval(this._interval);
