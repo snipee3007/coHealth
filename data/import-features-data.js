@@ -35,7 +35,7 @@ const importData = async function () {
 
 const deleteData = async function () {
   try {
-    await news.deleteMany();
+    await features.deleteMany();
     console.log('Data successfully deleted!');
   } catch (err) {
     console.log(err);

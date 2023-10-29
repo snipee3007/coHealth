@@ -85,8 +85,8 @@ class Slider {
       <img
         class="sliderImage"
         src="../${image.imgSRC}"
-        alt="${image.alt}"
-        id="${image.id}"
+        alt="${image.imgAlt}"
+        id="${image._id}"
         style="${image.imgFormat}"
       />
       

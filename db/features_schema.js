@@ -16,8 +16,8 @@ const featuresSchema = new mongoose.Schema({
   iconAlt: {
     type: String,
     required: [true, 'A feature must have a icon alt'],
-    unique: true,
     trim: true,
+    unique: false,
   },
   description: {
     type: String,
@@ -25,10 +25,9 @@ const featuresSchema = new mongoose.Schema({
   },
   main: {
     type: String,
-    unique: true,
     trim: true,
-    default: 'false',
     enum: ['true', 'false'],
+    default: 'false',
   },
 });
 

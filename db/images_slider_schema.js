@@ -26,7 +26,7 @@ const newsSchema = new mongoose.Schema({
     trim: true,
     required: [true, 'A news must have a description!'],
   },
-  descritionPosition: {
+  descriptionPosition: {
     type: String,
     enum: ['right', 'left'],
     default: 'left',
