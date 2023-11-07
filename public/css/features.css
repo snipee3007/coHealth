@@ -1,0 +1,67 @@
+.features {
+  width: 90%;
+  margin: auto;
+}
+
+.features p.features-title {
+  font-family: Abhaya Libre SemiBold;
+  font-size: 5vh;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: 6.9px;
+  background: linear-gradient(96deg, #3a8ef6 -10.84%, #6f3afa 196.74%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.features-items {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.features img {
+  width: 7vh;
+  height: 7vh;
+}
+
+.features img.icon-main {
+  width: 8vh;
+  height: 8vh;
+}
+.features-item-title {
+  color: #000;
+
+  font-family: Abhaya Libre ExtraBold;
+  font-size: 4vh;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 8vh; /* 148.148% */
+  display: inline-block;
+}
+
+.features-item-icon {
+  display: inline-block;
+}
+
+.features-item-description {
+  color: #6f7cb2;
+
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-family: Roboto;
+  font-size: 2.5vh;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px; /* 162.5% */
+}
+
+.features-item {
+  width: 30%;
+}
+
+.features-item-content {
+  text-align: justify;
+}
