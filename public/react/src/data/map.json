@@ -1,0 +1,641 @@
+{
+    "loc": [
+    {   
+        "id": 1,
+        "name": "Bệnh viện Nhân dân 115",
+        "image": "https://i.postimg.cc/Kvs0KPYG/IMG20230828160531.jpg",
+        "address": "527 Sư Vạn Hạnh, Phường 12, Quận 10",
+        "web": "https://benhvien115.com.vn/",
+        "phone": "1900099983",
+        "type": "BVTP",
+        "coordinates": [
+            10.77447,
+            106.666286
+        ]
+    },
+    {   
+        "id": 2,
+        "name": "Bệnh viện Nhân dân Gia Định",
+        "image": "https://i.postimg.cc/JnYGMz1h/2022-11-26.jpg",
+        "address": "1 Nơ Trang Long, Phường 7, Bình Thạnh",
+        "web": "http://bvndgiadinh.org.vn/",
+        "phone": "02838412692",
+        "type": "BVTP",
+        "coordinates": [
+            10.803747,106.694139
+        ]
+    },
+    {   
+        "id": 3,
+        "name": "Bệnh viện Nguyễn Trãi",
+        "image": "https://i.postimg.cc/52QGm7HK/BV-Ng-Trai-6-2023-2.jpg",
+        "address": "314 Nguyễn Trãi, Phường 8, Quận 5",
+        "web": "https://bvnguyentrai.org.vn/",
+        "phone": "02839235020",
+        "type": "BVTP",
+        "coordinates": [
+            10.756156,106.674954
+        ]
+    },
+    {   
+        "id": 4,
+        "name": "Bệnh viện Nguyễn Tri Phương",
+        "image": "https://i.postimg.cc/WpQf1mYM/benh-vien-nguyen-tri-phuong-4.jpg",
+        "address": "468 guyễn Trãi, Phường 8, Quận 5",
+        "web": "https://bvnguyentriphuong.com.vn/",
+        "phone": "02839234332",
+        "type": "BVTP",
+        "coordinates": [
+            10.755003,106.670535
+        ]
+    },
+    {   
+        "id": 5,
+        "name": "Bệnh viện Cấp cứu Trưng Vương",
+        "image": "https://i.postimg.cc/kX29ky6K/2023-01-02.jpg",
+        "address": "266 Lý Thường Kiệt, Phường 14, Quận 10",
+        "web": "http://bvtrungvuong.vn/",
+        "phone": "02854484949",
+        "type": "BVTP",
+        "coordinates": [
+            10.770506,106.659448
+        ]
+    },
+    {   
+        "id": 6,
+        "name": "Bệnh viện Tai Mũi Họng",
+        "image": "https://i.postimg.cc/t4S6Xb97/1-2.jpg",
+        "address": "153-157 Trần Quốc Thảo, Phường 9, Quận 3",
+        "web": "http://taimuihongtphcm.vn/",
+        "phone": "02839317381",
+        "type": "BVTP",
+        "coordinates": [
+            10.784510979532893, 106.68399025227535
+        ]
+    },
+    {   
+        "id": 7,
+        "name": "Bệnh viện Mắt",
+        "image": "https://i.postimg.cc/hGv5jKxY/HINH-5.jpg",
+        "address": "280 Điện Biên Phủ, Phường 7, Quận 3",
+        "web": "http://www.benhvienmat.com/",
+        "phone": "02839325364",
+        "type": "BVTP",
+        "coordinates": [
+            10.778775059398749, 106.68515954063761
+        ]
+    },
+    {   
+        "id": 8,
+        "name": "Bệnh viện Chấn thương chỉnh hình",
+        "image": "https://i.postimg.cc/0yMS23jf/benh-vien-chan-thuong-chinh-hinh-tphcm.jpg",
+        "address": "929 Trần Hưng Đạo, Phường 1, Quận 5",
+        "web": "http://www.bvctch.vn/",
+        "phone": "02839237007",
+        "type": "BVTP",
+        "coordinates": [
+            10.754472360939605, 106.67836548296484
+        ]
+    },
+    {   
+        "id": 9,
+        "name": "Bệnh viện Bình Dân",
+        "image": "https://i.postimg.cc/mk7b5Yg7/2020-08-10.jpg",
+        "address": "371 Điện Biên Phủ, Phường 4, Quận 3",
+        "web": "http://www.bvbinhdan.com.vn/",
+        "phone": "02838394747",
+        "type": "BVTP",
+        "coordinates": [
+            10.774382939267683, 106.68118926576652
+        ]
+    },
+    {   
+        "id": 10,
+        "name": "Bệnh viện Răng Hàm Mặt",
+        "image": "https://i.postimg.cc/zDxpysDZ/2020-10-28.jpg",
+        "address": "263-265 Trần Hưng Đạo, Phường Cô Giang, Quận 1",
+        "web": "https://bvranghammat.com/",
+        "phone": "1900636227",
+        "type": "BVTP",
+        "coordinates": [
+            10.763661730194228, 106.69197143878378
+        ]
+    },
+    {   
+        "id": 11,
+        "name": "Bệnh viện Bệnh Nhiệt đới",
+        "image": "https://i.postimg.cc/wjQkdZGG/13166066-956036127851148-6725201979451509682-n.jpg",
+        "address": "764 Võ Văn Kiệt, Phường 1, Quận 5",
+        "web": "http://www.bvbnd.vn/",
+        "phone": "02839235804",
+        "type": "BVTP",
+        "coordinates": [
+            10.752932100675354, 106.67889753878372
+        ]
+    },
+    {   
+        "id": 12,
+        "name": "Bệnh viện Từ Dũ",
+        "image": "https://i.postimg.cc/J4PnVQQQ/2022-05-25.jpg",
+        "address": "284 Cống Quỳnh, Phường Phạm Ngũ Lão, Quận 1",
+        "web": "http://tudu.com.vn/",
+        "phone": "02854042829",
+        "type": "BVTP",
+        "coordinates": [
+            10.768180067963703, 106.6847618946027
+        ]
+    },
+    {   
+        "id": 13,
+        "name": "Bệnh viện Hùng Vương",
+        "image": "https://i.postimg.cc/C5x3jbfF/2021-09-21.jpg",
+        "address": "9 Lý Thường Kiệt, Phường 12, Quận 5",
+        "web": "http://www.bvhungvuong.vn/",
+        "phone": "02839550957",
+        "type": "BVTP",
+        "coordinates": [
+            10.760072035989436, 106.66080348661758
+        ]
+    },
+    {   
+        "id": 14,
+        "name": "Bệnh viện Nhi đồng 1",
+        "image": "https://i.postimg.cc/C1Gvz5Pw/2022-11-28.jpg",
+        "address": "341 Sư Vạn Hạnh, Phường 10, Quận 10",
+        "web": "http://nhidong.org.vn/",
+        "phone": "02839271119",
+        "type": "BVTP",
+        "coordinates": [
+            10.768665688363651, 106.67026618481866
+        ]
+    },
+    {   
+        "id": 15,
+        "name": "Bệnh viện Nhi đồng 2",
+        "image": "https://i.postimg.cc/sX4c38xX/2021-08-03.jpg",
+        "address": "14 Lý Tự Trọng, Bến Nghé, Quận 1",
+        "web": "http://www.benhviennhi.org.vn/",
+        "phone": "02838295723",
+        "type": "BVTP",
+        "coordinates": [
+            10.781058295582332, 106.70233387503472
+        ]
+    },
+    {   
+        "id": 16,
+        "name": "Bệnh viện Phạm Ngọc Thạch",
+        "image": "https://i.postimg.cc/PqhvdqwW/image1.jpg",
+        "address": "120 Hồng Bàng, Phường 12, Quận 5",
+        "web": "http://www.bvpnt.org.vn/",
+        "phone": "02838550207",
+        "type": "BVTP",
+        "coordinates": [
+            10.756594297472763, 106.6655253541286
+        ]
+    },
+    {   
+        "id": 17,
+        "name": "Bệnh viện Ung Bướu",
+        "image": "https://i.postimg.cc/gj62V9hc/2022-02-09.jpg",
+        "address": "47 Nguyễn Huy Lượng, Phường 7, Bình Thạnh",
+        "web": "http://benhvienungbuou.vn/",
+        "phone": "02838433022",
+        "type": "BVTP",
+        "coordinates": [
+            10.805127777673679, 106.69448765042189
+        ]
+    },
+    {   
+        "id": 18,
+        "name": "Viện Tim thành phố Hồ Chí Minh",
+        "image": "https://i.postimg.cc/gcwVSnqj/download.jpg",
+        "address": "4 Dương Quang Trung, Phường 12, Quận 10",
+        "web": "https://vientimtphcm.vn/",
+        "phone": "02838651586",
+        "type": "BVTP",
+        "coordinates": [
+            10.774107899876801, 106.66649162529262
+        ]
+    },
+    {   
+        "id": 19,
+        "name": "Viện Y dược học cổ truyền",
+        "image": "https://i.postimg.cc/htJRh89g/2020-11-05.jpg",
+        "address": "273 Nguyễn Văn Trỗi, Phường 10, Phú Nhuận",
+        "web": "http://vienydhdt.gov.vn/",
+        "phone": "02838443047",
+        "type": "BVTP",
+        "coordinates": [
+            10.798062078974697, 106.67151170171901
+        ]
+    },
+    {   
+        "id": 20,
+        "name": "Bệnh viện Da Liễu",
+        "image": "https://i.postimg.cc/Yq5bfQ5t/bang-gia-bv-da-lieu-tphcm.jpg",
+        "address": "2 Nguyễn Thông, Phường 6, Quận 3",
+        "web": "https://bvdl.org.vn/",
+        "phone": "02839308131",
+        "type": "BVTP",
+        "coordinates": [
+            10.776670779896884, 106.68653058111155
+        ]
+    },
+    {   
+        "id": 21,
+        "name": "Bệnh viện Truyền máu huyết học",
+        "image": "https://i.postimg.cc/K4SBLDRV/2022-10-12.jpg",
+        "address": "118 Hồng Bàng, Phường 12, Quận 5",
+        "web": "http://bthh.org.vn/",
+        "type": "BVTP",
+        "phone": "02839571342",
+        "coordinates": [
+            10.756670497406137, 106.66583868111108
+        ]
+    },
+    {   
+        "id": 22,
+        "name": "Bệnh viện Nhi đồng Thành phố",
+        "image": "https://i.postimg.cc/ZKSLWJpq/2020-11-23.jpg",
+        "address": "15 Võ Trần Chí, Tân Kiên, Bình Chánh",
+        "web": "http://bvndtp.org.vn/",
+        "type": "BVTP",
+        "phone": "19001217",
+        "coordinates": [
+            10.709649793527051, 106.57392503876103
+        ]
+    },
+    {   
+        "id": 23,
+        "name": "Bệnh viện Đa khoa Khu vực Củ Chi",
+        "image": "https://i.postimg.cc/fyjmc0mR/pic-timngua.png",
+        "address": "9A Nguyễn Văn Hoài, Tân An Hội, Củ Chi",
+        "web": "http://bvdkkvcuchi.vn/",
+        "type": "BVTP",
+        "phone": "02838920583",
+        "coordinates": [
+            10.975837481288817, 106.47701355327054
+        ]
+    },
+    {   
+        "id": 24,
+        "name": "Bệnh viện Đa khoa Khu vực Hóc Môn",
+        "image": "https://i.postimg.cc/zv03DwTK/2021-09-24.jpg",
+        "address": "65/2B Bà Triệu, TT. Hóc Môn, Hóc Môn",
+        "web": "http://bvdkhocmon.vn/",
+        "type": "BVTP",
+        "phone": "02838914208",
+        "coordinates": [
+            10.882766671127907, 106.5933695387852
+        ]
+    },
+    {   
+        "id": 25,
+        "name": "Bệnh viện Đa khoa Khu vực Thủ Đức",
+        "image": "https://i.postimg.cc/Z5yYXzsr/2022-09-22.jpg",
+        "address": "64 Lê Văn Chí, Phường Linh Trung, Thủ Đức",
+        "web": "http://www.benhvienkhuvucthuduc.vn/",
+        "phone": "02837223556",
+        "type": "BVTP",
+        "coordinates": [
+            10.861621668529551, 106.77978216576768
+        ]
+    },
+    {   
+        "id": 26,
+        "name": "Bệnh viện An Bình",
+        "image": "https://i.postimg.cc/KzmZKkGN/2018-03-07.jpg",
+        "address": "146 An Bình, Phường 7, Quận 5",
+        "web": "http://www.benhvienanbinh.vn/",
+        "phone": "02839234260",
+        "type": "BVTP",
+        "coordinates": [
+            10.754517839689377, 106.67148496576631
+        ]
+    },
+    {   
+        "id": 27,
+        "name": "Bệnh viện Đa khoa Sài Gòn",
+        "image": "https://i.postimg.cc/xTX9bS2W/BV-a-Khoa-Sai-Gon.jpg",
+        "address": "125 Lê Lai, Phường Bến Thành, Quận 1",
+        "web": "http://benhviendakhoasaigon.vn/",
+        "phone": "02838291711",
+        "type": "BVTP",
+        "coordinates": [
+            10.77401521273453, 106.69956802261693
+        ]
+    },
+    {   
+        "id": 28,
+        "name": "Bệnh viện Tâm Thần",
+        "image": "https://i.postimg.cc/hv6W0fBN/download.jpg",
+        "address": "766 Võ Văn Kiệt, Phường 1, Quận 5",
+        "web": "https://bvtt-tphcm.org.vn/",
+        "phone": "",
+        "type": "BVTP",
+        "coordinates": [
+            10.753861256515213, 106.67888281632145
+        ]
+    },
+    {   
+        "id": 29,
+        "name": "Bệnh viện Điều dưỡng",
+        "image": "https://i.postimg.cc/vT1CDbVh/IMG-3340.jpg",
+        "address": "313 Âu Dương Lân, Phường 2, Quận 8",
+        "web": "",
+        "phone": "02838569147",
+        "type": "BVTP",
+        "coordinates": [
+            10.742436971619222, 106.68656191383644
+        ]
+    },
+    {   
+        "id": 30,
+        "name": "Bệnh viện Y học cổ truyền",
+        "image": "https://i.postimg.cc/SjF1s8qQ/benh-vien-y-hoc-co-truyen-thanh-pho-ho-chi-minh.jpg",
+        "address": "179-187 Nam Kỳ Khởi Nghĩa, Võ Thị Sáu, Quận 3",
+        "web": "http://yhct.vn/",
+        "phone": "02839326579",
+        "type": "BVTP",
+        "coordinates": [
+            10.786775714147511, 106.68870242304097
+        ]
+    },
+    {   
+        "id": 31,
+        "name": "Bệnh viện Quận 1",
+        "image": "https://i.postimg.cc/Gh9bsTYL/2021-06-11.jpg",
+        "address": "338 Hai Bà Trưng, Phường Tân Định, Quận 1",
+        "web": "http://bvq1.vn/",
+        "phone": "02838200880",
+        "type": "BVQH",
+        "coordinates": [
+            10.791432331030876, 106.69057852227802
+        ]
+    },
+    {   
+        "id": 32,
+        "name": "Bệnh viện Quận 2",
+        "image": "https://i.postimg.cc/8c7PD7mz/2019-08-15.jpg",
+        "address": "130 Đường Lê Văn Thịnh, Phường Bình Trưng Tây, Thành phố Thủ Đức",
+        "web": "https://benhvienlevanthinh.vn/",
+        "phone": "02854327888",
+        "type": "BVQH",
+        "coordinates": [
+            10.783023443124252, 106.76919316933304
+        ]
+    },
+    {   
+        "id": 33,
+        "name": "Bệnh viện Quận 3",
+        "image": "https://i.postimg.cc/8P8jDbx8/2023-02-22.jpg",
+        "address": "114 Trần Quốc Thảo, Phường 14, Quận 3",
+        "web": "https://bvquan3.medinet.gov.vn/default.aspx",
+        "phone": "02839310400",
+        "type": "BVQH",
+        "coordinates": [
+            10.784957075961033, 106.68392292343911
+        ]
+    },
+    {   
+        "id": 34,
+        "name": "Bệnh viện Quận 4",
+        "image": "https://i.postimg.cc/x8BHSDHB/2019-10-30.jpg",
+        "address": "65 Bến Vân Đồn, Phường 12, Quận 4",
+        "web": "http://benhvienquan4.vn/",
+        "phone": "0838261568",
+        "type": "BVQH",
+        "coordinates": [
+            10.765513469551966, 106.70223644063736
+        ]
+    },
+    {   
+        "id": 35,
+        "name": "Bệnh viện Quận 5",
+        "image": "https://i.postimg.cc/wBS7vc3s/H1.png",
+        "address": "642A Nguyễn Trãi, Phường 11, Quận 5",
+        "web": "https://trungtamytequan5.medinet.gov.vn/",
+        "phone": "02838550235",
+        "type": "BVQH",
+        "coordinates": [
+            10.754235457080487, 106.6658317541285
+        ]
+    },
+    {   
+        "id": 36,
+        "name": "Bệnh viện Quận 6",
+        "image": "https://i.postimg.cc/hjBc6CfM/BV-QUAN-6.jpg",
+        "address": "2D Chợ Lớn, Phường 11, Quận 6",
+        "web": "http://bvquan6.medinet.gov.vn/",
+        "phone": "02838750990",
+        "type": "BVQH",
+        "coordinates": [
+            10.746792165372197, 106.63451942529224
+        ]
+    },
+    {   
+        "id": 37,
+        "name": "Bệnh viện Quận 7",
+        "image": "https://i.postimg.cc/yNFzmFvR/2022-07-11.png",
+        "address": "101 Nguyễn Thị Thập, Tân Phú, Quận 7",
+        "web": "http://www.benhvienquan7.com.vn/",
+        "phone": "02838733420",
+        "type": "BVQH",
+        "coordinates": [
+            10.737447240290857, 106.72412278111112
+        ]
+    },
+    {   
+        "id": 38,
+        "name": "Bệnh viện Quận 8",
+        "image": "https://i.postimg.cc/d3gWNf0V/2022-10-10.jpg",
+        "address": "82 Cao Lỗ, Phường 4, Quận 8",
+        "web": "http://bvquan8.medinet.gov.vn/",
+        "phone": "02838506133",
+        "type": "BVQH",
+        "coordinates": [
+            10.741972373610222, 106.67645326947337
+        ]
+    },
+    {   
+        "id": 39,
+        "name": "Bệnh viện Quận 9",
+        "image": "https://i.postimg.cc/8cLy3Hfd/2021-02-26.jpg",
+        "address": "387 Lê Văn Việt, Tăng Nhơn Phú A, Thành Phố Thủ Đức",
+        "web": "http://bvquan9.medinet.gov.vn/",
+        "phone": "02838973628",
+        "type": "BVQH",
+        "coordinates": [
+            10.845139533613429, 106.7899792387849
+        ]
+    },
+    {   
+        "id": 40,
+        "name": "Bệnh viện Quận 10",
+        "image": "https://i.postimg.cc/DZrL3Y5z/download.jpg",
+        "address": "571 Sư Vạn Hạnh, Phường 12, Quận 10",
+        "web": "https://bvquan10.medinet.gov.vn/",
+        "phone": "38626978",
+        "type": "BVQH",
+        "coordinates": [
+            10.776453121557706, 106.66671178296514
+        ]
+    },
+    {   
+        "id": 41,
+        "name": "Bệnh viện Quận 11",
+        "image": "https://i.postimg.cc/c4SZJkhS/download.jpg",
+        "address": "72 Đường số 5-Cư xá Bình Thới, Phường 8, Quận 11",
+        "web": "https://benhvienquan11.vn/",
+        "phone": "",
+        "type": "BVQH",
+        "coordinates": [
+            10.760644370635857, 106.64813192529247
+        ]
+    },
+    {   
+        "id": 42,
+        "name": "Bệnh viện Quận 12",
+        "image": "https://i.postimg.cc/Kz2QTTHR/download.jpg",
+        "address": "111 Dương Thị Mười, Phường Tân Chánh Hiệp, Quận 12",
+        "web": "http://benhvienquan12.vn/",
+        "phone": "02862507955",
+        "type": "BVQH",
+        "coordinates": [
+            10.860684745946715, 106.63076986762123
+        ]
+    },
+    {   
+        "id": 43,
+        "name": "Bệnh viện Quận Gò Vấp",
+        "image": "https://i.postimg.cc/7PBMHjwC/download.jpg",
+        "address": "641 Quang Trung, Phường 11, Gò Vấp",
+        "web": "http://benhviengovap.vn/",
+        "phone": "02835891799",
+        "type": "BVQH",
+        "coordinates": [
+            10.834933103869528, 106.66161426947443
+        ]
+    },
+    {   
+        "id": 44,
+        "name": "Bệnh viện Quận Phú Nhuận",
+        "image": "https://i.postimg.cc/Jhv0YcLz/hinh-bv-2.png",
+        "address": "274 Nguyễn Trọng Tuyển, Phường 8, Q.Phú Nhuận",
+        "web": "http://bvquanphunhuan.medinet.gov.vn/",
+        "phone": "02838443910",
+        "type": "BVQH",
+        "coordinates": [
+            10.798405266518312, 106.67172302874228
+        ]
+    },
+    {   
+        "id": 45,
+        "name": "Bệnh viện Quận Tân Bình",
+        "image": "https://i.postimg.cc/J01LpGGh/2022-06-20.jpg",
+        "address": "605 Hoàng Văn Thụ, Phường 4, Tân Bình",
+        "web": "https://bvtb.org.vn/",
+        "phone": "0966381010",
+        "type": "BVQH",
+        "coordinates": [
+            10.794705730125544, 106.65502851180156
+        ]
+    },
+    {   
+        "id": 46,
+        "name": "Bệnh viện Quận Tân Phú",
+        "image": "https://i.postimg.cc/3JNMWMGz/download.jpg",
+        "address": "611 Âu Cơ, Phú Trung, Tân Phú",
+        "web": "http://benhvientanphu.vn/",
+        "phone": "02854088924",
+        "type": "BVQH",
+        "coordinates": [
+            10.787083211977476, 106.64125176948295
+        ]
+    },
+    {   
+        "id": 47,
+        "name": "Bệnh viện Quận Bình Thạnh",
+        "image": "https://i.postimg.cc/jqkggDWk/2022-02-23.jpg",
+        "address": "132 Lê Văn Duyệt, Phường 1, Bình Thạnh",
+        "web": "http://bvbinhthanh.org.vn/",
+        "phone": "02835108966",
+        "type": "BVQH",
+        "coordinates": [
+            10.798156255738938, 106.69668195412898
+        ]
+    },
+    {   
+        "id": 48,
+        "name": "Bệnh viện Quận Bình Tân",
+        "image": "https://i.postimg.cc/DfD6QRD9/2-xqjw.jpg",
+        "address": "809 Hương Lộ 2, Phường Bình Trị Đông A, Bình Tân",
+        "web": "http://bvbinhtan.vn/",
+        "phone": "02837542955",
+        "type": "BVQH",
+        "coordinates": [
+            10.767962862606797, 106.60145954776034
+        ]
+    },
+    {   
+        "id": 49,
+        "name": "Bệnh viện Quận Thủ Đức",
+        "image": "https://i.postimg.cc/6QmcHSq4/DJI-0036.jpg",
+        "address": "29 Phú Châu, Tam Phú, thành phố Thủ Đức",
+        "web": "https://benhvienthuduc.vn/",
+        "phone": "0966331010",
+        "type": "BVQH",
+        "coordinates": [
+            10.864489507513085, 106.74569538041568
+        ]
+    },
+    {   
+        "id": 50,
+        "name": "Bệnh viện Huyện Củ Chi",
+        "image": "https://i.postimg.cc/1zqVQYMq/2022-07-03.jpg",
+        "address": "1307 Tỉnh lộ 7, An Nhơn Tây, Củ Chi",
+        "web": "http://benhvienhuyencuchi.com/",
+        "phone": "02837946443",
+        "type": "BVQH",
+        "coordinates": [
+            11.085554190196941, 106.50915575042534
+        ]
+    },
+    {   
+        "id": 51,
+        "name": "Bệnh viện Huyện Bình Chánh",
+        "image": "https://i.postimg.cc/BQb63Vnn/2020-02-11.jpg",
+        "address": "1 Đường số 1, Khu trung tâm hành chính huyện, Bình Chánh",
+        "web": "http://binhchanhhospital.vn/",
+        "phone": "02837602895",
+        "type": "BVQH",
+        "coordinates": [
+            10.69109144154588, 106.58591832343798
+        ]
+    },
+    {   
+        "id": 52,
+        "name": "Bệnh viện Huyện Nhà Bè",
+        "image": "https://i.postimg.cc/C5W9W5KD/download.jpg",
+        "address": "281A Lê Văn Lương, Phước Kiển, Nhà Bè",
+        "web": "http://www.benhviennhabe.vn/",
+        "phone": "02837815558",
+        "type": "BVQH",
+        "coordinates": [
+            10.704667474231774, 106.7044589964555
+        ]
+    },
+    {   
+        "id": 53,
+        "name": "Bệnh viện Huyện Cần Giờ",
+        "image": "https://i.postimg.cc/YS5nrZ7K/B-NH-VI-N-C-N-GI.png",
+        "address": "Khu phố Miễu Ba, thị trấn Cần Thạnh, huyện Cần Giờ, TPHCM",
+        "web": "https://bvhuyencangio.medinet.gov.vn/",
+        "phone": "02838740317",
+        "type": "BVQH",
+        "coordinates": [
+            10.41216502333499, 106.9546832838247
+        ]
+    }
+    ]
+}

@@ -10,15 +10,6 @@
     <link rel="stylesheet" href="../css/decoration.css" />
 
     <script type="module" defer src="../js/index.js"></script>
-    <script
-      src="https://unpkg.com/react@18/umd/react.development.js"
-      crossorigin
-    ></script>
-    <script
-      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
-      crossorigin
-    ></script>
-    <script defer type="module" src="./../react/src/index.js"></script>
   </head>
   <body>
     <div class="decoration">
@@ -35,5 +26,32 @@
       {%REGISTER_BUTTON%}
     </div>
     <div id="findHospital"></div>
+
+    <!--ADD REACT-->
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone@7.11.4/babel.js"></script>
+
+    <script
+      type="module"
+      src="./../react/src/components/Header/Header.jsx"
+    ></script>
+    <script
+      type="module"
+      src="./../react/src/components/List/List.jsx"
+    ></script>
+    <script type="module" src="./../react/src/components/Map/Map.jsx"></script>
+    <script
+      type="module"
+      src="./../react/src/components/PlaceDetails/PlaceDetails.jsx"
+    ></script>
+    <script type="module" src="./../react/src/index.js"></script>
+    <!-- <script defer src="./../react/build/static/js/main.da7f74d5.js"></script> -->
   </body>
 </html>

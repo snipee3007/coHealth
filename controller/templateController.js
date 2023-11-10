@@ -17,10 +17,14 @@ const newsItemTemplate = addNavigation(
   fs.readFileSync(`${__dirname}/../public/template/newsItem.html`, 'utf-8')
 );
 
-const findHospitalTemplate = addNavigation(
+let findHospitalTemplate = addNavigation(
   fs.readFileSync(`${__dirname}/../public/template/findHospital.html`, 'utf-8')
 );
 
+findHospitalTemplate = findHospitalTemplate.replace(
+  '{%GOOGLE_MAPS_API_KEY%}',
+  process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+);
 //////////////////////////// EXPORT TEMPLATES /////////////////////////////////
 
 exports.getNewsTemplate = (req, res) => {

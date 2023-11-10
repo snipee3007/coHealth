@@ -12,7 +12,8 @@ const init = async function () {
   // navigation.updateClick();
   if (
     window.location.pathname === '/home' ||
-    window.location.pathname === '/aboutUs'
+    window.location.pathname === '/aboutUs' ||
+    window.location.pathname === '/'
   ) {
     await Slider.run();
     await Features.render();
