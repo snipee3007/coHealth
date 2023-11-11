@@ -1,5 +1,10 @@
 .newsImage img {
-  width: 30vw;
+  width: 100%;
+}
+
+.newsImage {
+  width: 36vw;
+  height: 100%;
   margin: 0 4vw 0 0;
 }
 
@@ -27,7 +32,9 @@
 }
 
 .firstContent {
-  width: 46vw;
+  width: 40vw;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 
 .newsBox {
@@ -39,6 +46,6 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: flex-end;
   align-items: center;
 }

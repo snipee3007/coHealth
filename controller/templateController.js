@@ -1,24 +1,40 @@
 const fs = require('fs');
-const addNavigation = require('./navigationController');
+const addTemplate = require('./replaceTemplate.js');
 
-const homePageTemplate = addNavigation(
-  fs.readFileSync(`${__dirname}/../public/template/homePage.html`, 'utf-8')
+const homePageTemplate = addTemplate.addDecoration(
+  addTemplate.addNavigation(
+    fs.readFileSync(`${__dirname}/../public/template/homePage.html`, 'utf-8')
+  )
 );
 
-const calculateBMITemplate = addNavigation(
-  fs.readFileSync(`${__dirname}/../public/template/calculateBMI.html`, 'utf-8')
+const calculateBMITemplate = addTemplate.addDecoration(
+  addTemplate.addNavigation(
+    fs.readFileSync(
+      `${__dirname}/../public/template/calculateBMI.html`,
+      'utf-8'
+    )
+  )
 );
 
-const newsTemplate = addNavigation(
-  fs.readFileSync(`${__dirname}/../public/template/news.html`, 'utf-8')
+const newsTemplate = addTemplate.addDecoration(
+  addTemplate.addNavigation(
+    fs.readFileSync(`${__dirname}/../public/template/news.html`, 'utf-8')
+  )
 );
 
-const newsItemTemplate = addNavigation(
-  fs.readFileSync(`${__dirname}/../public/template/newsItem.html`, 'utf-8')
+const newsItemTemplate = addTemplate.addDecoration(
+  addTemplate.addNavigation(
+    fs.readFileSync(`${__dirname}/../public/template/newsItem.html`, 'utf-8')
+  )
 );
 
-let findHospitalTemplate = addNavigation(
-  fs.readFileSync(`${__dirname}/../public/template/findHospital.html`, 'utf-8')
+let findHospitalTemplate = addTemplate.addDecoration(
+  addTemplate.addNavigation(
+    fs.readFileSync(
+      `${__dirname}/../public/template/findHospital.html`,
+      'utf-8'
+    )
+  )
 );
 
 findHospitalTemplate = findHospitalTemplate.replace(

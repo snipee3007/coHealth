@@ -19,7 +19,12 @@ const register = fs.readFileSync(
   'utf-8'
 );
 
-const addNavigation = (template) => {
+const decoration = fs.readFileSync(
+  `${__dirname}/../public/template/decoration.html`,
+  'utf-8'
+);
+
+exports.addNavigation = (template) => {
   template = template.replace(/{%NAVIGATION_BAR%}/g, navigation);
   template = template.replace(/{%LANGUAGE_SELECTION%}/g, language);
   template = template.replace(/{%SIGN_IN_BUTTON%}/g, signin);
@@ -27,4 +32,7 @@ const addNavigation = (template) => {
   return template;
 };
 
-module.exports = addNavigation;
+exports.addDecoration = (template) => {
+  template = template.replace(/{%DECORATION%}/g, decoration);
+  return template;
+};
