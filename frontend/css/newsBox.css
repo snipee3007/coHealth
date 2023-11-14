@@ -1,0 +1,51 @@
+.newsImage img {
+  width: 100%;
+}
+
+.newsImage {
+  width: 36vw;
+  height: 100%;
+  margin: 0 4vw 0 0;
+}
+
+.newsTitle {
+  color: #000;
+  text-align: center;
+  font-family: Abhaya Libre ExtraBold;
+  font-size: 6vh;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 2vh;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+}
+
+.newsContent {
+  color: #6f7cb2;
+  text-align: justify;
+  font-feature-settings: 'clig' off, 'liga' off;
+  font-family: Roboto;
+  font-size: 3vh;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 4vh;
+}
+
+.firstContent {
+  width: 40vw;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+
+.newsBox {
+  width: 80vw;
+  margin: auto;
+}
+
+.firstViewNewsContent {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
