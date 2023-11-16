@@ -1,5 +1,5 @@
 # coHealth
-This is Programming Fundamentals Project in Semester 231. 
+This is Programming Integration Project in Semester 231. 
 ## Usage
 **Prerequisites**
 - You need to install all necessary packages before run.
