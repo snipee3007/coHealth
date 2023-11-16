@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>coHealth</title>
+    <link rel="stylesheet" href="../css/body.css" />
+    <link rel="stylesheet" href="../css/navigation.css" />
+    <link rel="stylesheet" href="../css/languageDropdownMenu.css" />
+    <link rel="stylesheet" href="../css/decoration.css" />
+    <script
+      src="//code.tidio.co/26ysiqfodwkcpmmikqovd77se7nfu8cv.js"
+      defer
+    ></script>
+    <script type="module" defer src="../src/js/index.js"></script>
+  </head>
+  <body>
+    {%DECORATION%}
+
+    <div class="navigation">
+      <div class="logo">coHealth</div>
+      {%NAVIGATION_BAR%} {%LANGUAGE_SELECTION%} {%SIGN_IN_BUTTON%}
+      {%REGISTER_BUTTON%}
+    </div>
+    <div id="findHospital"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key={%GOOGLE_MAPS_API_KEY%}"></script>
+
+    <script
+      defer
+      src="./../src/react/build/static/js/main.f7a2aead.js"
+    ></script>
+  </body>
+</html>

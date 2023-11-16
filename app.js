@@ -1,22 +1,20 @@
 const express = require('express');
 
-const homePageRouter = require('./router/homePageRoutes.js');
-const getDataRouter = require('./router/getDataRoutes.js');
-const newsRouter = require('./router/newsRoutes.js');
-const findHospitalRouter = require('./router/findHospitalRoutes.js');
-const calculateBMIRouter = require('./router/calculateBMIRoutes.js');
-const getReactRouter = require('./router/reactGetRoutes.js');
+const homePageRouter = require('./backend/routers/homePageRoutes.js');
+const apiRouter = require('./backend/routers/apiRoutes.js');
+const newsRouter = require('./backend/routers/newsRoutes.js');
+const findHospitalRouter = require('./backend/routers/findHospitalRoutes.js');
+const calculateBMIRouter = require('./backend/routers/calculateBMIRoutes.js');
 
 const app = express();
 
 app.use(express.json());
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/frontend`));
 
 app.use('/', homePageRouter);
 app.use('/news', newsRouter);
 app.use('/calculateBMI', calculateBMIRouter);
 app.use('/findHospital', findHospitalRouter);
-app.use('/data', getDataRouter);
-app.use('/react', getReactRouter);
+app.use('/api', apiRouter);
 
 module.exports = app;

@@ -11,9 +11,7 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 // console.log(DB); //MUST CHANGE THE CONFIG, ADD cohealth before ?
-mongoose
-  .connect(DB)
-  .then(() => console.log('Connect to database successfully'));
+mongoose.connect(DB).then(() => console.log('Connect to database successful'));
 
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
