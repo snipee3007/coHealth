@@ -50,7 +50,9 @@
   font-size: 6.5vh;
   font-style: normal;
 
-  line-height: 180%; /* 90px */
+
+  line-height: 180%;
+
   letter-spacing: 1px;
   opacity: 0.7;
 }
@@ -87,7 +89,7 @@
   border: none;
   border-radius: 1.5vh;
   text-indent: 1vw;
-  background: #eaf0f7;
+  font-size: 1.5vh;
 }
 
 .formAge {
@@ -100,6 +102,11 @@
 
 .formHeight {
   width: 14vw;
+}
+
+
+.formActivity {
+  width: 30vw;
 }
 
 .formWeight {
