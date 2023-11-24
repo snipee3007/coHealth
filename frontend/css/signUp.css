@@ -1,0 +1,192 @@
+.signupBody {
+  display: flex;
+  flex-direction: row; /* Change flex direction to column */
+  justify-content: center;
+  align-items: center;
+  height: 50vh; /* Set a height to .calculateBMIBody to take up the full viewport height */
+}
+.signupTitle {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: start;
+
+  color: #000;
+  text-align: center;
+  font-family: "Abhaya Libre ExtraBold", Helvetica;
+  font-size: 51px;
+  font-style: normal;
+
+  line-height: 180%;
+  letter-spacing: 0;
+}
+.signupTitle--1 {
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  font-weight: 400;
+  font-size: larger;
+}
+.signupSubTitle {
+  width: 383px;
+  height: 62px;
+}
+
+.signupSubTitle .signupSubTitle--1 {
+  font-family: "Abhaya Libre Medium", Helvetica;
+  font-weight: 400;
+  color: transparent;
+  font-size: 27px;
+  letter-spacing: 0;
+  position: absolute;
+  top: 44%;
+  left: 10%;
+  font-weight: 400;
+}
+.signupSubTitle .text-wrapper {
+color: #000000;
+}
+
+.signupSubTitle .span {
+font-family: "Abhaya Libre ExtraBold", Helvetica;
+color: #4461f2;
+}
+
+.span a {
+  background: linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.span:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+.Image {
+  width: 40vw;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* Align items to the bottom */
+  margin-top: auto; /* Push the image to the bottom */
+}
+
+.lifesavers-bust {
+  position: absolute;
+  left: 38%;
+  bottom: -150px;
+  width: 30%;
+  height: auto; /* Maintain aspect ratio */
+}
+
+.signupContent {
+  position: absolute;
+  top: 150px;
+  left: 65%;
+  width: 30vw;
+  padding: 20px; /* Adjust padding as needed */
+}
+
+.formTitle {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: start;
+
+  color: #000;
+  text-align: center;
+  font-family: "Abhaya Libre ExtraBold", Helvetica;
+  font-size: 5vh;
+  font-style: normal;
+
+  line-height: 180%;
+  letter-spacing: 0;
+}
+
+.formTitle--1 {
+  position: absolute;
+  left: 12%;
+  font-weight: 400;
+}
+
+.signupForm {
+  display: flex;
+  position: absolute;
+  top: 120px;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  width: 30vw;
+  margin-top: 0vh;
+}
+
+.form_row {
+  height: 6vh;
+  margin-left: 2vw;
+  margin-right: 1vw;
+  margin-bottom: 5vh;
+}
+
+.form_input {  
+  width: 100%;
+  font-size: 17px;
+  letter-spacing: 1.6px;
+  line-height: 76px;
+  font-family: "Abhaya Libre Medium", Helvetica;
+  font-weight: 400;
+  color: #4f555a;
+  height: 100%;
+  padding: 0px;
+  border: none;
+  border-radius: 1.5vh;
+  text-indent: 1vw;
+  background: #eaf0f7;
+}
+
+.formName {
+  width: 26vw;
+}
+
+.formAge {
+  width: 6vw;
+}
+
+.formGender {
+  width: 17vw;
+}
+
+.formHeight {
+  width: 10vw;
+}
+
+.formWeight {
+  width: 13vw;
+}
+
+.formSubmit {
+  width: 26vw; 
+  height: 6vh;
+  margin-left: 2vw;
+  margin-right: 1vw;
+  margin-bottom: 5vh;
+  background: linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%);
+  color: #fff;
+
+  font-family: "Abhaya Libre Medium", Helvetica;
+  font-size: 3vh;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 2.7px;
+  border: none;
+  border-radius: 2vh;
+  box-shadow: 0px 11.85116px 20.73954px 3.95039px rgba(68, 97, 242, 0.15);
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff ;
+}
+
+

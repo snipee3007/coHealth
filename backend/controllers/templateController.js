@@ -64,3 +64,16 @@ exports.getfindHospitalTemplate = (req, res) => {
   );
   res.end(findHospitalTemplate);
 };
+
+
+exports.getsignUpTemplate = (req, res) => {
+  const signUpTemplate = replaceTemplate.addDecoration(
+    replaceTemplate.addNavigation(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/signUp.html`,
+        'utf-8'
+      )
+    )
+  );
+  res.end(signUpTemplate);
+};
