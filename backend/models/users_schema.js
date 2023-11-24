@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-// const validator = require('validator');
-// const bcrypt = require('bcryptjs');
+const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const historySchema = mongoose.Schema({
   takeDate: {
@@ -65,10 +65,10 @@ const userSchema = mongoose.Schema({
     type: String,
     trim: true,
     required: [true, 'Please provide your email'],
-    // validate: {
-    //   validator: validator.isEmail,
-    //   message: 'Please provide a valid email',
-    // },
+    validate: {
+      validator: validator.isEmail,
+      message: 'Please provide a valid email',
+    },
   },
   password: {
     type: String,
@@ -80,12 +80,12 @@ const userSchema = mongoose.Schema({
     type: String,
     trim: true,
     required: [true, 'Please re-enter your password'],
-    // validate: {
-    //   validator: function (el) {
-    //     return this.password === el;
-    //   },
-    //   message: 'The passwords are not the same',
-    // },
+    validate: {
+      validator: function (el) {
+        return this.password === el;
+      },
+      message: 'The passwords are not the same',
+    },
     select: false,
   },
   history: {
