@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-
+const appError = require('./../utils/errorHandler');
 const historySchema = mongoose.Schema({
   takeDate: {
     type: String,
@@ -24,8 +24,19 @@ const historySchema = mongoose.Schema({
   },
   activityPerWeek: {
     type: String,
-    enum: ['sedentary', 'lightly', 'moderately', 'very_active', 'extra_active'],
+    enum: {
+      values: [
+        'sedentary',
+        'lightly',
+        'moderately',
+        'very_active',
+        'extra_active',
+      ],
+      message:
+        'The activity input must from these selection: "sedentary", "lightly", "moderately", "very_active", "extra_active",',
+    },
     required: [true, 'Please provide your activity per week'],
+    default: 'sedentary',
     lowercase: true,
   },
 });
@@ -47,7 +58,10 @@ const userSchema = mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: ['male', 'female'],
+    enum: {
+      values: ['male', 'female'],
+      message: 'Gender must be male or female',
+    },
     required: [true, 'Please provide your gender'],
     lowercase: true,
   },
@@ -69,12 +83,12 @@ const userSchema = mongoose.Schema({
       validator: validator.isEmail,
       message: 'Please provide a valid email',
     },
+    unique: true,
   },
   password: {
     type: String,
     trim: true,
     required: [true, 'Please provide your password'],
-    select: false,
   },
   confirmPassword: {
     type: String,
@@ -151,6 +165,15 @@ userSchema.pre('save', async function (next) {
 
   this.confirmPassword = undefined;
   next();
+});
+
+userSchema.post('save', function (error, doc, next) {
+  // console.log(error);
+  if (error.code === 11000) {
+    next(appError(error, 11000));
+  } else {
+    next(appError(error, 400));
+  }
 });
 
 const User = mongoose.model('users', userSchema);
