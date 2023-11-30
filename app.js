@@ -9,8 +9,10 @@ const signUpRouter = require('./backend/routers/signUpRoutes.js')
 const userRouter = require('./backend/routers/userRoutes.js');
 
 const app = express();
+const bodyParser =  require("body-parser");
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(`${__dirname}/frontend`));
 
 app.use('/', homePageRouter);
@@ -22,4 +24,3 @@ app.use('/users', userRouter);
 app.use('/api', apiRouter);
 
 module.exports = app;
-//dsfijndskfndsfds
