@@ -1,6 +1,8 @@
 const User = require('./../models/users_schema');
 const bcrypt = require('bcryptjs');
 
+
+console.log('Received POST request at /signup');
 exports.signup = async (req, res) => {
   console.log('Received POST request at /signup');
   try {
@@ -10,13 +12,14 @@ exports.signup = async (req, res) => {
     // Perform validation, sanitation, etc.
 
     // Create a new user instance with the provided data
-    const newUser = new User({
-      email,
-      password,
-      age,
-      gender,
-      history: [{ height, weight }],
-    });
+    let newUser = new user({
+      email: req.body.email,
+      pass: req.body.pass,
+      age: req.body.age,
+      gender: req.body.gender,
+      height: req.body.height,
+      weight: req.body.weight,
+     });
 
     // Save the new user to the database
     await newUser.save();

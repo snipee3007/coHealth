@@ -3,7 +3,6 @@ dotenv.config({ path: './config.env' });
 
 const mongoose = require('mongoose');
 const app = require('./app.js');
-const User = require('./backend/models/users_schema.js');
 
 const port = process.env.PORT || 8000;
 

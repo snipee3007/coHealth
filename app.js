@@ -20,7 +20,6 @@ app.use('/findHospital', findHospitalRouter);
 app.use('/signUp', signUpRouter);
 app.use('/users', userRouter);
 app.use('/api', apiRouter);
-app.use('/users', userRouter);
 
 module.exports = app;
 //dsfijndskfndsfds
