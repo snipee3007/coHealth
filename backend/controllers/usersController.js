@@ -5,29 +5,32 @@ exports.signup = async (req, res) => {
   // console.log('Received POST request at /signup');
   try {
     // Extract user input from request body
-    const { email, password, age, gender, height, weight } = req.body;
-
+    const {
+      email,
+      password,
+      gender,
+      birthdate,
+      firstName,
+      lastName,
+      confirmPassword,
+    } = req.body;
+    console.log(req.body);
     // Perform validation, sanitation, etc.
 
     // Create a new user instance with the provided data
+    console.log(firstName, lastName);
     let newUser = new User({
       email: email,
       // password: req.body.pass,
       gender: gender,
       // height: req.body.height,
       // weight: req.body.weight,
-      fullname: 'le Minh chanh',
-      birthdate: '2003-07-30',
+      fullname: firstName.trim() + ' ' + lastName.trim(),
+      birthdate: birthdate,
       address: 'lmao lmao',
       phoneNum: '0835599955',
-      history: {
-        takeDate: '2023-18-11',
-        height: 181,
-        weight: 100,
-        activityPerWeek: 'seDentary',
-      },
-      password: 'lmaolmao',
-      confirmPassword: 'lmaolmao',
+      password: password,
+      confirmPassword: confirmPassword,
     });
 
     // Save the new user to the database
