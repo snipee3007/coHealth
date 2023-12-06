@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../css/body.css" />
     <link rel="stylesheet" href="../css/navigation.css" />
     <link rel="stylesheet" href="../css/languageDropdownMenu.css" />
-    <link rel="stylesheet" href="../css/newsContainer.css" />
     <link rel="stylesheet" href="../css/features.css" />
     <link rel="stylesheet" href="../css/decoration.css" />
     <link rel="stylesheet" href="../css/aboutUs.css" />
@@ -15,16 +14,7 @@
 
     <script type="module" defer src="../js/index.js"></script>
   </head>
-  <body>
-
-    <!-- <div class="decoration">
-      <div class="eclipse-1"></div>
-      <div class="eclipse-2"></div>
-      <div class="chat-icon">
-        <img src="chatbot.png" alt="Chat Icon" class="chatIcon" />
-      </div>
-    </div> -->
-
+  <body class="body">
     {%DECORATION%}
 
     <div class="navigation">
@@ -34,70 +24,91 @@
     </div>
 
     <div class="signupBody">
-
-      <div class="signupTitle"> 
+      <div class="signupTitle">
         <div class="signupTitle--1">Sign Up to join us&nbsp;</div>
       </div>
 
       <div class="signupSubTitle">
         <p class="signupSubTitle--1">
-          <span class="text-wrapper">if you already have an account<br />you can </span>
-          <span class="span"><a href="/your-other-view">Login here!</a></span>
-          </p>
+          <span class="text-wrapper"
+            >If you already have an account<br />you can
+          </span>
+          <span class="span"><a href="#login">Login here!</a></span>
+        </p>
       </div>
 
       <div class="Image">
-        <img
-          class="lifesavers-bust"
-          src="../images/png/lifesavers-bust.png"
-        />
+        <img class="lifesavers-bust" src="../images/png/lifesavers-bust.png" />
       </div>
 
       <div class="signupContent">
-
         <div class="formTitle">
           <div class="formTitle--1">Be healthy with us&nbsp;</div>
         </div>
 
         <div class="Form">
-
           <form class="signupForm" method="post" action="/users/signUp">
-
-            <div class="form_row formName">
-              <input type="email" name="email" class="form_input" placeholder="Enter Email" />
+            <div class="form_row formFirstName">
+              <input
+                type="text"
+                name="firstName"
+                class="form_input"
+                placeholder="First name"
+              />
             </div>
 
-            <div class="form_row formName">
-              <input type="password" name="pass" class="form_input" placeholder="••••••••" />
+            <div class="form_row formLastName">
+              <input
+                type="text"
+                name="lastName"
+                class="form_input"
+                placeholder="Last name"
+              />
             </div>
 
-            <div class="form_row formAge">
-              <input type="number" name="age" class="form_input formInputAge" placeholder="Age" />
+            <div class="form_row formEmail">
+              <input
+                type="email"
+                name="email"
+                class="form_input"
+                placeholder="Enter Email"
+              />
             </div>
 
             <div class="form_row formGender">
-              <select name="gender" class="form_input formInputGender">
-                <option value="" disabled selected>Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+              <input type="date" name="birthdate" class="form_input" />
+            </div>
+
+            <div class="form_row formGender">
+              <select name="gender" class="form_input">
+                <option value="Gender" disabled selected>Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
               </select>
             </div>
 
-            <div class="form_row formHeight">
-              <input type="number" name="height" class="form_input formInputHeight" placeholder="Height" />
+            <div class="form_row formPassword">
+              <input
+                type="password"
+                name="password"
+                class="form_input"
+                placeholder="Enter your password"
+              />
             </div>
 
-            <div class="form_row">
-              <input type="number" name="weight" class="form_input formWeight formInputWeight" placeholder="Weight" />
+            <div class="form_row formPassword">
+              <input
+                type="password"
+                name="confirmPassword"
+                class="form_input"
+                placeholder="Confirm your password"
+              />
             </div>
 
             <button type="submit" class="formSubmit">Register</button>
           </form>
-
         </div>
       </div>
     </div>
   </body>
-  
-    
 </html>

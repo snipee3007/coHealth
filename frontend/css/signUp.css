@@ -1,3 +1,7 @@
+.body {
+  overflow: hidden;
+}
+
 .signupBody {
   display: flex;
   flex-direction: row; /* Change flex direction to column */
@@ -13,7 +17,7 @@
 
   color: #000;
   text-align: center;
-  font-family: "Abhaya Libre ExtraBold", Helvetica;
+  font-family: 'Abhaya Libre ExtraBold', Helvetica;
   font-size: 51px;
   font-style: normal;
 
@@ -33,7 +37,7 @@
 }
 
 .signupSubTitle .signupSubTitle--1 {
-  font-family: "Abhaya Libre Medium", Helvetica;
+  font-family: 'Abhaya Libre Medium', Helvetica;
   font-weight: 400;
   color: transparent;
   font-size: 27px;
@@ -44,16 +48,16 @@
   font-weight: 400;
 }
 .signupSubTitle .text-wrapper {
-color: #000000;
+  color: #000000;
 }
 
 .signupSubTitle .span {
-font-family: "Abhaya Libre ExtraBold", Helvetica;
-color: #4461f2;
+  font-family: 'Abhaya Libre ExtraBold', Helvetica;
+  color: #4461f2;
 }
 
 .span a {
-  background: linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%);
+  background: linear-gradient(96.14deg, #3a8ef6 -10.84%, #6f3afa 196.74%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-decoration: none;
@@ -65,7 +69,6 @@ color: #4461f2;
   cursor: pointer;
 }
 
-
 .Image {
   width: 40vw;
   display: flex;
@@ -76,10 +79,9 @@ color: #4461f2;
 
 .lifesavers-bust {
   position: absolute;
-  left: 38%;
-  bottom: -150px;
-  width: 30%;
-  height: auto; /* Maintain aspect ratio */
+  left: 43vw;
+  bottom: -15vh;
+  width: 25vw;
 }
 
 .signupContent {
@@ -98,7 +100,7 @@ color: #4461f2;
 
   color: #000;
   text-align: center;
-  font-family: "Abhaya Libre ExtraBold", Helvetica;
+  font-family: 'Abhaya Libre ExtraBold', Helvetica;
   font-size: 5vh;
   font-style: normal;
 
@@ -131,12 +133,12 @@ color: #4461f2;
   margin-bottom: 5vh;
 }
 
-.form_input {  
+.form_input {
   width: 100%;
   font-size: 17px;
   letter-spacing: 1.6px;
   line-height: 76px;
-  font-family: "Abhaya Libre Medium", Helvetica;
+  font-family: 'Abhaya Libre Medium', Helvetica;
   font-weight: 400;
   color: #4f555a;
   height: 100%;
@@ -147,36 +149,33 @@ color: #4461f2;
   background: #eaf0f7;
 }
 
-.formName {
+.formEmail,
+.formPassword {
   width: 26vw;
 }
 
-.formAge {
-  width: 6vw;
-}
-
-.formGender {
-  width: 17vw;
-}
-
-.formHeight {
+.formFirstName {
   width: 10vw;
 }
 
-.formWeight {
+.formLastName {
   width: 13vw;
 }
 
+.formGender {
+  width: 12vw;
+}
+
 .formSubmit {
-  width: 26vw; 
+  width: 26vw;
   height: 6vh;
   margin-left: 2vw;
   margin-right: 1vw;
   margin-bottom: 5vh;
-  background: linear-gradient(96.14deg, #3A8EF6 -10.84%, #6F3AFA 196.74%);
+  background: linear-gradient(96.14deg, #3a8ef6 -10.84%, #6f3afa 196.74%);
   color: #fff;
 
-  font-family: "Abhaya Libre Medium", Helvetica;
+  font-family: 'Abhaya Libre Medium', Helvetica;
   font-size: 3vh;
   font-style: normal;
   font-weight: 400;
@@ -186,7 +185,5 @@ color: #4461f2;
   box-shadow: 0px 11.85116px 20.73954px 3.95039px rgba(68, 97, 242, 0.15);
   cursor: pointer;
   font-size: 16px;
-  color: #fff ;
+  color: #fff;
 }
-
-
