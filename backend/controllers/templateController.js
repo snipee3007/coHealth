@@ -89,3 +89,15 @@ exports.getsignInTemplate = (req, res) => {
   );
   res.end(signInTemplate);
 }
+
+exports.getForgetPasswordTemplate = (req, res) => {
+  const forgetPasswordTemplate = replaceTemplate.addDecoration(
+    replaceTemplate.addNavigation(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/forgetPassword.html`,
+        'utf-8'
+      )
+    )
+  )
+  res.end(forgetPasswordTemplate);
+}
