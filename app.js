@@ -7,6 +7,7 @@ const findHospitalRouter = require('./backend/routers/findHospitalRoutes.js');
 const calculateBMIRouter = require('./backend/routers/calculateBMIRoutes.js');
 const signUpRouter = require('./backend/routers/signUpRoutes.js')
 const userRouter = require('./backend/routers/userRoutes.js');
+const loginRouter = require('./backend/routers/loginRoutes.js');
 
 const app = express();
 const bodyParser =  require("body-parser");
@@ -20,6 +21,7 @@ app.use('/news', newsRouter);
 app.use('/calculateBMI', calculateBMIRouter);
 app.use('/findHospital', findHospitalRouter);
 app.use('/signUp', signUpRouter);
+app.use('/login', loginRouter);
 app.use('/users', userRouter);
 app.use('/api', apiRouter);
 

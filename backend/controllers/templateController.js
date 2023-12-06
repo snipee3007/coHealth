@@ -77,3 +77,15 @@ exports.getsignUpTemplate = (req, res) => {
   );
   res.end(signUpTemplate);
 };
+
+exports.getsignInTemplate = (req, res) => {
+  const signInTemplate = replaceTemplate.addDecoration(
+    replaceTemplate.addNavigation(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/signIn.html`,
+        'utf-8'
+      )
+    )
+  );
+  res.end(signInTemplate);
+}
