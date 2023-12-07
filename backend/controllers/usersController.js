@@ -1,5 +1,6 @@
 const User = require('./../models/users_schema');
 const bcrypt = require('bcryptjs');
+const authController = require('./authController');
 
 exports.signup = async (req, res) => {
   // console.log('Received POST request at /signup');
@@ -36,6 +37,8 @@ exports.signup = async (req, res) => {
     // Save the new user to the database
     await newUser.save();
 
+    authController.createSendToken(newUser, 201, res);
+
     // res.status(200).json({
     //   status: 'success',
     //   message: `Successfully signup with email: ${req.body.email}`,
@@ -58,6 +61,7 @@ exports.login = async (req, res, next) => {
     const match = await bcrypt.compare(req.body.password, user.password);
     // console.log(match);
     if (match) {
+      authController.createSendToke(user, 200, res);
       res.status(200).json({
         status: 'success',
         message: 'Login success',

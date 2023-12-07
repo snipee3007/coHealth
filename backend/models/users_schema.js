@@ -105,6 +105,7 @@ const userSchema = mongoose.Schema({
   history: {
     type: [historySchema],
   },
+
 });
 
 userSchema.pre('save', function (next) {
