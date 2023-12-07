@@ -5,6 +5,7 @@ exports.signup = async (req, res) => {
   // console.log('Received POST request at /signup');
   try {
     // Extract user input from request body
+
     const {
       email,
       password,
@@ -21,7 +22,6 @@ exports.signup = async (req, res) => {
     console.log(firstName, lastName);
     let newUser = new User({
       email: email,
-      // password: req.body.pass,
       gender: gender,
       // height: req.body.height,
       // weight: req.body.weight,
@@ -35,10 +35,13 @@ exports.signup = async (req, res) => {
 
     // Save the new user to the database
     await newUser.save();
-    res.status(200).json({
-      status: 'success',
-      message: `Successfully signup with email: ${req.body.email}`,
-    });
+
+    // res.status(200).json({
+    //   status: 'success',
+    //   message: `Successfully signup with email: ${req.body.email}`,
+    // });
+    res.redirect('/home');
+
   } catch (err) {
     res.status(400).json({
       status: 'failed',

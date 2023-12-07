@@ -24,6 +24,13 @@ const decoration = fs.readFileSync(
   'utf-8'
 );
 
+
+const profile = fs.readFileSync(
+  `${__dirname}/../../frontend/template/profile.html`,
+  'utf-8'
+);
+
+
 exports.addNavigation = (template) => {
   template = template.replace(/{%NAVIGATION_BAR%}/g, navigation);
   template = template.replace(/{%LANGUAGE_SELECTION%}/g, language);
@@ -36,3 +43,11 @@ exports.addDecoration = (template) => {
   template = template.replace(/{%DECORATION%}/g, decoration);
   return template;
 };
+
+exports.addNavigationAfterSign = (template) => {
+  template = template.replace(/{%NAVIGATION_BAR%}/g, navigation);
+  template = template.replace(/{%LANGUAGE_SELECTION%}/g, language);
+  template = template.replace(/{%SIGN_IN_BUTTON%}/g, signin);
+  template = template.replace(/{%REGISTER_BUTTON%}/g, profile);
+  return template;
+}
