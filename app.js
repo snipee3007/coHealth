@@ -12,17 +12,7 @@ const forgetPasswordRouter = require('./backend/routers/forgetPasswordRoutes.js'
 
 const app = express();
 const bodyParser =  require("body-parser");
-const cookieParser = require("cookie-parser");
 
-var session;
-const oneDay = 1000 * 60 * 60 * 24;
-app.use(sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
-    saveUninitialized:true,
-    cookie: { maxAge: oneDay },
-    resave: false
-}));
-app.use(cookieParser());
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended:true}));
