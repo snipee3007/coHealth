@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../css/aboutUs.css" />
     <link rel="stylesheet" href="../css/signUp.css" />
 
-    <script type="module" defer src="../js/index.js"></script>
+    <script type="module" defer src="../src/js/index.js"></script>
   </head>
   <body class="body">
     {%DECORATION%}
@@ -47,7 +47,12 @@
         </div>
 
         <div class="Form">
-          <form class="signupForm" method="post" action="/users/signUp">
+          <form
+            class="signupForm"
+            method="post"
+            action="/users/signUp"
+            id="signupForm"
+          >
             <div class="form_row formFirstName">
               <input
                 type="text"
