@@ -61,7 +61,7 @@ exports.login = async (req, res, next) => {
     const match = await bcrypt.compare(req.body.password, user.password);
     // console.log(match);
     if (match) {
-      authController.createSendToke(user, 200, res);
+      authController.createSendToken(user, 200, res);
       res.status(200).json({
         status: 'success',
         message: 'Login success',
