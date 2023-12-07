@@ -90,6 +90,7 @@ exports.getsignInTemplate = (req, res) => {
   res.end(signInTemplate);
 }
 
+
 exports.getForgetPasswordTemplate = (req, res) => {
   const forgetPasswordTemplate = replaceTemplate.addDecoration(
     replaceTemplate.addNavigation(
@@ -101,3 +102,16 @@ exports.getForgetPasswordTemplate = (req, res) => {
   )
   res.end(forgetPasswordTemplate);
 }
+
+exports.getHomePageTemplateAfterSignIn = (req, res) => {
+  const homePageTemplate = replaceTemplate.addDecoration(
+    replaceTemplate.addNavigationAfterSign(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/homePage.html`,
+        'utf-8'
+      )
+    )
+  );
+  res.end(homePageTemplate);
+};
+

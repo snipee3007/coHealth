@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../css/aboutUs.css" />
     <link rel="stylesheet" href="../css/signUp.css" />
 
-    <script type="module" defer src="../js/index.js"></script>
+    <script type="module" defer src="../src/js/index.js"></script>
   </head>
   <body class="body">
     {%DECORATION%}
@@ -33,7 +33,7 @@
           <span class="text-wrapper"
             >If you already have an account<br />you can
           </span>
-          <span class="span"><a href="#login">Login here!</a></span>
+          <span class="span"><a href="/login">Login here!</a></span>
         </p>
       </div>
 
@@ -47,13 +47,19 @@
         </div>
 
         <div class="Form">
-          <form class="signupForm" method="post" action="/users/signUp">
+          <form
+            class="signupForm"
+            method="post"
+            action="/users/signUp"
+            id="signupForm"
+          >
             <div class="form_row formFirstName">
               <input
                 type="text"
                 name="firstName"
                 class="form_input"
                 placeholder="First name"
+                required
               />
             </div>
 
@@ -63,6 +69,7 @@
                 name="lastName"
                 class="form_input"
                 placeholder="Last name"
+                required
               />
             </div>
 
@@ -72,15 +79,17 @@
                 name="email"
                 class="form_input"
                 placeholder="Enter Email"
+                required
               />
             </div>
 
             <div class="form_row formGender">
-              <input type="date" name="birthdate" class="form_input" />
+              <input type="date" name="birthdate" class="form_input"  required/>
+
             </div>
 
             <div class="form_row formGender">
-              <select name="gender" class="form_input">
+              <select name="gender" class="form_input" required>
                 <option value="Gender" disabled selected>Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -93,6 +102,7 @@
                 name="password"
                 class="form_input"
                 placeholder="Enter your password"
+                required
               />
             </div>
 
@@ -102,6 +112,7 @@
                 name="confirmPassword"
                 class="form_input"
                 placeholder="Confirm your password"
+                required
               />
             </div>
 
