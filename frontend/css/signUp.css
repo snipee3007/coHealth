@@ -67,6 +67,7 @@
 .span:hover {
   text-decoration: underline;
   cursor: pointer;
+  text-shadow: 5px 5px 10px #3a8ef6;
 }
 
 .Image {
@@ -186,4 +187,10 @@
   cursor: pointer;
   font-size: 16px;
   color: #fff;
+}
+
+.formSubmitButton :hover {
+  text-shadow: 5px 5px 10px #3a8ef6;
+  box-shadow: 5px 5px 10px #3a8ef6;
+
 }
