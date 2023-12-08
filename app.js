@@ -11,6 +11,8 @@ const userRouter = require('./backend/routers/userRoutes.js');
 const loginRouter = require('./backend/routers/loginRoutes.js');
 const forgetPasswordRouter = require('./backend/routers/forgetPasswordRoutes.js');
 const profileRouter = require('./backend/routers/profileRoutes.js');
+const accountRouter = require('./backend/routers/accountRoutes.js');
+const historyRouter = require('./backend/routers/historyRoutes.js');
 
 const app = express();
 
@@ -43,5 +45,8 @@ app.use('/users', userRouter);
 app.use('/api', apiRouter);
 app.use('/forgetPassword', forgetPasswordRouter);
 app.use('/profile', profileRouter);
+app.use('/account', accountRouter);
+app.use('/history', historyRouter);
+
 
 module.exports = app;

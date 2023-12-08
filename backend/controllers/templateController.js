@@ -116,14 +116,38 @@ exports.getHomePageTemplateAfterSignIn = (req, res) => {
 };
 
 exports.getProfileTemplate = (req, res) => {
-  const homeProfileTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
+  const ProfileTemplate = replaceTemplate.addDecoration(
+    replaceTemplate.addNavigationAfterSign(
       fs.readFileSync(
         `${__dirname}/../../frontend/template/profilePage.html`,
         'utf-8'
       )
     )
   );
-  res.end(homeProfileTemplate);
+  res.end(ProfileTemplate);
+};
+
+exports.getAccountTemplate = (req, res) => {
+  const AccountTemplate = replaceTemplate.addDecoration(
+    replaceTemplate.addNavigationAfterSign(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/accountPage.html`,
+        'utf-8'
+      )
+    )
+  );
+  res.end(AccountTemplate);
+};
+
+exports.getHistoryTemplate = (req, res) => {
+  const historyTemplate = replaceTemplate.addDecoration(
+    replaceTemplate.addNavigationAfterSign(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/historyPage.html`,
+        'utf-8'
+      )
+    )
+  );
+  res.end(historyTemplate);
 };
 
