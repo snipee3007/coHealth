@@ -1,0 +1,18 @@
+.profileIcon {
+  width: 4vw;
+  border-radius: 10vw;
+}
+.profileName {
+  width: 5vw;
+}
+.profileIcon img {
+  width: 100%;
+}
+
+.afterLogin {
+  width: 10vw;
+}
+
+.afterLoginButton {
+  width: 10vw;
+}

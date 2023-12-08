@@ -6,6 +6,7 @@ import Slider from './sliderController.js';
 import Features from './featuresController.js';
 import Members from './membersController.js';
 import AboutUs from './aboutUsController.js';
+import Login from './login.js';
 
 const init = async function () {
   // navigation.updateClick();
@@ -25,7 +26,12 @@ const init = async function () {
   if (window.location.pathname.includes('/news/')) {
     await NewsItem.run(window.location.pathname.replace('/news/', ''));
   }
-  await dropdownMenu();
-  await Underline.run();
+  if (!(window.location.pathname === '/login')) {
+    await Underline.run();
+    await dropdownMenu();
+  }
+  if (window.location.pathname === '/login') {
+    await Login.login();
+  }
 };
 init();

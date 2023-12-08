@@ -10,9 +10,13 @@ const signUpRouter = require('./backend/routers/signUpRoutes.js');
 const userRouter = require('./backend/routers/userRoutes.js');
 const loginRouter = require('./backend/routers/loginRoutes.js');
 const forgetPasswordRouter = require('./backend/routers/forgetPasswordRoutes.js');
+
 const profileRouter = require('./backend/routers/profileRoutes.js');
 const accountRouter = require('./backend/routers/accountRoutes.js');
 const historyRouter = require('./backend/routers/historyRoutes.js');
+
+const globalErrorHandler = require('./backend/controllers/errorController.js');
+
 
 const app = express();
 
@@ -29,7 +33,6 @@ const bodyParser = require('body-parser');
 //   })
 // );
 // app.use(cookieParser());
-
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,5 +51,7 @@ app.use('/profile', profileRouter);
 app.use('/account', accountRouter);
 app.use('/history', historyRouter);
 
+
+app.use(globalErrorHandler);
 
 module.exports = app;
