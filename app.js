@@ -12,6 +12,7 @@ const loginRouter = require('./backend/routers/loginRoutes.js');
 const forgetPasswordRouter = require('./backend/routers/forgetPasswordRoutes.js');
 
 const app = express();
+
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
@@ -25,6 +26,7 @@ app.use(
   })
 );
 app.use(cookieParser());
+
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
