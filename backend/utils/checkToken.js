@@ -3,22 +3,29 @@ const User = require('../models/users_schema');
 const authController = require('./../controllers/authController');
 
 const checkTokenAndRedirect = async (req, res, next) => {
-  const token = res.socket.parser.socket._httpMessage.req.cookies.jwt;
-  //   console.log(token);
+  const data = req.rawHeaders.filter((str) => str.includes('jwt'))[0];
+  const token = data
+    .split(';')
+    .filter((str) => str.includes('jwt'))[0]
+    .replace('jwt=', '')
+    .trim();
   const users = await User.find();
   if (users.length !== 0) {
     const user = await User.find({ token: token });
+
     if (user) {
+      // console.log(token);
+      //
       authController.protect(token, req, next);
       const json = `{"token":"${token}"}`;
-      res.socket.parser.socket._httpMessage.req.cookies.jwt = token;
+      res.cookies = token;
       res.setHeader('token', json);
     } else {
-      res.socket.parser.socket._httpMessage.req.cookies.jwt = '';
+      res.cookies = '';
       res.setHeader('token', '');
     }
   } else {
-    res.socket.parser.socket._httpMessage.req.cookies.jwt = '';
+    res.cookies = '';
     res.setHeader('token', '');
   }
   next();

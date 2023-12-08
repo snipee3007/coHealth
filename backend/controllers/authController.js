@@ -12,7 +12,7 @@ const signToken = (id) => {
 };
 
 const createSendToken = async (user, statusCode, res) => {
-  // console.log(user);
+  console.log(user);
 
   const token = signToken(user._id);
   const cookieOptions = {
@@ -77,7 +77,7 @@ exports.signup = catchAsync(async (req, res) => {
     image: image,
   });
 
-  createSendToken(newUser, 201, res);
+  await createSendToken(newUser, 201, res);
   // res.redirect('/home');
 });
 

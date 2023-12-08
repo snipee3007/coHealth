@@ -1,103 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>coHealth</title>
-        <link rel="stylesheet" href="../css/body.css" />
-        <link rel="stylesheet" href="../css/navigation.css" />
-        <link rel="stylesheet" href="../css/languageDropdownMenu.css" />
-        <link rel="stylesheet" href="../css/features.css" />
-        <link rel="stylesheet" href="../css/decoration.css" />
-        <link rel="stylesheet" href="../css/userSetting.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>coHealth</title>
+    <link rel="stylesheet" href="../css/body.css" />
+    <link rel="stylesheet" href="../css/navigation.css" />
+    <link rel="stylesheet" href="../css/languageDropdownMenu.css" />
+    <link rel="stylesheet" href="../css/features.css" />
+    <link rel="stylesheet" href="../css/decoration.css" />
+    <link rel="stylesheet" href="../css/userSetting.css" />
+    <link rel="stylesheet" href="../css/afterLogin.css" />
 
-        <script type="module" defer src="../src/js/index.js"></script>
-    </head>
-    <body>
-        {%DECORATION%}
-        
-        <div class="navigation">
-            <div class="logo">coHealth</div>
-            {%NAVIGATION_BAR%} {%LANGUAGE_SELECTION%} {%SIGN_IN_BUTTON%}
-            {%REGISTER_BUTTON%}
-        </div>
+    <script type="module" defer src="../src/js/index.js"></script>
+  </head>
+  <body>
+    {%DECORATION%}
 
-        <div class="container">
-            <div class="sidebar left-div">
-                <div class="titleItem">
-                    <div class="title">
-                        User Settings
-                    </div>
-                </div>
-                <div class="sideItems">
-                    <a href="./profile" class="profilee sidesideItems activee">PROFILE</a>
-                    <a href="./history" class="healtHis sidesideItems">HEALTH HISTORY</a>
-                    <a href="./account" class="account sidesideItems">ACCOUNT</a>
-                </div>                
-            </div>
-    
-            <div class="bodyInfo right-div">
-                <div class="basicInfo">
-                    Basic Info
-                </div>
-                <div class="containInfo">
-                    <!-- hàng info 1 -->
-                    <div class="titleInfo">
-                        <div class="title-left">
-                            Full name
-                        </div>
-                        <div style="margin-right: 25.3vw;">
-                            Birthdate
-                        </div>
-                    </div>
-                    <div class="boxInfoAll">
-                        <div class="infoBox-left">
-                            <div class="boxItems">Lê Thị Cồn</div>
-                        </div>
-                        <div class="infoBox-right"> 
-                            <div class="boxItems">20-01-2003</div>
-                        </div>
-                    </div>
-                    <!-- dòng info 2 -->
-                    <div class="titleInfo">
-                        <div class="title-left">
-                            Address
-                        </div>
-                        <div style="margin-right: 21.3vw;">
-                            Phone number
-                        </div>
-                    </div>
-                    <div class="boxInfoAll">
-                        <div class="infoBox-left">
-                            <div class="boxItems">268 Lý Thường Kiệt</div>
-                        </div>
-                        <div class="infoBox-right"> 
-                            <div class="boxItems">0969696969</div>
-                        </div>
-                    </div>
-                    <!-- dòng info 3 -->
-                    <div class="titleInfo">
-                        <div class="title-left">
-                            Email
-                        </div>
-                    </div>
-                    <div class="boxInfoAll">
-                        <div class="infoBox-left">
-                            <div class="boxItems">cocha2003@gmail.com</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="buttonContain">
-                    <button class="btnn" style="margin-left: 4vw;">
-                        UPDATE
-                    </button>
-                    <button class="btnnSignout" style="margin-right: 8vw">
-                        SIGN OUT
-                    </button>
-                </div>
-            </div>
+    <div class="navigation">
+      <div class="logo">coHealth</div>
+      {%NAVIGATION_BAR%} {%LANGUAGE_SELECTION%} {%SIGN_IN_BUTTON%}
+      {%REGISTER_BUTTON%}
+    </div>
+
+    <div class="container">
+      <div class="sidebar left-div">
+        <div class="titleItem">
+          <div class="title">User Settings</div>
         </div>
-    </body>
+        <div class="sideItems">
+          <a href="./profile" class="profilee sidesideItems activee">PROFILE</a>
+          <a href="./history" class="healtHis sidesideItems">HEALTH HISTORY</a>
+          <a href="./account" class="account sidesideItems">ACCOUNT</a>
+        </div>
+      </div>
+
+      <div class="bodyInfo right-div">
+        <div class="basicInfo">Basic Info</div>
+        <div class="containInfo">
+          <!-- hàng info 1 -->
+          <div class="titleInfo">
+            <div class="title-left">Full name</div>
+            <div style="margin-right: 25.3vw">Birthdate</div>
+          </div>
+          <div class="boxInfoAll">
+            <div class="infoBox-left">
+              <div class="boxItems">Lê Thị Cồn</div>
+            </div>
+            <div class="infoBox-right">
+              <div class="boxItems">20-01-2003</div>
+            </div>
+          </div>
+          <!-- dòng info 2 -->
+          <div class="titleInfo">
+            <div class="title-left">Address</div>
+            <div style="margin-right: 21.3vw">Phone number</div>
+          </div>
+          <div class="boxInfoAll">
+            <div class="infoBox-left">
+              <div class="boxItems">268 Lý Thường Kiệt</div>
+            </div>
+            <div class="infoBox-right">
+              <div class="boxItems">0969696969</div>
+            </div>
+          </div>
+          <!-- dòng info 3 -->
+          <div class="titleInfo">
+            <div class="title-left">Email</div>
+          </div>
+          <div class="boxInfoAll">
+            <div class="infoBox-left">
+              <div class="boxItems">cocha2003@gmail.com</div>
+            </div>
+          </div>
+        </div>
+        <div class="buttonContain">
+          <button class="btnn" style="margin-left: 4vw">UPDATE</button>
+          <button class="btnnSignout" style="margin-right: 8vw">
+            SIGN OUT
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
-
-
