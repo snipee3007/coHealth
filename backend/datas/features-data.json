@@ -1,23 +1,23 @@
 [
   {
-    "title": "Calculating BMI is easier",
+    "title": "Calculating BMI",
     "iconSRC": "images/png/heartMedical.png",
     "iconAlt": "Heart Medical Icon",
-    "description": "",
+    "description": "Calculate your BMI is easier than ever. Improve your health condition now, and your future self will be blessed.",
     "main": "true"
   },
   {
     "title": "Find nearby hospital",
     "iconSRC": "images/png/hospital.png",
     "iconAlt": "Heart Medical Icon",
-    "description": "Donec quam felis, ultricies nec, pellentesque eu, pretium quis,sem. Nulla consequat massa quis enim.",
+    "description": "Want to find nearby hospitals? Use this function and be amazed by how it works.",
     "main": "false"
   },
   {
     "title": "Interactive chatbot",
     "iconSRC": "images/png/chatbot.png",
     "iconAlt": "Heart Medical Icon",
-    "description": "Donec quam felis, ultricies nec, pellentesque eu, pretium quis,sem. Nulla consequat massa quis enim.",
+    "description": "You are living alone and have no one to share your health condition with? Use this chatbot and chat directly to our talented doctors",
     "main": "false"
   }
 ]
