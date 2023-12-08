@@ -1,15 +1,19 @@
-const crypto = require('crypto');
 const { promisify } = require('util');
-const { catchAsync } = require('./../utils/catchAsync.js');
+const catchAsync = require('./../utils/catchAsync.js');
 const jwt = require('jsonwebtoken');
+const User = require('./../models/users_schema');
+const AppError = require('./../utils/appError.js');
 
 const signToken = (id) => {
+  // console.log(process.env.JWT_EXPIRES_IN);
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
-exports.createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, res) => {
+  // console.log(user);
+
   const token = signToken(user._id);
   const cookieOptions = {
     expires: new Date(
@@ -17,7 +21,7 @@ exports.createSendToken = (user, statusCode, res) => {
     ),
     httpOnly: true,
   };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  // if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
   res.cookie('jwt', token, cookieOptions);
 
@@ -33,15 +37,60 @@ exports.createSendToken = (user, statusCode, res) => {
   });
 };
 
-exports.protect = catchAsync(async (req, res, next) => {
-  // 1) Getting token and check of it's there
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
-    token = req.headers.authorization.split(' ')[1];
+exports.signup = catchAsync(async (req, res) => {
+  // console.log('Received POST request at /signup');
+
+  // Extract user input from request body
+
+  const {
+    email,
+    password,
+    gender,
+    birthdate,
+    firstName,
+    lastName,
+    confirmPassword,
+  } = req.body;
+  // console.log(req.body);
+  // Perform validation, sanitation, etc.
+
+  // Create a new user instance with the provided data
+  // console.log(firstName, lastName);
+  const newUser = await User.create({
+    email: email,
+    gender: gender,
+    // height: req.body.height,
+    // weight: req.body.weight,
+    fullname: firstName.trim() + ' ' + lastName.trim(),
+    birthdate: birthdate,
+    address: 'lmao lmao',
+    phoneNum: '0835599955',
+    password: password,
+    confirmPassword: confirmPassword,
+  });
+  createSendToken(newUser, 201, res);
+  // res.redirect('/home');
+});
+
+exports.login = catchAsync(async (req, res, next) => {
+  // console.log(req.body);
+  const { email, password } = req.body;
+  // console.log('This is a email: ', email, '. This is a password: ', password);
+  // 1) Check if email and password exist
+  if (!email || !password) {
+    return next(new AppError('Please provide email and password!', 400));
   }
+  // 2) Check if user exists && password is correct
+  const user = await User.findOne({ email }).select('+password');
+
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError('Incorrect email or password', 401));
+  }
+  createSendToken(user, 200, res);
+});
+
+exports.protect = catchAsync(async (token, req, next) => {
+  // 1) Getting token and check of it's there
 
   if (!token) {
     return next(
@@ -74,4 +123,3 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
-
