@@ -115,3 +115,15 @@ exports.getHomePageTemplateAfterSignIn = (req, res) => {
   res.end(homePageTemplate);
 };
 
+exports.getProfileTemplate = (req, res) => {
+  const homeProfileTemplate = replaceTemplate.addDecoration(
+    replaceTemplate.addNavigation(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/profilePage.html`,
+        'utf-8'
+      )
+    )
+  );
+  res.end(homeProfileTemplate);
+};
+

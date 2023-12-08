@@ -33,6 +33,6 @@ const checkTokenAndRedirect = (req, res, next) => {
     });
 };
 
-router.get(['/', '/home', '/aboutUs'], checkTokenAndRedirect, template.getHomePageTemplateAfterSignIn);
+router.get(['/', '/home', '/aboutUs'],  template.getHomePageTemplateAfterSignIn);
 
 module.exports = router;
