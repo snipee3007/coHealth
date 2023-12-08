@@ -31,9 +31,6 @@ class Login {
         .catch((err) => {
           console.log('This is a error', err);
         });
-      if (token) {
-        localStorage.setItem('token', token.token);
-      }
       window.location.href = '/home';
     });
   }

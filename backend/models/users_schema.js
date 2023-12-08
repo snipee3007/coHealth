@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const AppError = require('./../utils/appError');
+
 const historySchema = mongoose.Schema({
   takeDate: {
     type: String,
@@ -102,8 +103,16 @@ const userSchema = mongoose.Schema({
     },
     select: false,
   },
+  passwordChangedAt: Date,
   history: {
     type: [historySchema],
+  },
+  token: {
+    type: String,
+    trim: true,
+  },
+  image: {
+    type: String,
   },
 });
 
@@ -171,9 +180,23 @@ userSchema.post('save', function (error, doc, next) {
   if (error.code === 11000) {
     next(new AppError('Duplicate key value in mongoDB', 11000));
   } else {
-    next(new AppError('Bad Request!!! 💥💥', 400));
+    next(new AppError('Bad Request!!! 💥💥 ', 400));
   }
 });
+
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  // False means NOT changed
+  return false;
+};
 
 userSchema.methods.correctPassword = async function (
   candidatePassword,

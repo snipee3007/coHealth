@@ -3,10 +3,14 @@ const replaceTemplate = require('./replaceTemplate.js');
 
 //////////////////////////// EXPORT TEMPLATES /////////////////////////////////
 
-exports.getNewsTemplate = (req, res) => {
+exports.getNewsTemplate = async (req, res) => {
   const newsTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
-      fs.readFileSync(`${__dirname}/../../frontend/template/news.html`, 'utf-8')
+    await replaceTemplate.addNavigation(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/news.html`,
+        'utf-8'
+      ),
+      req
     )
   );
   res.end(newsTemplate);
@@ -14,47 +18,51 @@ exports.getNewsTemplate = (req, res) => {
 
 exports.getNewsItemTemplate = async (req, res) => {
   const newsItemTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
+    await replaceTemplate.addNavigation(
       fs.readFileSync(
         `${__dirname}/../../frontend/template/newsItem.html`,
         'utf-8'
-      )
+      ),
+      req
     )
   );
   res.end(newsItemTemplate);
 };
 
-exports.getHomePageTemplate = (req, res) => {
+exports.getHomePageTemplate = async (req, res) => {
   const homePageTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
+    await replaceTemplate.addNavigation(
       fs.readFileSync(
         `${__dirname}/../../frontend/template/homePage.html`,
         'utf-8'
-      )
+      ),
+      req
     )
   );
   res.end(homePageTemplate);
 };
 
-exports.getCalculateBMITemplate = (req, res) => {
+exports.getCalculateBMITemplate = async (req, res) => {
   const calculateBMITemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
+    await replaceTemplate.addNavigation(
       fs.readFileSync(
         `${__dirname}/../../frontend/template/calculateBMI.html`,
         'utf-8'
-      )
+      ),
+      req
     )
   );
   res.end(calculateBMITemplate);
 };
 
-exports.getfindHospitalTemplate = (req, res) => {
+exports.getfindHospitalTemplate = async (req, res) => {
   let findHospitalTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
+    await replaceTemplate.addNavigation(
       fs.readFileSync(
         `${__dirname}/../../frontend/template/findHospital.html`,
         'utf-8'
-      )
+      ),
+      req
     )
   );
 
@@ -65,53 +73,53 @@ exports.getfindHospitalTemplate = (req, res) => {
   res.end(findHospitalTemplate);
 };
 
-
-exports.getsignUpTemplate = (req, res) => {
+exports.getsignUpTemplate = async (req, res) => {
   const signUpTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
+    await replaceTemplate.addNavigation(
       fs.readFileSync(
         `${__dirname}/../../frontend/template/signUp.html`,
         'utf-8'
-      )
+      ),
+      req
     )
   );
   res.end(signUpTemplate);
 };
 
-exports.getsignInTemplate = (req, res) => {
+exports.getsignInTemplate = async (req, res) => {
   const signInTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
+    await replaceTemplate.addNavigation(
       fs.readFileSync(
         `${__dirname}/../../frontend/template/signIn.html`,
         'utf-8'
-      )
+      ),
+      req
     )
   );
   res.end(signInTemplate);
-}
+};
 
-
-exports.getForgetPasswordTemplate = (req, res) => {
+exports.getForgetPasswordTemplate = async (req, res) => {
   const forgetPasswordTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
+    await replaceTemplate.addNavigation(
       fs.readFileSync(
         `${__dirname}/../../frontend/template/forgetPassword.html`,
         'utf-8'
-      )
-    )
-  )
-  res.end(forgetPasswordTemplate);
-}
-
-exports.getHomePageTemplateAfterSignIn = (req, res) => {
-  const homePageTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigationAfterSign(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/homePage.html`,
-        'utf-8'
-      )
+      ),
+      req
     )
   );
-  res.end(homePageTemplate);
+  res.end(forgetPasswordTemplate);
 };
 
+// exports.getHomePageTemplateAfterSignIn = (req, res) => {
+//   const homePageTemplate = replaceTemplate.addDecoration(
+//     await replaceTemplate.addNavigationAfterSign(
+//       fs.readFileSync(
+//         `${__dirname}/../../frontend/template/homePage.html`,
+//         'utf-8'
+//       )
+//     )
+//   );
+//   res.end(homePageTemplate);
+// };
