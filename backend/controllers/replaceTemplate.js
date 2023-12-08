@@ -30,6 +30,11 @@ const profile = fs.readFileSync(
   'utf-8'
 );
 
+const profilePicture = fs.readFileSync(
+  `${__dirname}/../../frontend/template/profilePicture.html`,
+  'utf-8'
+);
+
 
 exports.addNavigation = (template) => {
   template = template.replace(/{%NAVIGATION_BAR%}/g, navigation);
@@ -47,7 +52,7 @@ exports.addDecoration = (template) => {
 exports.addNavigationAfterSign = (template) => {
   template = template.replace(/{%NAVIGATION_BAR%}/g, navigation);
   template = template.replace(/{%LANGUAGE_SELECTION%}/g, language);
-  template = template.replace(/{%SIGN_IN_BUTTON%}/g, signin);
+  template = template.replace(/{%SIGN_IN_BUTTON%}/g, profilePicture);
   template = template.replace(/{%REGISTER_BUTTON%}/g, profile);
   return template;
 }
