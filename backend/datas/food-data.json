@@ -1,0 +1,107 @@
+[
+    {
+        "meal": "breakfast",
+        "items": [
+            {
+                "name": "Oatmeal",
+                "calories": 150,
+                "ingredients": [
+                    "Rolled oats",
+                    "Almond milk",
+                    "Berries",
+                    "Chia seeds"
+                ]
+            },
+            {
+                "name": "Greek Yogurt Parfait",
+                "calories": 200,
+                "ingredients": [
+                    "Greek yogurt",
+                    "Granola",
+                    "Honey",
+                    "Mixed fruits"
+                ]
+            },
+            {
+                "name": "Avocado Toast",
+                "calories": 180,
+                "ingredients": [
+                    "Whole grain bread",
+                    "Avocado",
+                    "Tomato",
+                    "Egg"
+                ]
+            }
+        ]
+    },
+    {
+        "meal": "lunch",
+        "items": [
+            {
+                "name": "Quinoa Salad",
+                "calories": 250,
+                "ingredients": [
+                    "Quinoa",
+                    "Spinach",
+                    "Cherry tomatoes",
+                    "Cucumber"
+                ]
+            },
+            {
+                "name": "Grilled Chicken Wrap",
+                "calories": 300,
+                "ingredients": [
+                    "Grilled chicken",
+                    "Whole wheat wrap",
+                    "Lettuce",
+                    "Tomato"
+                ]
+            },
+            {
+                "name": "Vegetable Stir-Fry",
+                "calories": 220,
+                "ingredients": [
+                    "Broccoli",
+                    "Bell peppers",
+                    "Carrots",
+                    "Tofu"
+                ]
+            }
+        ]
+    },
+    {
+        "meal": "dinner",
+        "items": [
+            {
+                "name": "Salmon with Quinoa",
+                "calories": 350,
+                "ingredients": [
+                    "Salmon fillet",
+                    "Quinoa",
+                    "Asparagus",
+                    "Lemon"
+                ]
+            },
+            {
+                "name": "Sweet Potato and Chickpea Curry",
+                "calories": 280,
+                "ingredients": [
+                    "Sweet potatoes",
+                    "Chickpeas",
+                    "Coconut milk",
+                    "Spinach"
+                ]
+            },
+            {
+                "name": "Vegetarian Sushi Bowl",
+                "calories": 320,
+                "ingredients": [
+                    "Sushi rice",
+                    "Avocado",
+                    "Cucumber",
+                    "Edamame"
+                ]
+            }
+        ]
+    }
+]

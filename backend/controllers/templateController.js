@@ -55,6 +55,19 @@ exports.getCalculateBMITemplate = async (req, res) => {
   res.end(calculateBMITemplate);
 };
 
+exports.getResultBMITemplate = async  (req, res) => {
+  const resultBMITemplate = replaceTemplate.addDecoration(
+    await replaceTemplate.addNavigation(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/resultBMI.html`,
+        'utf-8'
+      ),
+      req
+    )
+  );
+  res.end(resultBMITemplate);
+};
+
 exports.getfindHospitalTemplate = async (req, res) => {
   let findHospitalTemplate = replaceTemplate.addDecoration(
     await replaceTemplate.addNavigation(
@@ -112,44 +125,6 @@ exports.getForgetPasswordTemplate = async (req, res) => {
   res.end(forgetPasswordTemplate);
 };
 
-
-exports.getProfileTemplate = (req, res) => {
-  const ProfileTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigationAfterSign(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/profilePage.html`,
-        'utf-8'
-      )
-    )
-  );
-  res.end(ProfileTemplate);
-};
-
-exports.getAccountTemplate = (req, res) => {
-  const AccountTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigationAfterSign(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/accountPage.html`,
-        'utf-8'
-      )
-    )
-  );
-  res.end(AccountTemplate);
-};
-
-exports.getHistoryTemplate = (req, res) => {
-  const historyTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigationAfterSign(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/historyPage.html`,
-        'utf-8'
-      )
-    )
-  );
-  res.end(historyTemplate);
-};
-
-
 // exports.getHomePageTemplateAfterSignIn = (req, res) => {
 //   const homePageTemplate = replaceTemplate.addDecoration(
 //     await replaceTemplate.addNavigationAfterSign(
@@ -161,4 +136,3 @@ exports.getHistoryTemplate = (req, res) => {
 //   );
 //   res.end(homePageTemplate);
 // };
-
