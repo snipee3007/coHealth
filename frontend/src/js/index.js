@@ -27,7 +27,7 @@ const init = async function () {
   if (window.location.pathname.includes('/news/')) {
     await NewsItem.run(window.location.pathname.replace('/news/', ''));
   }
-  if (!window.location.pathname === '/login') {
+  if (!(window.location.pathname === '/login')) {
     await Underline.run();
     await dropdownMenu();
   }

@@ -11,7 +11,7 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = async (user, statusCode, res) => {
   // console.log(user);
 
   const token = signToken(user._id);
@@ -26,6 +26,12 @@ const createSendToken = (user, statusCode, res) => {
   res.cookie('jwt', token, cookieOptions);
 
   // Remove password from output
+  user.token = token;
+  // user.password = undefined;
+  // console.log('Old user: ', user);
+  user = await user.save({ validateBeforeSave: false });
+  // console.log('New user: ', user);
+
   user.password = undefined;
 
   res.status(statusCode).json({
@@ -50,6 +56,7 @@ exports.signup = catchAsync(async (req, res) => {
     firstName,
     lastName,
     confirmPassword,
+    image,
   } = req.body;
   // console.log(req.body);
   // Perform validation, sanitation, etc.
@@ -67,7 +74,9 @@ exports.signup = catchAsync(async (req, res) => {
     phoneNum: '0835599955',
     password: password,
     confirmPassword: confirmPassword,
+    image: image,
   });
+
   createSendToken(newUser, 201, res);
   // res.redirect('/home');
 });
@@ -86,7 +95,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
-  createSendToken(user, 200, res);
+  await createSendToken(user, 200, res);
 });
 
 exports.protect = catchAsync(async (token, req, next) => {
@@ -121,5 +130,5 @@ exports.protect = catchAsync(async (token, req, next) => {
 
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
-  next();
+  // next();
 });
