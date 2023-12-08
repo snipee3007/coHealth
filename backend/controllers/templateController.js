@@ -48,6 +48,19 @@ exports.getCalculateBMITemplate = (req, res) => {
   res.end(calculateBMITemplate);
 };
 
+exports.getResultBMITemplate = (req, res) => {
+  const resultBMITemplate = replaceTemplate.addDecoration(
+    replaceTemplate.addNavigation(
+      fs.readFileSync(
+        `${__dirname}/../../frontend/template/resultBMI.html`,
+        'utf-8'
+      )
+    )
+  );
+  res.end(resultBMITemplate);
+};
+
+
 exports.getfindHospitalTemplate = (req, res) => {
   let findHospitalTemplate = replaceTemplate.addDecoration(
     replaceTemplate.addNavigation(
@@ -58,60 +71,11 @@ exports.getfindHospitalTemplate = (req, res) => {
     )
   );
 
+
+  
   findHospitalTemplate = findHospitalTemplate.replace(
     '{%GOOGLE_MAPS_API_KEY%}',
     process.env.REACT_APP_GOOGLE_MAPS_API_KEY
   );
   res.end(findHospitalTemplate);
 };
-
-
-exports.getsignUpTemplate = (req, res) => {
-  const signUpTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/signUp.html`,
-        'utf-8'
-      )
-    )
-  );
-  res.end(signUpTemplate);
-};
-
-exports.getsignInTemplate = (req, res) => {
-  const signInTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/signIn.html`,
-        'utf-8'
-      )
-    )
-  );
-  res.end(signInTemplate);
-}
-
-
-exports.getForgetPasswordTemplate = (req, res) => {
-  const forgetPasswordTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/forgetPassword.html`,
-        'utf-8'
-      )
-    )
-  )
-  res.end(forgetPasswordTemplate);
-}
-
-exports.getHomePageTemplateAfterSignIn = (req, res) => {
-  const homePageTemplate = replaceTemplate.addDecoration(
-    replaceTemplate.addNavigationAfterSign(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/homePage.html`,
-        'utf-8'
-      )
-    )
-  );
-  res.end(homePageTemplate);
-};
-

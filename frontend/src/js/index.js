@@ -7,6 +7,7 @@ import Features from './featuresController.js';
 import Members from './membersController.js';
 import AboutUs from './aboutUsController.js';
 import Login from './login.js';
+import BMI from "./calculate.js"
 
 const init = async function () {
   // navigation.updateClick();
@@ -33,5 +34,12 @@ const init = async function () {
   if (window.location.pathname === '/login') {
     await Login.login();
   }
+  await dropdownMenu();
+  await Underline.run();
+  if (window.location.pathname.includes('/result')) {
+    BMI.renderBMIDescription();
+    BMI.renderCaloriesDescription();
+  }
+
 };
 init();
