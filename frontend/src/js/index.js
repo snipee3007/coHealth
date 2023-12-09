@@ -8,7 +8,7 @@ import Members from './membersController.js';
 import AboutUs from './aboutUsController.js';
 import Login from './login.js';
 import BMI from './calculate.js';
-import signUp from './signup.js';
+import signup from './signup.js';
 
 const init = async function () {
   // navigation.updateClick();
@@ -39,7 +39,7 @@ const init = async function () {
     await Login.login();
   }
   if (window.location.pathname === '/signUp') {
-    await signUp.signup();
+    await signup.signup();
   }
   if (window.location.pathname.includes('/result')) {
     BMI.renderBMIDescription();

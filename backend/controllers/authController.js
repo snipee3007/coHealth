@@ -12,7 +12,7 @@ const signToken = (id) => {
 };
 
 const createSendToken = async (user, statusCode, res) => {
-  console.log(user);
+  // console.log(user);
 
   const token = signToken(user._id);
   const cookieOptions = {

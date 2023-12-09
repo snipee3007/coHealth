@@ -5,6 +5,7 @@ class signup {
     signUpForm.addEventListener('submit', async function (e) {
       e.preventDefault();
       const inputs = signUpForm.querySelectorAll('input');
+      const selects = signUpForm.querySelectorAll('select');
       let email,
         password,
         confirmPassword,
@@ -18,8 +19,6 @@ class signup {
           email = element.value;
         } else if (element.name === 'password') {
           password = element.value;
-        } else if (element.name === 'gender') {
-          gender = element.value;
         } else if (element.name === 'birthdate') {
           birthdate = element.value;
         } else if (element.name === 'firstName') {
@@ -32,7 +31,12 @@ class signup {
           image = element.value;
         }
       });
-      const token = await fetch('users/signup', {
+      selects.forEach((element, i) => {
+        if (element.name === 'gender') {
+          gender = element.value;
+        }
+      });
+      const token = await fetch('users/signUp', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -49,10 +53,14 @@ class signup {
         }),
       })
         .then((data) => data.json())
-        .then((data) => data)
+        .then((data) => {
+          console.log(data);
+          return data;
+        })
         .catch((err) => {
           console.log('This is a error', err);
         });
+      console.log(token);
       window.location.href = '/home';
     });
   }

@@ -8,8 +8,11 @@ exports.getUserByToken = async (req) => {
     return null; // Consider returning null or some other appropriate value in case of error
   }
 
-  const token = data.split(';').find((str) => str.includes('jwt'));
-
+  const token = data
+    .split(';')
+    .filter((str) => str.includes('jwt'))[0]
+    .replace('jwt=', '')
+    .trim();
   if (!token) {
     console.error('No JWT present in the header');
     return null; // Consider returning null or some other appropriate value in case of error
