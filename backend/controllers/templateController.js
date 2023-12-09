@@ -126,7 +126,8 @@ exports.getForgetPasswordTemplate = async (req, res) => {
 };
 
 exports.getProfileTemplate = async (req, res) => {
-  const ProfileTemplate = replaceTemplate.addDecoration(
+
+  const ProfileTemplate = await replaceTemplate.addProfile(replaceTemplate.addDecoration(
     await replaceTemplate.addNavigation(
       fs.readFileSync(
         `${__dirname}/../../frontend/template/profilePage.html`,
@@ -134,7 +135,7 @@ exports.getProfileTemplate = async (req, res) => {
       ),
       req
     )
-  );
+  ));
   res.end(ProfileTemplate);
 };
 
@@ -147,6 +148,7 @@ exports.getAccountTemplate = async (req, res) => {
       ),
       req
     )
+    
   );
   res.end(AccountTemplate);
 };

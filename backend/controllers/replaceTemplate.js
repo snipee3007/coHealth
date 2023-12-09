@@ -1,5 +1,6 @@
 const fs = require('fs');
 const userController = require('./usersController');
+const User = require('../models/users_schema');
 
 const navigation = fs.readFileSync(
   `${__dirname}/../../frontend/template/navigation.html`,
@@ -29,8 +30,6 @@ const profile = fs.readFileSync(
   `${__dirname}/../../frontend/template/profile.html`,
   'utf-8'
 );
-
-
 
 
 
@@ -81,3 +80,16 @@ exports.addNavigationAfterSign = (template) => {
   return template;
 };
 */
+exports.addProfile = async (template, req) => {
+  const user = await userController.getUserByToken(req);
+  // console.log(user);
+  if (user) {
+    template = template.replace(/{%PHONE_USER%}/,user.phoneNum);
+    template = template.replace(/{%ADDRESS_USER%}/,user.address);
+    template = template.replace(/{%BIRTHDAY_USER%}/,user.birthdate);
+    template = template.replace(/{%EMAIL_USER%}/g, user.email);
+    template = template.replace(/{%NAME_USER%}/g, user.fullname);
+    return template;
+  }
+  return template;
+};
