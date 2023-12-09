@@ -126,17 +126,27 @@ exports.getForgetPasswordTemplate = async (req, res) => {
 };
 
 exports.getProfileTemplate = async (req, res) => {
+  try {
+    const profilePagePath = `${__dirname}/../../frontend/template/profilePage.html`;
+    const profilePageContent = fs.readFileSync(profilePagePath, 'utf-8');
 
-  const ProfileTemplate = await replaceTemplate.addProfile(replaceTemplate.addDecoration(
-    await replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/profilePage.html`,
-        'utf-8'
-      ),
+    const navigationTemplate = await replaceTemplate.addNavigation(
+      profilePageContent,
       req
-    )
-  ));
-  res.end(ProfileTemplate);
+    );
+    const decorationTemplate = await replaceTemplate.addDecoration(
+      navigationTemplate
+    );
+    const profileTemplate = await replaceTemplate.addProfile(
+      decorationTemplate,
+      req
+    );
+
+    res.end(profileTemplate);
+  } catch (error) {
+    console.error('Error generating profile template:', error);
+    res.status(500).send('Internal Server Error');
+  }
 };
 
 exports.getAccountTemplate = async (req, res) => {
@@ -148,7 +158,6 @@ exports.getAccountTemplate = async (req, res) => {
       ),
       req
     )
-    
   );
   res.end(AccountTemplate);
 };

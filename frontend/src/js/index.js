@@ -8,6 +8,7 @@ import Members from './membersController.js';
 import AboutUs from './aboutUsController.js';
 import Login from './login.js';
 import BMI from './calculate.js';
+import signUp from './signup.js';
 
 const init = async function () {
   // navigation.updateClick();
@@ -37,9 +38,13 @@ const init = async function () {
   if (window.location.pathname === '/login') {
     await Login.login();
   }
+  if (window.location.pathname === '/signUp') {
+    await signUp.signup();
+  }
   if (window.location.pathname.includes('/result')) {
     BMI.renderBMIDescription();
     BMI.renderCaloriesDescription();
+    // await CalculateBMI.renderBreakfast();
   }
 };
 init();

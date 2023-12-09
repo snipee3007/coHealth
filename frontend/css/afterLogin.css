@@ -1,18 +1,22 @@
 .profileIcon {
   width: 4vw;
   border-radius: 10vw;
+  position: relative;
+  right: 2vw;
 }
 .profileName {
-  width: 5vw;
+  width: 7vw;
+  position: relative;
+  right: 1.5vw;
 }
 .profileIcon img {
   width: 100%;
 }
 
 .afterLogin {
-  width: 10vw;
+  width: 11vw;
 }
 
 .afterLoginButton {
-  width: 10vw !important;
+  width: 11vw !important;
 }
