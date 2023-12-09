@@ -83,9 +83,9 @@ exports.addProfile = async (template, req) => {
   if (user) {
     const date = user.birthdate;
     const formatDate = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()}`;
-    console.log(formatDate);
+      date.getMonth() + 1 >= 10 ? '' : '0'
+    }${date.getMonth() + 1}/${date.getFullYear()}`;
+    // console.log(formatDate);
     template = template.replace(/{%PHONE_USER%}/, user.phoneNum);
     template = template.replace(/{%ADDRESS_USER%}/, user.address);
     template = template.replace(/{%BIRTHDAY_USER%}/, formatDate);
