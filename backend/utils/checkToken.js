@@ -1,34 +1,37 @@
-const template = require('../controllers/templateController');
 const User = require('../models/users_schema');
 const authController = require('./../controllers/authController');
 
 const checkTokenAndRedirect = async (req, res, next) => {
-  const data = req.rawHeaders.filter((str) => str.includes('jwt'))[0];
-  const token = data
-    .split(';')
-    .filter((str) => str.includes('jwt'))[0]
-    .replace('jwt=', '')
-    .trim();
-  // const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NzQxZWRlN2U3ZTc5MzNjZDc1MjBhNSIsImlhdCI6MTcwMjEwODg5NSwiZXhwIjoxNzAyMTk1Mjk1fQ.UUQddW4hE1117B96ognslYm9aOTd4m7U_UILE3T9OKQ`;
-  const users = await User.find();
-  if (users.length !== 0) {
-    const user = await User.find({ token: token });
+  const data = req.rawHeaders.find((str) => str.includes('jwt'));
 
-    if (user) {
-      // console.log(token);
-      //
-      authController.protect(token, req, next);
-      const json = `{"token":"${token}"}`;
-      res.cookies = token;
-      res.setHeader('token', json);
-    } else {
-      res.cookies = '';
-      res.setHeader('token', '');
-    }
+  if (!data) {
+    // console.error('No JWT header found');
+    res.clearCookie('token'); // Clear cookie if it exists
+    res.setHeader('token', '');
+    return next();
+  }
+
+  const token = data.split(';').find((str) => str.includes('jwt'));
+
+  if (!token) {
+    // console.error('No JWT present in the header');
+    res.clearCookie('token');
+    res.setHeader('token', '');
+    return next();
+  }
+
+  const user = await User.find({ token: token });
+
+  if (user.length !== 0) {
+    authController.protect(token, req, next);
+    const json = `{"token":"${token}"}`;
+    res.cookie('token', token);
+    res.setHeader('token', json);
   } else {
-    res.cookies = '';
+    res.clearCookie('token');
     res.setHeader('token', '');
   }
+
   next();
 };
 

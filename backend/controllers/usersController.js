@@ -4,7 +4,7 @@ exports.getUserByToken = async (req) => {
   const data = req.rawHeaders.find((str) => str.includes('jwt'));
 
   if (!data) {
-    console.error('No JWT header found');
+    // console.error('No JWT header found');
     return null; // Consider returning null or some other appropriate value in case of error
   }
 
@@ -14,7 +14,7 @@ exports.getUserByToken = async (req) => {
     .replace('jwt=', '')
     .trim();
   if (!token) {
-    console.error('No JWT present in the header');
+    // console.error('No JWT present in the header');
     return null; // Consider returning null or some other appropriate value in case of error
   }
 
