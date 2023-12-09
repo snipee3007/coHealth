@@ -31,9 +31,6 @@ const profile = fs.readFileSync(
   'utf-8'
 );
 
-
-
-
 exports.addNavigation = async (template, req) => {
   const user = await userController.getUserByToken(req);
   // console.log(user);
@@ -84,9 +81,14 @@ exports.addProfile = async (template, req) => {
   const user = await userController.getUserByToken(req);
   // console.log(user);
   if (user) {
-    template = template.replace(/{%PHONE_USER%}/,user.phoneNum);
-    template = template.replace(/{%ADDRESS_USER%}/,user.address);
-    template = template.replace(/{%BIRTHDAY_USER%}/,user.birthdate);
+    const date = user.birthdate;
+    const formatDate = `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()}`;
+    console.log(formatDate);
+    template = template.replace(/{%PHONE_USER%}/, user.phoneNum);
+    template = template.replace(/{%ADDRESS_USER%}/, user.address);
+    template = template.replace(/{%BIRTHDAY_USER%}/, formatDate);
     template = template.replace(/{%EMAIL_USER%}/g, user.email);
     template = template.replace(/{%NAME_USER%}/g, user.fullname);
     return template;

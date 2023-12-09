@@ -60,7 +60,6 @@ class signup {
         .catch((err) => {
           console.log('This is a error', err);
         });
-      console.log(token);
       window.location.href = '/home';
     });
   }
