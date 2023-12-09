@@ -4,41 +4,41 @@
     "name": "M.D. Masamune",
     "imageName": "masamune",
     "imageAlt": "Masamune's profile picture",
-    "description": "Chó bịp masamune"
+    "description": "Chuyên khoa xương khớp"
   },
   {
     "id": 1,
     "name": "D.D.S. Itto",
     "imageName": "ittoday",
     "imageAlt": "Ittoday's profile picture",
-    "description": "Lê Cồn"
+    "description": "Chuyên khoa nội tổng quát"
   },
   {
     "id": 2,
     "name": "Ph.D. Snipee",
     "imageName": "snipee",
     "imageAlt": "Snipee's profile picture",
-    "description": "Moi moi"
+    "description": "Chuyên khoa mắt"
   },
   {
     "id": 3,
     "name": "Dr. TNK",
     "imageName": "tnk",
     "imageAlt": "TNK's profile picture",
-    "description": "Tanaka-san"
+    "description": "Chuyên khoa thần kinh"
   },
   {
     "id": 4,
     "name": "Dr Drazod",
     "imageName": "drazod",
     "imageAlt": "Drazod's profile picture",
-    "description": "T-con"
+    "description": "Chuyên khoa tiêu hoá"
   },
   {
     "id": 5,
     "name": "Dr. Wan",
     "imageName": "wan",
     "imageAlt": "Wan's profile picture",
-    "description": "Chấn bé đù"
+    "description": "Chuyên khoa tai mũi họng"
   }
 ]

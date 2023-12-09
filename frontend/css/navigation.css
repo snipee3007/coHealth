@@ -123,6 +123,12 @@
   font-size: 2.5vh;
 }
 
+.btn :hover {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+  text-decoration: underline;
+}
+
 .a_links,
 .nav_links {
   text-decoration: none;
