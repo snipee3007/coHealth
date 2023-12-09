@@ -74,8 +74,8 @@
   width: 40vw;
   display: flex;
   justify-content: center;
-  align-items: flex-end; /* Align items to the bottom */
-  margin-top: auto; /* Push the image to the bottom */
+  align-items: flex-end;
+  margin-top: auto;
 }
 
 .lifesavers-bust {

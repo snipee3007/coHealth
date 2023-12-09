@@ -1,7 +1,5 @@
-exports.catchAsync = async (func) => {
-  try {
-    await func;
-  } catch (err) {
-    console.error('Can not using async await function with: ', err);
-  }
+module.exports = (fn) => {
+  return (req, res, next) => {
+    fn(req, res, next).catch(next);
+  };
 };

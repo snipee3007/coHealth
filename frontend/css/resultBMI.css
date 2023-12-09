@@ -1,0 +1,35 @@
+.bmicDescriptionContainer {
+    position: relative;
+    top: 75%;
+}
+
+.bmiDescriptionTitle {
+    font-family: 'Alice', sans-serif;
+    font-weight: bold;
+
+}
+
+.bmiDescriptionContent {
+    color: #00B7FF;
+    font-family: 'Alice', sans-serif;
+    font-weight: bold;
+
+}
+
+.caloriescDescriptionContainer {
+    position: relative;
+    top: 75%;
+}
+
+.caloriesDescriptionTitle {
+    font-family: 'Alice', sans-serif;
+    font-weight: bold;
+}
+
+.caloriesDescriptionContent {
+    color: #FF389C;
+    font-family: 'Alice', sans-serif;
+    font-weight: bold;
+    width: 200px;
+    text-align: center;
+}
