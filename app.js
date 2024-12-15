@@ -1,5 +1,6 @@
 const express = require('express');
 const sessions = require('express-session');
+const path = require('path');
 
 const homePageRouter = require('./backend/routers/homePageRoutes.js');
 const apiRouter = require('./backend/routers/apiRoutes.js');
@@ -18,10 +19,16 @@ const historyRouter = require('./backend/routers/historyRoutes.js');
 
 const globalErrorHandler = require('./backend/controllers/errorController.js');
 
-
 const app = express();
 
 const bodyParser = require('body-parser');
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'frontend/template'));
+app.use(express.static(path.join(__dirname, `frontend`)));
+
+// app.use(swiper);
+
 // const cookieParser = require('cookie-parser');
 
 // const oneDay = 1000 * 60 * 60 * 24;
@@ -37,7 +44,6 @@ const bodyParser = require('body-parser');
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(`${__dirname}/frontend`));
 
 app.use('/', homePageRouter);
 app.use('/news', newsRouter);
@@ -52,7 +58,6 @@ app.use('/forgetPassword', forgetPasswordRouter);
 app.use('/profile', profileRouter);
 app.use('/account', accountRouter);
 app.use('/history', historyRouter);
-
 
 app.use(globalErrorHandler);
 

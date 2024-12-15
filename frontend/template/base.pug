@@ -1,0 +1,19 @@
+doctype html 
+
+html 
+    header 
+        block header
+            title coHealth ! #{title}
+            link(rel="stylesheet" href="css/tailwind.css")
+            link(rel="stylesheet" href="css/aboutUs.css")
+            link(rel="short icon" href="images/Le Con.png")
+            script(type='module' src='src/js/index.js')
+    body 
+        // Navbar
+        include navbar 
+
+        // Actual body
+        block body 
+
+        // Footer
+        include footer

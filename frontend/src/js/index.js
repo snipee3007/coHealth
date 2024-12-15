@@ -1,26 +1,18 @@
-import dropdownMenu from './languageDropDownMenu.js';
 import News from './newsController.js';
 import NewsItem from './newsItemController.js';
-import Underline from './underline.js';
 import Slider from './sliderController.js';
-import Features from './featuresController.js';
-import Members from './membersController.js';
-import AboutUs from './aboutUsController.js';
+import Navbar from './navbarController.js';
 import Login from './login.js';
 import BMI from './calculate.js';
 import signup from './signup.js';
 
 const init = async function () {
-  // navigation.updateClick();
   if (
     window.location.pathname === '/home' ||
     window.location.pathname === '/aboutUs' ||
     window.location.pathname === '/'
   ) {
-    await Slider.run();
-    await Features.render();
-    await Members.run();
-    await AboutUs.moveTo();
+    new Slider();
   }
   if (window.location.pathname === '/news') {
     await News.run();
@@ -28,13 +20,7 @@ const init = async function () {
   if (window.location.pathname.includes('/news/')) {
     await NewsItem.run(window.location.pathname.replace('/news/', ''));
   }
-  if (
-    !(window.location.pathname === '/login') &&
-    !(window.location.pathname === '/signup')
-  ) {
-    await Underline.run();
-    await dropdownMenu();
-  }
+
   if (window.location.pathname === '/login') {
     await Login.login();
   }
@@ -46,5 +32,7 @@ const init = async function () {
     BMI.renderCaloriesDescription();
     // await CalculateBMI.renderBreakfast();
   }
+
+  Navbar.init();
 };
 init();

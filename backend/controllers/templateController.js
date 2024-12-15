@@ -1,6 +1,7 @@
 const fs = require('fs');
 const replaceTemplate = require('./replaceTemplate.js');
-
+const New = require('./../models/news_schema.js');
+const catchAsync = require('./../utils/catchAsync.js');
 //////////////////////////// EXPORT TEMPLATES /////////////////////////////////
 
 exports.getNewsTemplate = async (req, res) => {
@@ -29,18 +30,19 @@ exports.getNewsItemTemplate = async (req, res) => {
   res.end(newsItemTemplate);
 };
 
-exports.getHomePageTemplate = async (req, res) => {
-  const homePageTemplate = replaceTemplate.addDecoration(
-    await replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/homePage.html`,
-        'utf-8'
-      ),
-      req
-    )
-  );
-  res.end(homePageTemplate);
-};
+exports.getHomePageTemplate = catchAsync(async (req, res) => {
+  const mostViewNews = await New.find()
+    .sort('-view')
+    .sort('createDate')
+    .limit(6);
+  const latestNews = await New.find().sort('createDate').limit(3);
+  res.render('homepage', {
+    title: 'Welcome',
+    mostViewNews,
+    latestNews,
+  });
+  // res.end(homePageTemplate);
+});
 
 exports.getCalculateBMITemplate = async (req, res) => {
   const calculateBMITemplate = replaceTemplate.addDecoration(
