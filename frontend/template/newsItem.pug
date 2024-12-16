@@ -37,17 +37,20 @@ block body
         .comments_title.linearText.font-ABeeZee.text-4xl.font-ABeeZee.my-4.font-bold COMMENTS
 
         .commentBox.px-16
-            .flex.flex-1.items-center.justify-center.gap-12
-                img(src=`./../images/users/profile/${user.image}`).rounded-full.w-20.object-fill
-                .relative.w-full
-                    input(type="text" placeholder='Write your comment here' class='border-[#EAF0F7]').w-full.border.py-2.px-3.rounded-lg
-                    img(src="./../images/png/send-svgrepo-com.png", alt="Send icon" class='top-1/2 -translate-y-1/2').absolute.right-4.w-6
+            if user 
+                .flex.flex-1.items-center.justify-center.gap-12
+                    img(src=`./../images/users/profile//menAnonymous.jpg`).rounded-full.w-20.object-fill
+                    .relative.w-full
+                        input(type="text" placeholder='Write your comment here' class='border-[#EAF0F7]').w-full.border.py-2.px-3.rounded-lg
+                        img(src="./../images/png/send-svgrepo-com.png", alt="Send icon" class='top-1/2 -translate-y-1/2').absolute.right-4.w-6
+            else 
+                .linearText.text-center.font-AbhayaLibre.text-xl Please #[a(href='/signIn' class='hover:underline').italic.underline sign in] to comment on this news
             .flex.flex-1.items-center.justify-center.gap-12.px-16.my-6
-                img(src=`./../images/users/profile/${user.image}`).rounded-full.w-20.object-fill
+                img(src=`./../images/users/profile/womanAnonymous.jpg`).rounded-full.w-20.object-fill
                 .comment.flex.flex-col.w-full 
                     .commentInfo.flex.flex-1.px-6 
                         .commentNameRating.flex.flex-1.gap-4 
-                            .commentUsername.font-AbhayaLibre.font-extrabold.text-2xl(class='text-[#6E67F4] min-w-56')= user.fullname
+                            .commentUsername.font-AbhayaLibre.font-extrabold.text-2xl(class='text-[#6E67F4] min-w-56') Lê Minh Chánh
                             .commentRating.flex.flex-1.gap-2.items-center.mx-6
                                 img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
                                 img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4

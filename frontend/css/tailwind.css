@@ -1624,3 +1624,8 @@ label {
 .swiper-pagination-bullet-active-news-main {
   background: none;
 }
+
+.hover\:underline:hover {
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
