@@ -43,64 +43,70 @@ const createSendToken = async (user, statusCode, res) => {
   });
 };
 
-exports.signup = catchAsync(async (req, res) => {
-  // console.log('Received POST request at /signup');
+exports.signUp = catchAsync(async (req, res, next) => {
+  // console.log('Received POST request at /signUp');
 
   // Extract user input from request body
-
   const {
     email,
     password,
     gender,
-    birthdate,
-    firstName,
-    lastName,
+    yearOfBirth,
+    fullname,
     confirmPassword,
     image,
   } = req.body;
   // console.log(req.body);
+
   // Perform validation, sanitation, etc.
 
   // Create a new user instance with the provided data
-  // console.log(firstName, lastName);
   const newUser = await User.create({
-    email: email,
-    gender: gender,
-    // height: req.body.height,
-    // weight: req.body.weight,
-    fullname: firstName.trim() + ' ' + lastName.trim(),
-    birthdate: birthdate,
-    address: 'lmao lmao',
-    phoneNum: '0835599955',
-    password: password,
-    confirmPassword: confirmPassword,
-    image: image,
+    email,
+    password,
+    gender,
+    yearOfBirth,
+    fullname,
+    confirmPassword,
+    image,
   });
 
   await createSendToken(newUser, 201, res);
-  // res.redirect('/home');
 });
 
-exports.login = catchAsync(async (req, res, next) => {
+exports.signIn = catchAsync(async (req, res, next) => {
   // console.log(req.body);
-  const { email, password } = req.body;
+  const { signInField, password } = req.body;
   // console.log('This is a email: ', email, '. This is a password: ', password);
   // 1) Check if email and password exist
-  if (!email || !password) {
-    return next(new AppError('Please provide email and password!', 400));
+  if (!signInField || !password) {
+    return next(
+      new AppError('Please provide Email/Username and password!', 400)
+    );
   }
   // 2) Check if user exists && password is correct
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({
+    $or: [{ email: signInField }, { username: signInField }],
+  }).select('+password');
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 401));
+    return next(new AppError('Incorrect email/username or password', 401));
   }
+
   await createSendToken(user, 200, res);
 });
 
-exports.protect = catchAsync(async (token, req, next) => {
+exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
-
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
+  }
   if (!token) {
     return next(
       new AppError('You are not logged in! Please log in to get access.', 401)
@@ -113,6 +119,7 @@ exports.protect = catchAsync(async (token, req, next) => {
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
+    res.clearCookie('jwt');
     return next(
       new AppError(
         'The user belonging to this token does no longer exist.',
@@ -123,6 +130,7 @@ exports.protect = catchAsync(async (token, req, next) => {
 
   // 4) Check if user changed password after the token was issued
   if (currentUser.changedPasswordAfter(decoded.iat)) {
+    res.clearCookie('jwt');
     return next(
       new AppError('User recently changed password! Please log in again.', 401)
     );
@@ -131,4 +139,33 @@ exports.protect = catchAsync(async (token, req, next) => {
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
   // next();
+});
+
+exports.isSignedIn = catchAsync(async (req, res, next) => {
+  // 1) Getting token and check of it's there
+  if (req.cookies && req.cookies.jwt) {
+    // 2) Verification token
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    // 3) Check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      res.clearCookie('jwt');
+      return next();
+    }
+
+    // 4) Check if user changed password after the token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      res.clearCookie('jwt');
+      return next();
+    }
+
+    // GRANT ACCESS TO PROTECTED ROUTE
+    res.locals.user = currentUser;
+    return next();
+  }
+  next();
 });

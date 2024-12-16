@@ -5,13 +5,14 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        ABeeZee: ['ABeeZee'],
-        AbhayaLibre: ['AbhayaLibre'],
         Fustat: ['Fustat'],
         Roca: ['Roca'],
         'DM-Sans': ['DM-Sans'],
         Urbanist: ['Urbanist'],
         Roboto: ['Roboto'],
+        Inter: ['Inter'],
+        ABeeZee: ['ABeezee'],
+        AbhayaLibre: ['AbhayaLibre'],
       },
     },
   },

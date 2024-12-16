@@ -1,37 +1,39 @@
 class News {
-  #images;
-  async fetchData() {
-    await fetch('/api/getAllNews')
-      .then((res) => res.json())
-      .then((res) => (this.#images = res.data.newsFound))
-      .catch((err) => console.error('Could not load images', err));
+  constructor() {
+    this.#init();
   }
-  async loadHTML() {
-    const html = this.#images
-      .map(
-        (image) =>
-          `
-          <a href="/news/${image.slug}" class="a_links newsItem">
-        <div>
-          <div class="newsItemImage">
-            <img src="./../${image.imgSRC}" />
-          </div>
-          <div class="newsItemContent">
-            <div class="newsItemTitle">${image.name}</div>
-            <div class="newsItemDescription">${image.description}</div>
-          </div>
-          
-        </div></a>`
-      )
-      .join('');
-    const newsItemContainer = document.querySelector('.newsItemsContainer');
-    newsItemContainer.insertAdjacentHTML('beforeend', html);
-  }
-  async render() {}
-  async run() {
-    await this.fetchData();
-    await this.loadHTML();
+  #init() {
+    const swiper = new Swiper('.swiper', {
+      pagination: {
+        el: '.swiper-pagination-1',
+        clickable: true,
+        bulletClass: 'swiper-pagination-bullet swiper-pagination-bullet-news',
+        dynamicBullets: true,
+        dynamicMainBullets: 6,
+        bulletActiveClass: 'swiper-pagination-bullet-active-news',
+        renderBullet: function (index, className) {
+          return (
+            '<span class="' +
+            className +
+            ' cursor-pointer font-Inter">' +
+            (index + 1) +
+            '</span>'
+          );
+        },
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      slidesPerView: 3,
+      spaceBetween: 80,
+      grid: {
+        fill: 'row',
+        rows: 2,
+      },
+    });
+    this.swiper = swiper;
   }
 }
 
-export default new News();
+export default News;

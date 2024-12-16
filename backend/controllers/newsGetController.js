@@ -1,8 +1,8 @@
-const news = require('../models/news_schema.js');
+const News = require('../models/news_schema.js');
 
 exports.get6NearsestNews = async (req, res) => {
   try {
-    const newsFound = await news.find().sort('_id').limit(6);
+    const newsFound = await News.find().sort('_id').limit(6);
     res.status(200).json({
       status: 'success',
       results: newsFound.length,
@@ -20,7 +20,7 @@ exports.get6NearsestNews = async (req, res) => {
 
 exports.getAllNews = async (req, res) => {
   try {
-    const newsFound = await news.find().sort('-createdAt');
+    const newsFound = await News.find().sort('-createdAt');
     res.status(200).json({
       status: 'success',
       results: newsFound.length,
@@ -38,7 +38,7 @@ exports.getAllNews = async (req, res) => {
 
 exports.getNewsItem = async (req, res) => {
   try {
-    let newsFound = await news.find({ slug: req.params.name });
+    let newsFound = await News.find({ slug: req.params.name });
     if (!newsFound) {
       throw new Error("Can not find the request's news");
     }

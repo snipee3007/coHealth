@@ -57,6 +57,6 @@ newsSchema.pre('save', function (next) {
   next();
 });
 
-const New = mongoose.model('news', newsSchema);
+const News = mongoose.model('news', newsSchema);
 
-module.exports = New;
+module.exports = News;

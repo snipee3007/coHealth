@@ -1,5 +1,8 @@
 class Slider {
   constructor() {
+    this.#init();
+  }
+  #init() {
     const swiper = new Swiper('.swiper', {
       pagination: {
         el: '.swiper-pagination',
@@ -16,7 +19,6 @@ class Slider {
     });
     this.swiper = swiper;
   }
-  init() {}
 }
 
 export default Slider;

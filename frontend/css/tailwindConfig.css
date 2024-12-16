@@ -9,9 +9,9 @@
     src: url('./font/ABeeZee-Regular.ttf');
   }
   @font-face {
-    font-family: 'AbhayaLibre';
+    font-family: 'Inter';
     font-style: normal;
-    src: url('./font/AbhayaLibre-Regular.ttf');
+    src: url('./font/Inter/Inter-VariableFont_opsz.ttf');
   }
   @font-face {
     font-family: 'Fustat';
@@ -21,7 +21,7 @@
   @font-face {
     font-family: 'Roca';
     font-style: normal;
-    src: url('./font/Roca/fonnts.com-Roca-Regular.otf');
+    src: url('./font/Roca/fonnts.com-Roca.otf');
   }
   @font-face {
     font-family: 'DM-Sans';
@@ -37,6 +37,11 @@
     font-family: 'Roboto';
     font-style: normal;
     src: url('./font/Roboto/Roboto-Regular.ttf');
+  }
+  @font-face {
+    font-family: 'AbhayaLibre';
+    font-style: normal;
+    src: url('./font/AbhayaLibre-Regular.ttf');
   }
 }
 
@@ -120,4 +125,85 @@
   -webkit-box-orient: vertical;
   display: -webkit-box;
   overflow: hidden;
+}
+
+label {
+  @apply font-DM-Sans;
+  @apply tracking-wider;
+}
+
+.input-box > input {
+  @apply font-DM-Sans;
+}
+
+.input-box > input:invalid {
+  @apply border-b-2;
+  @apply border-red-600;
+}
+
+.input-box > input:valid {
+  @apply border-b-2;
+  @apply border-green-600;
+}
+
+.linearText {
+  @apply bg-clip-text;
+  @apply bg-gradient-to-r;
+  @apply text-transparent;
+  @apply from-[#3a8ef6];
+  @apply to-[#6f3afa];
+}
+
+.linearBackground {
+  @apply bg-gradient-to-r;
+  @apply from-[#3a8ef6];
+  @apply to-[#6f3afa];
+}
+
+.swiper-pagination-1 {
+  bottom: 0.3rem !important;
+}
+
+.swiper-1 {
+  padding: 3.5rem 3.5rem 3.5rem 3.5rem !important;
+}
+
+.newsItem:hover {
+  @apply -translate-y-1 !important;
+  @apply border;
+  @apply border-black;
+  @apply transition;
+  @apply duration-100;
+}
+
+.swiper-pagination-bullet-news {
+  text-align: center;
+  line-height: 20px;
+  color: #3a8ef6;
+  opacity: 1;
+  font-family: Inter;
+  background: none;
+  @apply w-7 !important;
+  @apply h-7 !important;
+  @apply text-lg !important;
+  @apply mx-3 !important;
+  @apply rounded-lg !important;
+}
+
+.swiper-pagination-bullet {
+  background: none !important;
+}
+
+.swiper-pagination-bullet-active-news {
+  background: #dfdffb !important;
+  @apply opacity-100 !important;
+}
+
+.swiper-pagination-bullet-active-news-main,
+.swiper-pagination-bullet-active-news {
+  @apply scale-100 !important;
+}
+
+.swiper-pagination-bullet-active-news-main {
+  background: none;
 }
