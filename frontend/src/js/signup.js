@@ -14,7 +14,7 @@ const signUp = async function (data) {
       alert('Sign Up successfully!');
       window.setTimeout(() => {
         location.assign('/');
-      }, 1500);
+      }, 500);
     }
   } catch (err) {
     alert(err.response.data.message);
