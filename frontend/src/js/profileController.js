@@ -95,16 +95,27 @@ class Profile {
 
       ['input', 'focusout'].forEach((event) => {
         field.addEventListener(event, function (e) {
-          if (isNaN(parseFloat(e.target.value))) {
+          if (
+            e.target.value.length !== 0 &&
+            isNaN(parseFloat(e.target.value))
+          ) {
             e.target.setCustomValidity(
               'Wrong number input format! Please input again!'
             );
           } else if (
-            parseFloat(e.target.value) > 999 ||
+            (e.target.closest('.yearOfBirth') &&
+              parseFloat(e.target.value) > 9999) ||
             parseFloat(e.target.value) <= 0
           ) {
             e.target.setCustomValidity(
-              'The input range must between 0 and 999! Please input again!'
+              'The input digits must below 5 digits! Please input again!'
+            );
+          } else if (
+            e.target.closest('.phoneNumber') &&
+            e.target.value.length > 16
+          ) {
+            e.target.setCustomValidity(
+              'The input digits must between 0 and 16 digits! Please input again!'
             );
           } else {
             e.target.setCustomValidity('');
