@@ -7,7 +7,7 @@
             img.w-8.ml-2(src='./../images/png/right-arrow-svgrepo-com.png')
     .grid.grid-cols-3.gap-24
         each newsItem in latestNews 
-            a.newsCard.flex.flex-col.shadow-lg(href='/news')
+            a.newsCard.flex.flex-col.shadow-lg(href=`/news/${newsItem.slug}`)
                 img.h-52.object-cover.object-top(src=`./../images/news/${newsItem.imgSRC}`, alt="")
                 .p-4
                     p.mb-4.text-2xl.font-Roca(class='text-[#384FC0]')= newsItem.name

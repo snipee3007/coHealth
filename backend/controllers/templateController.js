@@ -43,17 +43,10 @@ exports.getAboutUsTemplate = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getCalculateBMITemplate = async (req, res) => {
-  const calculateBMITemplate = replaceTemplate.addDecoration(
-    await replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/calculateBMI.html`,
-        'utf-8'
-      ),
-      req
-    )
-  );
-  res.end(calculateBMITemplate);
+exports.getCalculateTemplate = async (req, res) => {
+  res.status(200).render('calculate', {
+    title: 'Calculate BMI/TDEE',
+  });
 };
 
 exports.getResultBMITemplate = async (req, res) => {
@@ -113,27 +106,10 @@ exports.getForgetPasswordTemplate = async (req, res) => {
 };
 
 exports.getProfileTemplate = async (req, res) => {
-  try {
-    const profilePagePath = `${__dirname}/../../frontend/template/profilePage.html`;
-    const profilePageContent = fs.readFileSync(profilePagePath, 'utf-8');
-
-    const navigationTemplate = await replaceTemplate.addNavigation(
-      profilePageContent,
-      req
-    );
-    const decorationTemplate = await replaceTemplate.addDecoration(
-      navigationTemplate
-    );
-    const profileTemplate = await replaceTemplate.addProfile(
-      decorationTemplate,
-      req
-    );
-
-    res.end(profileTemplate);
-  } catch (error) {
-    console.error('Error generating profile template:', error);
-    res.status(500).send('Internal Server Error');
-  }
+  res.status(200).render('profile', {
+    title: 'User Profile',
+    userProfileTitle: 'Basic Info',
+  });
 };
 
 exports.getAccountTemplate = async (req, res) => {

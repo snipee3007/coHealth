@@ -1,0 +1,68 @@
+extend base
+
+block body
+    .calculateBMIBody.flex.flex-1.items-center.justify-center.gap-20.my-12
+        .calculateContent
+            .calculateTtile.linearText.font-Fustat.text-4xl.mb-4
+                p Check your BMI, TDEE 
+                p And get your Personalize Advices
+            form.calculateForm(method='POST' class='w-3/4').flex.flex-col.gap-6
+                .flex.w-full.gap-12
+                    .age.form_row(class='w-1/3')
+                        input(name='age' placeholder='Age' maxLength=3 required).w-full.numberOnly.inputCheck
+                    .gender.w-full
+                        .w-full.outline-none.border-0.relative.font-AbhayaLibre
+                            .genderSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
+                                input(type='text' name='gender' required placeholder='Gender' onkeydown="return false").bg-transparent.select-none.outline-none.cursor-pointer
+                                img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4.mx-3
+                            .absolute.w-full.genderOptions.hidden.z-50
+                                .w-full(type='button' data-value='' class='bg-[#EAF0F7]').cursor-pointer.genderOption.py-2.px-2.rounded-t-xl.border-b-2 Gender
+                                .w-full(type='button' data-value='Male' class='bg-[#EAF0F7]').cursor-pointer.genderOption.py-2.px-2.border-b-2 Male
+                                .w-full(type='button' data-value='Female' class='bg-[#EAF0F7]').cursor-pointer.genderOption.py-2.px-2.rounded-b-xl Female
+                .flex.w-full.gap-6
+                    .height.form_row.relative
+                        p.font-AbhayaLibre.absolute.z-30.right-3(class='-translate-y-1/2 top-1/2') cm
+                        input(name='height' placeholder='Height' maxLength=5 required).w-full.relative.numberOnly.inputCheck
+                    .weight.form_row.relative
+                        p.font-AbhayaLibre.absolute.z-30.right-3(class='-translate-y-1/2 top-1/2') kg
+                        input(name='weight' placeholder='Weight' maxLength=5 required).w-full.relative.numberOnly.inputCheck
+                .trainingIntensity.form_row
+                    .w-full.outline-none.border-0.relative.font-AbhayaLibre
+                        .trainingSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
+                            input(type='text' name='training' required placeholder='Training Intensity' onkeydown="return false").bg-transparent.select-none.outline-none.cursor-pointer
+                            img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4.mx-3
+                        .absolute.w-full.trainingOptions.z-50.hidden
+                            .w-full(type='button' data-value='' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.rounded-t-xl.border-b-2 Training Intensity
+                            .w-full(type='button' data-value='BMR' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.border-b-2 Basic Metabolic Rate (BMR)
+                            .w-full(type='button' data-value='Sedentary' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.border-b-2 Sedentary: little or no exercise
+                            .w-full(type='button' data-value='Light' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.border-b-2 Light: exercise 1-3 times/week
+                            .w-full(type='button' data-value='Moderate' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.border-b-2 Moderate: exercise 4-5 times/week
+                            .w-full(type='button' data-value='Active' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.border-b-2 Active: daily exercise or intense exercise 3-4 times/week
+                            .w-full(type='button' data-value='Very Active' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.border-b-2 Very Active: intense exercise 6-7 times/week
+                            .w-full(type='button' data-value='Extra Active' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.rounded-b-xl Extra Active: very intense exercise daily, or physical job
+                .target.form_row 
+                    .w-full.outline-none.border-0.relative.font-AbhayaLibre
+                        .targetSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
+                            input(type='text' name='target' required placeholder='Target' onkeydown="return false").bg-transparent.select-none.outline-none.cursor-pointer
+                            img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4.mx-3
+                        .absolute.w-full.targetOptions.z-50.hidden
+                            .w-full(type='button' data-value='' class='bg-[#EAF0F7]').cursor-pointer.targetOption.py-2.px-2.rounded-t-xl.border-b-2 Target
+                            .w-full(type='button' data-value='Gain' class='bg-[#EAF0F7]').cursor-pointer.targetOption.py-2.px-2.border-b-2 Gain Weight
+                            .w-full(type='button' data-value='Maintain' class='bg-[#EAF0F7]').cursor-pointer.targetOption.py-2.px-2.border-b-2 Maintain Weight
+                            .w-full(type='button' data-value='Lose' class='bg-[#EAF0F7]').cursor-pointer.targetOption.py-2.px-2.rounded-b-xl Lose Weight
+                .speed.form_row 
+                    .w-full.outline-none.border-0.relative.font-AbhayaLibre
+                        .speedSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
+                            input(type='text' name='speed' required placeholder='Speed' onkeydown="return false").bg-transparent.select-none.outline-none.cursor-pointer
+                            img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4.mx-3
+                        .absolute.w-full.speedOptions.z-50.hidden
+                            .w-full(type='button' data-value='' class='bg-[#EAF0F7]').cursor-pointer.speedOption.py-2.px-2.rounded-t-xl.border-b-2 Speed
+                            .w-full(type='button' data-value='Slow' class='bg-[#EAF0F7]').cursor-pointer.speedOption.py-2.px-2.border-b-2 Slow
+                            .w-full(type='button' data-value='Normal' class='bg-[#EAF0F7]').cursor-pointer.speedOption.py-2.px-2.border-b-2 Normal
+                            .w-full(type='button' data-value='Fast' class='bg-[#EAF0F7]').cursor-pointer.speedOption.py-2.px-2.rounded-b-xl Fast
+                .targetWeight.form_row.w-full.font-AbhayaLibre.relative.hidden
+                    p.font-AbhayaLibre.absolute.z-30.right-3(class='-translate-y-1/2 top-1/2') kg
+                    input(name='targetWeight' placeholder='Target Weight' maxLength=5 required).w-full.relative.numberOnly.inputCheck
+                button(type='submit').linearBackground.text-white.font-AbhayaLibre.py-2.text-xl.rounded-xl.font-bold.tracking-widest Calculate
+        .calculateImage 
+            img(src="./../images/png/eating-donuts.png", alt="Eating Donut Picture")          

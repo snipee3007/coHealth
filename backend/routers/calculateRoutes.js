@@ -1,9 +1,9 @@
 const express = require('express');
-const template = require('../controllers/templateController');
+const template = require('../controllers/templateController.js');
 const authController = require('../controllers/authController.js');
 
 const router = express.Router();
 
-router.get('/', authController.protect, template.getAccountTemplate);
+router.get('/', authController.protect, template.getCalculateTemplate);
 
 module.exports = router;

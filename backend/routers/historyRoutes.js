@@ -1,9 +1,9 @@
 const express = require('express');
 const template = require('../controllers/templateController');
-const checkTokenAndRedirect = require('../utils/checkToken');
+const authController = require('../controllers/authController.js');
 
 const router = express.Router();
 
-router.get('/', checkTokenAndRedirect, template.getHistoryTemplate);
+router.get('/', authController.protect, template.getHistoryTemplate);
 
 module.exports = router;

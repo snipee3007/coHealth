@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const AppError = require('./../utils/appError');
+const slugify = require('slugify');
 
 const userSchema = mongoose.Schema({
   fullname: {
@@ -29,9 +30,8 @@ const userSchema = mongoose.Schema({
   address: {
     type: String,
     trim: true,
-    lowercase: true,
   },
-  phoneNum: {
+  phoneNumber: {
     type: String,
     trim: true,
   },
@@ -70,6 +70,9 @@ const userSchema = mongoose.Schema({
   image: {
     type: String,
   },
+  slug: {
+    type: String,
+  },
 });
 
 userSchema.pre('save', function (next) {
@@ -80,7 +83,7 @@ userSchema.pre('save', function (next) {
 
   const now = new Date(Date.now());
   this.age = now.getFullYear() - parseInt(this.yearOfBirth);
-
+  this.slug = slugify(this.fullname.toLowerCase());
   next();
 });
 

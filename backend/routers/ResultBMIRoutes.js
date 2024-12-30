@@ -1,11 +1,16 @@
 const express = require('express');
 const resultController = require('../controllers/resultController.js');
 const template = require('../controllers/templateController.js');
+const authController = require('../controllers/authController.js');
+
 const food = require('../models/food_schema.js');
-const checkTokenAndRedirect = require('../utils/checkToken');
 
 const router = express.Router();
-router.get('/', checkTokenAndRedirect, template.getResultBMITemplate);
-router.post('/calculate', checkTokenAndRedirect, resultController.calculateBMI);
+router.get('/', authController.protect, template.getResultBMITemplate);
+router.post(
+  '/calculate',
+  authController.protect,
+  resultController.calculateBMI
+);
 
 module.exports = router;

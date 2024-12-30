@@ -108,9 +108,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.cookies.jwt;
   }
   if (!token) {
-    return next(
-      new AppError('You are not logged in! Please log in to get access.', 401)
-    );
+    return next();
   }
 
   // 2) Verification token
@@ -120,25 +118,17 @@ exports.protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
     res.clearCookie('jwt');
-    return next(
-      new AppError(
-        'The user belonging to this token does no longer exist.',
-        401
-      )
-    );
+    return next();
   }
 
   // 4) Check if user changed password after the token was issued
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     res.clearCookie('jwt');
-    return next(
-      new AppError('User recently changed password! Please log in again.', 401)
-    );
   }
 
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
-  // next();
+  next();
 });
 
 exports.isSignedIn = catchAsync(async (req, res, next) => {
@@ -163,9 +153,15 @@ exports.isSignedIn = catchAsync(async (req, res, next) => {
       return next();
     }
 
-    // GRANT ACCESS TO PROTECTED ROUTE
+    // GRANT ACCESS TO PROTECTED ROUTE !! THIS IS FOR PUG TEMPLATE
     res.locals.user = currentUser;
+
     return next();
   }
   next();
 });
+
+exports.signOut = (req, res, next) => {
+  res.clearCookie('jwt');
+  res.status(204).json();
+};

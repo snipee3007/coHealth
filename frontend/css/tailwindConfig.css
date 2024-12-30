@@ -41,7 +41,12 @@
   @font-face {
     font-family: 'AbhayaLibre';
     font-style: normal;
-    src: url('./font/AbhayaLibre-Regular.ttf');
+    src: url('./font/AbhayaLibre/AbhayaLibre-Regular.ttf');
+  }
+  @font-face {
+    font-family: 'AbeeZee';
+    font-style: normal;
+    src: url('./font/ABeeZee/ABeeZee-Regular.ttf');
   }
 }
 
@@ -136,12 +141,14 @@ label {
   @apply font-DM-Sans;
 }
 
-.input-box > input:invalid {
+.inputCheck:invalid,
+.invalidInput {
   @apply border-b-2;
   @apply border-red-600;
 }
 
-.input-box > input:valid {
+.inputCheck:valid,
+.validInput {
   @apply border-b-2;
   @apply border-green-600;
 }
@@ -190,12 +197,7 @@ label {
   @apply rounded-lg !important;
 }
 
-.swiper-pagination-bullet {
-  background: none !important;
-}
-
 .swiper-pagination-bullet-active-news {
-  background: #dfdffb !important;
   @apply opacity-100 !important;
 }
 
@@ -206,4 +208,16 @@ label {
 
 .swiper-pagination-bullet-active-news-main {
   background: none;
+}
+
+.form_row > input {
+  @apply py-2;
+  @apply px-3;
+  @apply bg-[#EAF0F7];
+  @apply rounded-xl;
+  @apply font-AbhayaLibre;
+}
+
+button:disabled {
+  opacity: 50%;
 }

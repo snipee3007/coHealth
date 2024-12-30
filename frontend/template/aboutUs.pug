@@ -8,8 +8,9 @@ block body
             .aboutUs_title.font-ABeeZee.linearText.text-5xl ABOUT US
             .aboutUs_ContentIn.text-justify.my-6.font-ABeeZee In today's world, where awareness of personal health monitoring is steadily increasing, we developed #[span(class='text-[#384FC0]').italic coHealth] – an innovative solution that empowers users to easily track and manage their health from the comfort of their homes. With a mission to provide convenience and support in maintaining a healthy lifestyle, #[span(class='text-[#384FC0]').italic coHealth] is not just a tool but a trusted companion on your journey to better personal health.
             .signUpButton.w-full.flex.justify-center
-                button.linearBackground.font-DM-Sans.text-white.py-2(class='w-3/5').rounded-xl.font-bold
-                    a(href='/signUp') Sign up for free
+                a(href='/signUp' class='w-3/5')
+                    button.linearBackground.font-DM-Sans.text-white.py-2.w-full.rounded-xl.font-bold Sign up for free
+
     .members.flex.flex-1.justify-evenly.items-center.my-20
         .memberItem.flex.flex-col.items-center(class='w-[15%]')
             img(src='./../images/members/ittoday.jpg' class='w-full').object-fill

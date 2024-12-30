@@ -6,7 +6,7 @@ const handleCastErrorDB = (err) => {
 };
 
 const handleDuplicateFieldsDB = (err) => {
-  console.log(err);
+  // console.log(err);
 
   const message = `Duplicate field email value. Please use another value!`;
   return new AppError(message, 400);
@@ -46,17 +46,20 @@ const sendErrorProd = (err, res) => {
   } else {
     // 1) Log error
     console.error('ERROR 💥', err);
-
+    if (err.code == '11000')
+      err.message = `This ${
+        Object.keys(err.keyValue)[0]
+      } has already taken! Please use another ${Object.keys(err.keyValue)[0]}!`;
     // 2) Send generic message
     res.status(500).json({
       status: 'error',
-      message: 'Something went very wrong!',
+      message: err.message,
     });
   }
 };
 
 module.exports = (err, req, res, next) => {
-  console.log(err);
+  // console.log(err);
 
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -74,7 +77,6 @@ module.exports = (err, req, res, next) => {
       error = handleValidationErrorDB(error);
     if (error.name === 'JsonWebTokenError') error = handleJWTError();
     if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
-
     sendErrorProd(error, res);
   }
 };

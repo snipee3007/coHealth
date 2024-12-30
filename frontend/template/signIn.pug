@@ -14,13 +14,13 @@ block body
                     .input-box 
                         label(for='signInField').px-2.text-xl.linearText.font-semibold Username or E-mail
                         .relative.my-4
-                            input.w-full#signInField(type='text' name='email' placeholder='Username/E-mail' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2
+                            input.w-full#signInField(type='text' name='email' placeholder='Username/E-mail' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
                             img.w-4.absolute.right-3(src="./../images/png/close-circle-svgrepo-com.png" alt="Close icon" class='top-1/2 -translate-y-1/2').cursor-pointer
 
                     .input-box
                         label.px-2.text-xl.bg-clip-text.linearText.font-semibold Password
                         .relative.my-4
-                            input.w-full#password(type='password' name='password' placeholder='Password' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2
+                            input.w-full#password(type='password' name='password' placeholder='Password' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
                             img.togglePassword.w-4.absolute.right-3(src="./../images/png/eye-slash-svgrepo-com.png" alt="Toggle Password icon" class='top-1/2 -translate-y-1/2').cursor-pointer
 
                     button.w-full.py-2.bg-gradient-to-r(type='Submit' class='from-[#3a8ef6] to-[#6f3afa]').my-8.text-white.font-DM-Sans.tracking-widest.font-bold.rounded-xl Sign In 

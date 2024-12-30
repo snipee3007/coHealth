@@ -8,7 +8,6 @@ const exerciseContainer = document.querySelector('.exercise');
 
 class CalculateBMI {
   async renderBreakfast() {
-    console.log(breakfastContainer);
     const breakfast = await fetch('/api/getRandomBreakfast')
       .then((data) => data.json())
       .then((data) => data.data);
@@ -24,7 +23,6 @@ class CalculateBMI {
         }
       })
       .join('');
-    console.log(background);
     breakfastContainer.style.backgroundImage = `url('')`;
   }
 }

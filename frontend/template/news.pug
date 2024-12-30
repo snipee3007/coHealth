@@ -3,7 +3,14 @@ extend base
 block append header 
     link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css')
     script(src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js')
+    style(type="text/css").
+        .swiper-pagination-bullet {
+            background: none !important;
+        }
 
+        .swiper-pagination-bullet-active-news {
+            background: #dfdffb !important;
+        }
 block body
     .flex.flex-col.items-center.my-20
         .pageTitle.linearText.font-ABeeZee.font-bold.text-6xl.my-6 NEWS

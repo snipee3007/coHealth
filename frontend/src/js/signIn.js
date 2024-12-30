@@ -12,6 +12,7 @@ const signIn = async function (data) {
       }, 1500);
     }
   } catch (err) {
+    console.log(err);
     alert(err.response.data.message);
   }
 };

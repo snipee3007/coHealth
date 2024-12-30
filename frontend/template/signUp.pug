@@ -12,34 +12,34 @@ block body
                 .input-box.w-full
                     label(for="fullname" class='text-[#4F555A]').px-2 Full name 
                     .relative.my-4
-                        input.w-full#fullname(type='text' name='fullname' placeholder='Fullname' required min=8 class='bg-[#EAF0F7]').rounded-lg.px-4.py-2
+                        input.w-full#fullname(type='text' name='fullname' placeholder='Fullname' required min=8 class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
                         img.w-4.absolute.right-3(src="./../images/png/close-circle-svgrepo-com.png" alt="Close icon" class='top-1/2 -translate-y-1/2').cursor-pointer
 
                 .input-box.w-full
                     label(for="email" class='text-[#4F555A]').px-2 Email
                     .relative.my-4
-                        input.w-full#email(type='email' name='email' placeholder='Username/E-mail' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2
+                        input.w-full#email(type='email' name='email' placeholder='Username/E-mail' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
                         img.w-4.absolute.right-3(src="./../images/png/close-circle-svgrepo-com.png" alt="Close icon" class='top-1/2 -translate-y-1/2').cursor-pointer
 
                 .input-box.w-full
                     label(for='password' class='text-[#4F555A]').px-2 Password
                     .relative.my-4
-                        input.w-full#password(type='password' name='password' placeholder='Password' min=8 required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2
+                        input.w-full#password(type='password' name='password' placeholder='Password' min=8 required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
                         img.togglePassword.w-4.absolute.right-3(src="./../images/png/eye-slash-svgrepo-com.png" alt="Toggle Password icon" class='top-1/2 -translate-y-1/2').cursor-pointer
 
                 .input-box.w-full
                     label(for='confirmPassword' class='text-[#4F555A]').px-2 Confirm Password
                     .relative.my-4
-                        input.w-full#confirmPassword(type='password' name='confirmPassword' min=8 placeholder='Confirm your password' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2
+                        input.w-full#confirmPassword(type='password' name='confirmPassword' min=8 placeholder='Confirm your password' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
                         img.toggleConfirmPassword.w-4.absolute.right-3(src="./../images/png/eye-slash-svgrepo-com.png" alt="Toggle Password icon" class='top-1/2 -translate-y-1/2').cursor-pointer
 
                 .input-box.w-full.flex.flex-1.justify-between.gap-4
                     .yearOfBirth(class='w-1/2') 
                         label(for='yearOfBirth' class='text-[#4F555A]').px-2 Year Of Birth
                         .relative.my-4
-                            input.w-full#yearOfBirth(type='text' name='yearOfBirth' placeholder='Year' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2
+                            input.w-full#yearOfBirth(type='text' name='yearOfBirth' placeholder='Year' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
                     .gender(class='w-1/2')
-                        label(for='gender' class='text-[#4F555A]').px-2 Gender
+                        label(for='gender' class='text-[#4F555A]').px-2.inputCheck Gender
                         .relative.my-4
                             select.w-full#gender(name='gender' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2
                                 option(value="" disabled selected) Gender
