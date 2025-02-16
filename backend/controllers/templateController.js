@@ -2,7 +2,10 @@ const fs = require('fs');
 const replaceTemplate = require('./replaceTemplate.js');
 const New = require('./../models/news_schema.js');
 const User = require('./../models/users_schema.js');
+const Hospital = require('./../models/hospitals_schema.js')
 const catchAsync = require('./../utils/catchAsync.js');
+const Doctor = require('./../models/doctors_schema.js');
+
 //////////////////////////// EXPORT TEMPLATES /////////////////////////////////
 
 exports.getNewsTemplate = catchAsync(async (req, res, next) => {
@@ -63,21 +66,26 @@ exports.getResultBMITemplate = async (req, res) => {
 };
 
 exports.getfindHospitalTemplate = async (req, res) => {
-  let findHospitalTemplate = replaceTemplate.addDecoration(
-    await replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/findHospital.html`,
-        'utf-8'
-      ),
-      req
-    )
-  );
+  // let findHospitalTemplate = replaceTemplate.addDecoration(
+  //   await replaceTemplate.addNavigation(
+  //     fs.readFileSync(
+  //       `${__dirname}/../../frontend/template/findHospital.html`,
+  //       'utf-8'
+  //     ),
+  //     req
+  //   )
+  // );
 
-  findHospitalTemplate = findHospitalTemplate.replace(
-    '{%GOOGLE_MAPS_API_KEY%}',
-    process.env.REACT_APP_GOOGLE_MAPS_API_KEY
-  );
-  res.end(findHospitalTemplate);
+  // findHospitalTemplate = findHospitalTemplate.replace(
+  //   '{%GOOGLE_MAPS_API_KEY%}',
+  //   process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+  // );
+  // res.end(findHospitalTemplate);
+  const hospitals = await Hospital.find().limit(6);
+  res.status(200).render('findHospital', {
+    title: 'Find Hospital',
+    hospitals,
+  });
 };
 
 exports.getsignUpTemplate = async (req, res) => {
@@ -136,4 +144,46 @@ exports.getHistoryTemplate = async (req, res) => {
     )
   );
   res.end(historyTemplate);
+};
+
+exports.getChatToDoctorsTemplate = catchAsync(async (req, res, next) => {
+  const doctors = await User.find({
+    role: 'doctor',
+  }).populate({ path: 'doctorInfo'});
+
+    res.status(200).render('chatToDoctor', {
+    title: 'doctors',
+    doctors,
+  });
+  
+}); 
+
+exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
+  console.log(req.params.name)
+  // console.log(req.originalUrl.split('/')[2])
+  const doctor = await User.findOne({
+    slug: req.originalUrl.split('/')[2],
+    role: 'doctor',
+  }).populate({ path: 'doctorInfo'}); 
+  const recommendDoctors = await User.find({
+    role: 'doctor',
+    _id: { $ne: doctor._id },  
+  }).populate({path: 'doctorInfo', match: {major: {$eq: doctor.doctorInfo[0].major}}});
+
+  // if (recommendDoctors.length() < 3){
+
+  // }
+
+  res.status(200).render('chatToDoctorItem', {
+    title: 'doctors',
+    doctor,
+    recommendDoctors,
+    
+  });
+});
+exports.getListOfChatTemplate = async (req, res) => {
+  res.status(200).render('listOfChat', {
+    title: 'List of Chat',
+    rooms: req.room
+  });
 };

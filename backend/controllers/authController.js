@@ -94,6 +94,7 @@ exports.signIn = catchAsync(async (req, res, next) => {
   }
 
   await createSendToken(user, 200, res);
+
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -107,8 +108,10 @@ exports.protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-  if (!token) {
-    return next();
+  else {
+    return next(
+      new AppError('You are not logged in! Please log in to get access.', 401)
+    );
   }
 
   // 2) Verification token
@@ -155,13 +158,46 @@ exports.isSignedIn = catchAsync(async (req, res, next) => {
 
     // GRANT ACCESS TO PROTECTED ROUTE !! THIS IS FOR PUG TEMPLATE
     res.locals.user = currentUser;
-
+    req.user = currentUser;
     return next();
   }
   next();
 });
 
-exports.signOut = (req, res, next) => {
+exports.signOut = catchAsync(async (req, res, next) => {
+  // trước khi signOut tìm người dùng rồi chuyển status từ on sang off
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return;
+    }
+    else{
+      await User.findOneAndUpdate(
+        {_id: currentUser._id},
+        {status: 'offline', lastSeen: new Date()},
+        {new: true}
+      );
+      console.log("nó vô đây")
+    }
+  // sau đó thì xóa cookie như bình thường
+
   res.clearCookie('jwt');
   res.status(204).json();
+});
+
+exports.restrictTo = role => {
+  return (req, res, next) => {
+    if (!req.user || !req.user.role.includes(role)) {
+      res.writeHead(
+        302,
+        'This is a restrict route! You need to login with specific account to go to this page!',
+        { Location: '/' }
+      );
+      return res.end();
+    } else next();
+  };
 };

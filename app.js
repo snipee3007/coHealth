@@ -9,10 +9,13 @@ const findHospitalRouter = require('./backend/routers/findHospitalRoutes.js');
 const calculateRouter = require('./backend/routers/calculateRoutes.js');
 const resultBMIRouter = require('./backend/routers/ResultBMIRoutes.js');
 const signUpRouter = require('./backend/routers/signUpRoutes.js');
+
 const userRouter = require('./backend/routers/userRoutes.js');
 const signInRouter = require('./backend/routers/signInRoutes.js');
 const aboutUsRouter = require('./backend/routers/aboutUsRoutes.js');
 
+const chatToDoctorRouter = require('./backend/routers/chatToDoctorRoutes.js');
+const doctorRouter = require('./backend/routers/doctorRoutes.js');
 const forgetPasswordRouter = require('./backend/routers/forgetPasswordRoutes.js');
 
 const profileRouter = require('./backend/routers/profileRoutes.js');
@@ -22,7 +25,9 @@ const historyRouter = require('./backend/routers/historyRoutes.js');
 const globalErrorHandler = require('./backend/controllers/errorController.js');
 const authController = require('./backend/controllers/authController.js');
 
+
 const app = express();
+
 
 const bodyParser = require('body-parser');
 
@@ -33,6 +38,8 @@ app.use(express.static(path.join(__dirname, `frontend`)));
 const cookieParser = require('cookie-parser');
 
 const oneDay = 1000 * 60 * 60 * 24;
+
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -54,6 +61,8 @@ app.use('/profile', profileRouter);
 app.use('/account', accountRouter);
 app.use('/history', historyRouter);
 app.use('/aboutUs', aboutUsRouter);
+app.use('/chat', chatToDoctorRouter);
+app.use('/doctor', doctorRouter);
 
 app.use(globalErrorHandler);
 

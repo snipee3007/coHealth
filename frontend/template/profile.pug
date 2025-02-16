@@ -9,13 +9,22 @@ block body
             form(method='POST' enctype="multipart/form-data")
                 input(type="hidden" name='prevUserProfile' value=`${user.image}`)
                 .userProfile.flex.flex-1.items-center.gap-12.my-8
-                    .profileImage.relative
-                        label(for='userProfile').cursor-pointer
-                            input(type="file" name='userProfile' id='userProfile' style='display:none' accept='image/*' value=`${user.image}`).formInput.userProfile
-                            img(src="./../images/png/camera.png", alt="Camera Icon" ).absolute.right-0.bottom-0.z-40.w-6.h-6
-                            img(src=`./../images/users/profile/${user.image}`, alt=`${user.slug}-profile` id='profile').rounded-full.w-16.h-16
-                    p.linearText.text-2xl.font-ABeeZee.font-bold #{user.fullname}
-                
+                    if user.role === 'user'
+                        .profileImage.relative
+                            label(for='userProfile').cursor-pointer
+                                input(type="file" name='userProfile' id='userProfile' style='display:none' accept='image/*' value=`${user.image}`).formInput.userProfile
+                                img(src="./../images/png/camera.png", alt="Camera Icon" ).absolute.right-0.bottom-0.z-40.w-6.h-6
+                                img(src=`./../images/users/profile/${user.image}`, alt=`${user.slug}-profile` id='profile').rounded-full.w-16.h-16
+                        p.linearText.text-2xl.font-ABeeZee.font-bold #{user.fullname}
+                    else
+                        .profileImage.relative
+                            label(for='userProfile').cursor-pointer
+                                input(type="file" name='userProfile' id='userProfile' style='display:none' accept='image/*' value=`${user.image}`).formInput.userProfile
+                                img(src="./../images/png/camera.png", alt="Camera Icon" ).absolute.right-0.bottom-0.z-40.w-6.h-6
+                                img(src=`./../images/users/profile/${user.image}`, alt=`${user.slug}-profile` id='profile').rounded-full.w-16.h-16
+                        .items-center        
+                            p.linearText.text-2xl.font-ABeeZee.font-bold #{user.fullname}
+                            p.linearText.text-2xl.font-ABeeZee.font-bold.inline I'm a doctor
                 .grid.grid-cols-2.items-center.font-Inter.gap-8
                     .fullname.flex.flex-col(class='w-2/3')
                         label(for='fullname').mb-2 Full name 

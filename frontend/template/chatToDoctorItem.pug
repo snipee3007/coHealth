@@ -1,0 +1,76 @@
+extend base
+
+block body 
+    .newsContainer 
+        .newsTitle.flex.flex-1.justify-center.text-6xl.font-Roca.linearText.my-8 I'm doctor #{doctor.fullname}
+        .newsBox.py-6.px-20
+            .newsFirstParagraph.flex.flex-1.items-center.gap-12.justify-between
+                img(src=`./../images/users/profile/${doctor.image}` class='w-1/3 mx-auto')
+                .text-xl.text-justify.font-Roboto(class='w-1/2 text-[#6F7CB2]')
+                    .firstParagraph My major is #{doctor.doctorInfo[0].major}
+                    .secondParagraph Now I'm working at #{doctor.doctorInfo[0].workAt}
+                    .thirdParagraph I has working for #{doctor.doctorInfo[0].yearEXP} years
+                    if user 
+                        button.chat.linearBackground.font-DM-Sans.text-white.py-2.rounded-xl.font-bold.mt-4.w-60(id = `${doctor.slug}`) Chat to this doctor
+                    else 
+                        .linearText.mt-8.font-AbhayaLibre.text-xl Please #[a(href='/signIn' class='hover:underline font-bold').italic.underline sign in] to chat with doctor
+
+
+    hr.mx-16(class='border-[#1678F2] border-[1.5px]').my-12
+    .recommenddoctorContainer.px-20
+        .recommenddoctor_title.linearText.font-ABeeZee.text-4xl.font-ABeeZee.mb-4.font-bold RECOMMEND
+
+        .recommenddoctorBox.grid.grid-cols-3.w-full.gap-24
+            each recommendDoctor in recommendDoctors 
+                if recommendDoctor.doctorInfo[0] 
+                    a(href=`/chat/${recommendDoctor.slug}`).shadow-xl.doctorItem
+                            img(src=`./../images/users/profile/${recommendDoctor.image}` class='h-56').w-full.object-cover
+                            .py-4.px-3
+                                .title.font-Roca.text-xl #{recommendDoctor.fullname}
+                                .description.truncate-3.text-justify.font-Roboto(class='text-[#6F7CB2]') #{recommendDoctor.doctorInfo[0].major}
+                                
+
+    hr.mx-16(class='border-[#1678F2] border-[1.5px]').my-12
+    .commentsContainer.px-20.mb-20
+        .comments_title.linearText.font-ABeeZee.text-4xl.font-ABeeZee.my-4.font-bold COMMENTS
+
+        .commentBox.px-16
+            if user 
+                .flex.flex-1.items-center.justify-center.gap-12
+                    img(src=`./../images/users/profile//menAnonymous.jpg`).rounded-full.w-20.object-fill
+                    .relative.w-full
+                        input(type="text" placeholder='Write your comment here' class='border-[#EAF0F7]').w-full.border.py-2.px-3.rounded-lg
+                        img(src="./../images/png/send-svgrepo-com.png", alt="Send icon" class='top-1/2 -translate-y-1/2').absolute.right-4.w-6
+            else 
+                .linearText.text-center.font-AbhayaLibre.text-xl Please #[a(href='/signIn' class='hover:underline font-bold').italic.underline sign in] to comment on this doctor
+            .flex.flex-1.items-center.justify-center.gap-12.px-16.my-6
+                img(src=`./../images/users/profile/womanAnonymous.jpg`).rounded-full.w-20.object-fill
+                .comment.flex.flex-col.w-full 
+                    .commentInfo.flex.flex-1.px-6 
+                        .commentNameRating.flex.flex-1.gap-4 
+                            .commentUsername.font-AbhayaLibre.font-extrabold.text-2xl(class='text-[#6E67F4] min-w-56') Lê Minh Chánh
+                            .commentRating.flex.flex-1.gap-2.items-center.mx-6
+                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
+                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
+                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
+                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
+                                img(src="./../images/png/half-star-svgrepo-com.png", alt="half star" class='w-[1.1rem] h-[1.1rem]')
+                        .commentTime.font-Inter(color='text-[#667085]') 38 minutes ago
+                    .commentContent.font-Inter(color='text-[#667085]') This new is very useful for me
+            .flex.flex-1.items-center.justify-center.gap-12.px-16.my-6
+                img(src=`./../images/users/profile/Le Con.png`).rounded-full.w-20.object-fill
+                .comment.flex.flex-col.w-full 
+                    .commentInfo.flex.flex-1.px-6 
+                        .commentNameRating.flex.flex-1.gap-4 
+                            .commentUsername.font-AbhayaLibre.font-extrabold.text-2xl(class='text-[#6E67F4] min-w-56') Lê Thiên Ân
+                            .commentRating.flex.flex-1.gap-2.items-center.mx-6
+                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
+                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
+                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
+                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
+                                img(src="./../images/png/half-star-svgrepo-com.png", alt="half star" class='w-[1.1rem] h-[1.1rem]')
+                        .commentTime.font-Inter(color='text-[#667085]') 58 minutes ago
+                    .commentContent.font-Inter(color='text-[#667085]') This new is very useful for me
+                
+
+

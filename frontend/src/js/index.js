@@ -3,9 +3,13 @@ import NewsItem from './newsItemController.js';
 import Navbar from './navbarController.js';
 import SignIn from './signIn.js';
 import CalculateForm from './calculateController.js';
-import SignUp from './signUp.js';
+import SignUp from './signup.js';
 import Slider from './sliderController.js';
 import Profile from './profileController.js';
+import Doctor from './doctorsController.js';
+import Chat from './chatToDoctorController.js';
+import ListOfChat from './listOfChatController.js';
+// import Hospital from "./findHospitalController.js"
 
 const init = async function () {
   if (
@@ -20,7 +24,15 @@ const init = async function () {
   if (window.location.pathname.includes('/news/')) {
     new NewsItem(window.location.pathname.replace('/news/', ''));
   }
-
+  if (window.location.pathname === '/doctor') {
+    new Doctor();
+  }
+  if(window.location.pathname === '/doctor/'){
+    Chat;
+  }
+  if(window.location.pathname === '/chat'){
+    ListOfChat;
+  }
   if (window.location.pathname === '/signIn') {
     await SignIn.init();
   }
@@ -31,7 +43,9 @@ const init = async function () {
     new CalculateForm();
     // await CalculateBMI.renderBreakfast();
   }
-
+  // if (window.location.pathname === '/findHospital') {
+  //   await Hospital.init();
+  // }
   if (window.location.pathname.includes('/profile')) {
     new Profile();
   }

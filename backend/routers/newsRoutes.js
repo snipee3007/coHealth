@@ -4,10 +4,10 @@ const authController = require('../controllers/authController.js');
 
 const router = express.Router();
 
-router.get('/', authController.protect, template.getNewsTemplate);
+router.get('/', template.getNewsTemplate);
 
 router
   .route('/:name')
-  .get(authController.protect, template.getNewsItemTemplate);
+  .get( template.getNewsItemTemplate);
 
 module.exports = router;

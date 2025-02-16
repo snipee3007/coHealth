@@ -53,7 +53,15 @@ class Navbar {
         .querySelector('.auth')
         .querySelector('a')
         .classList.add('active');
-    } else if (window.location.pathname.includes('/result')) {
+    } else if (
+      window.location.pathname === '/findHospital' 
+    ) {
+      document
+        .querySelector('.tools')
+        .querySelector('.nav_links')
+        .classList.add('active');
+    }  
+    else if (window.location.pathname.includes('/result')) {
     }
   }
 }
