@@ -4,6 +4,7 @@ const slugify = require('slugify');
 const rimraf = require('rimraf');
 
 const User = require('./../models/users_schema');
+
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 
@@ -116,3 +117,4 @@ exports.editProfile = catchAsync(async (req, res, next) => {
     message: 'Update User Profile successful!',
   });
 });
+

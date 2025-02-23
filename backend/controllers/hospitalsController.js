@@ -2,7 +2,8 @@ const hospitals = require('./../models/hospitals_schema');
 
 exports.getAllHospitals = async (req, res) => {
   try {
-    const data = await hospitals.find();
+    // chua sort
+    const data = await hospitals.find().limit(6);
     res.status(200).json({
       status: 200,
       length: data.length,

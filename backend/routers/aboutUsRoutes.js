@@ -4,6 +4,6 @@ const authController = require('../controllers/authController.js');
 
 const router = express.Router();
 
-router.get('/', authController.protect, template.getAboutUsTemplate);
+router.get('/', template.getAboutUsTemplate);
 
 module.exports = router;

@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const AppError = require('./../utils/appError');
 const slugify = require('slugify');
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
   fullname: {
     type: String,
     trim: true,
@@ -73,7 +73,36 @@ const userSchema = mongoose.Schema({
   slug: {
     type: String,
   },
+  role:
+    {
+      type: String,
+      default: 'user',
+      enum: ['user', 'doctor'],
+    },
+  status: {
+    type: String,
+    default: 'online',
+    enum: ['online', 'offline'],
+  },
+  lastSeen: {
+    type: Date,
+    default: null,
+  }
+},{
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true},
+    timestamps: {},
+}
+      
+);
+
+userSchema.virtual('doctorInfo', {
+  ref: 'doctor',
+  foreignField: 'userID',
+  localField: '_id',
 });
+
+
 
 userSchema.pre('save', function (next) {
   this.fullname = this.fullname
@@ -97,6 +126,7 @@ userSchema.pre('save', async function (next) {
 
 userSchema.post('save', function (error, doc, next) {
   if (error.code === 11000) {
+    console.log(error.message);
     next(new AppError('Duplicate key value in mongoDB', 11000));
   } else {
     next(new AppError('Bad Request!!! 💥💥 ', 400));
@@ -124,6 +154,6 @@ userSchema.methods.correctPassword = async function (
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-const User = mongoose.model('users', userSchema);
+const User = mongoose.model('user', userSchema);
 
 module.exports = User;

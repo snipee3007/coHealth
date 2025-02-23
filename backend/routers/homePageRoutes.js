@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get(
   ['/', '/home'],
-  authController.protect,
+  // authController.protect,
   template.getHomePageTemplate
 );
 

@@ -1,0 +1,44 @@
+class Doctor {
+    constructor() {
+      this.#init();
+    }
+    #init() {
+      this.#swiper();
+    }
+    #swiper(){
+      const swiper = new Swiper('.swiper', {
+        pagination: {
+          el: '.swiper-pagination-1',
+          clickable: true,
+          bulletClass: 'swiper-pagination-bullet swiper-pagination-bullet-doctor',
+          dynamicBullets: true,
+          dynamicMainBullets: 6,
+          bulletActiveClass: 'swiper-pagination-bullet-active-doctor',
+          renderBullet: function (index, className) {
+            return (
+              '<span class="' +
+              className +
+              ' cursor-pointer font-Inter">' +
+              (index + 1) +
+              '</span>'
+            );
+          },
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        slidesPerView: 3,
+        spaceBetween: 80,
+        grid: {
+          fill: 'row',
+          rows: 2,
+        },
+      });
+      this.swiper = swiper;
+    }
+    
+  }
+  
+  export default Doctor;
+  

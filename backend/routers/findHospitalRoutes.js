@@ -4,6 +4,6 @@ const authController = require('../controllers/authController.js');
 
 const router = express.Router();
 
-router.get('/', authController.protect, template.getfindHospitalTemplate);
+router.get('/', template.getfindHospitalTemplate);
 
 module.exports = router;

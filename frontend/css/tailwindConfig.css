@@ -97,6 +97,39 @@
   @apply border-[#B0C7EB];
 }
 
+.chatItemActive{
+  @apply bg-[#6E67F4]/80;
+  @apply text-white; 
+}
+
+.sender{
+  @apply border-2;
+  @apply p-4;
+  @apply w-fit;
+  @apply max-w-xl;
+  @apply mb-4;
+  @apply break-words;
+  @apply text-balance;
+  @apply rounded-[40px];
+  ;
+}
+
+.user{
+  @apply text-right;
+  @apply border-2;
+  @apply p-4;
+  @apply mb-4;
+  @apply max-w-xl;
+  @apply ml-auto;
+  @apply mr-4;
+  @apply w-fit;
+  @apply break-words;
+  @apply text-balance;
+  @apply rounded-[40px];
+  @apply bg-[#6E67F4]/80;
+  @apply text-white; 
+}
+
 .unshown {
   @apply opacity-0;
   @apply duration-200;
