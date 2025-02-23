@@ -26,7 +26,7 @@ class SignUp {
     await this.#signUp();
     this.#togglePasswordAndConfirmPassword();
     this.#handleYearOfBirthField();
-    this.#handleConfirmPassword();
+    this.#handlePassword();
   }
 
   async #signUp() {
@@ -50,13 +50,18 @@ class SignUp {
     });
   }
 
-  #handleConfirmPassword() {
+  #handlePassword() {
     const confirmPassword = document.getElementById('confirmPassword');
-    confirmPassword.addEventListener('input', function () {
-      confirmPassword.value !== document.getElementById('password').value
-        ? confirmPassword.setCustomValidity('Invalid field.')
-        : confirmPassword.setCustomValidity('');
-    });
+    const password = document.getElementById('password');
+
+    [confirmPassword, password].forEach((field) =>
+      field.addEventListener('input', function () {
+        confirmPassword.value && password.value;
+        confirmPassword.value !== password.value
+          ? confirmPassword.setCustomValidity('Invalid field.')
+          : confirmPassword.setCustomValidity('');
+      })
+    );
   }
 
   #handleYearOfBirthField() {
