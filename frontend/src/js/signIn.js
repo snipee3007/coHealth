@@ -9,7 +9,7 @@ const signIn = async function (data) {
       alert('Sign In successfully!');
       window.setTimeout(() => {
         location.assign('/');
-      }, 1500);
+      }, 500);
     }
   } catch (err) {
     console.log(err);
