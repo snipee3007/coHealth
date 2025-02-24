@@ -25,10 +25,7 @@ const init = async function () {
     new NewsItem(window.location.pathname.replace('/news/', ''));
   }
   if (window.location.pathname === '/doctor') {
-    new Doctor();
-  }
-  if(window.location.pathname === '/doctor/'){
-    Chat;
+    new Chat();
   }
   if(window.location.pathname === '/chat'){
     ListOfChat;

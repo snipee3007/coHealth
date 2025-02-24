@@ -130,6 +130,20 @@
   @apply text-white; 
 }
 
+.online{
+  @apply h-4;
+  @apply w-4;
+  @apply bg-green-600;
+  @apply rounded-full;
+}
+
+.offline{
+  @apply h-4;
+  @apply w-4;
+  @apply bg-neutral-600;
+  @apply rounded-full;
+}
+
 .unshown {
   @apply opacity-0;
   @apply duration-200;

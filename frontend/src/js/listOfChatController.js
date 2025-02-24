@@ -1,5 +1,19 @@
 const socket = io("http://127.0.0.1:3000");
 
+setInterval(() => {
+
+}, 30000)
+
+const timeAgo = (timestamp) => {
+    console.log(timestamp)
+    const diff = Math.floor((Date.now() - new Date(timestamp)) / 1000);
+    if (diff < 60) return `1 minute ago`
+    if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+    else if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+    else if (diff < 2592000) return `${Math.floor(diff / 86400)} days ago`;
+    else return `over 30 days ago`;
+}
+
 socket.on('receiveMessage', message => {
     // trên đây để hiện chat cho đối phương
     let html = `<div class= "sender"> ${message}</div>`
@@ -8,6 +22,8 @@ socket.on('receiveMessage', message => {
 
     // dưới đây để hiện nội dung chat ở trong cái button từng người
     document.querySelector('.lastMessage').textContent = message;
+
+
 })
 
 const sendMessage = async function(message, roomCode){
@@ -42,6 +58,7 @@ class ListOfChat{
         this.#getMessageEachRoom();
         this.#createMessage();
         this.#getRoomCode();
+        this.#getUserStatus();
     }
     #getMessageEachRoom(){
         const buttons = document.querySelectorAll(".listChat")
@@ -74,27 +91,57 @@ class ListOfChat{
                     },
                 })
                 self.#roomCode = button.id
+
                 const data = await isChatRoom.json()
-                // tí làm tiếp
                 console.log(data.data.room)
                 // lấy userData trong memberID của từng room
                 const userData = data.data.room.memberID
                 // lấy slug name toàn bộ người trong room ra 
                 const roomSlugName = [userData[0].slug, userData[1].slug]
-                
-                // lấy cái slug name trong button
+                // chỉnh cái online offline và đăng nhập lần cuối là bao lâu
+                const status = [userData[0].status, userData[1].status]
+                const lastSeen = [new Date(userData[0].lastSeen), new Date(userData[1].lastSeen)]
+                // chỗ này cho 2 người là người đang đăng nhập và người nhận được tin nhắn
+                let lastSeenUser = []
+                let i = 0
+                for(i; i<=1; i++){
+                    lastSeenUser.push(
+                        timeAgo(lastSeen[i])
+                    )
+                }
+                console.log(lastSeenUser[1])
+                // lấy cái slug name của bác sĩ trong button ở vị trí số 7 -> thêm class thì sửa cái này? 
                 console.log(button.classList)
                 const slug = button.classList[7]
                 // console.log(userData[0].image)
-                // check coi tên trong mảng có là cái slug của bác sĩ hay 0 (người trò chuyện)
-                let chatBoxInfoHTML = roomSlugName[0] === slug? 
+                let userDataImage = ''
+                let userDataName = ''
+                let userDataStatus = ''
+                let userDataStatusCircle = ''
+                if(roomSlugName[0]===slug){
+                    userDataImage = userData[0].image
+                    userDataName = userData[0].fullname
+                    userDataStatus = status[0]=='online'? `<p>Online</p>` : `<p>Offline ${lastSeenUser[0]}</p>`
+                    userDataStatusCircle = status[0]=='online'? 'online' : 'offline'
+
+                }
+                else{
+                    userDataImage = userData[1].image
+                    userDataName = userData[1].fullname
+                    userDataStatus = status[1]=='online'? `<p>Online</p>` : `<p>Offline ${lastSeenUser[1]}</p>`
+                    userDataStatusCircle = status[1]=='online'? 'online' : 'offline'
+
+                }
+                let chatBoxInfoHTML = `
+                    <div class='relative'>
+                        <img src='./../images/users/profile/${userDataImage}' class='h-16 rounded-full' alt='${userDataImage}-profile'>
+                        <div class='${userDataStatusCircle} absolute right-0 bottom-0'></div>
+                    </div>
+                    
+                    <div class='font-ABeeZee content-center space-x-4'>
+                        <p class='ml-4'>${userDataName}</p>                        
+                ` + userDataStatus + `</div>`
                 
-                ` <img src='./../images/users/profile/${userData[0].image}' class='h-16 rounded-full' alt='${roomSlugName[0]}-profile'>
-                    <p class='font-ABeeZee content-center'>${userData[0].fullname}</p>
-                ` : 
-                ` <img src='./../images/users/profile/${userData[1].image}' class='h-16 rounded-full' alt='${roomSlugName[1]}-profile'>
-                    <p class='font-ABeeZee content-center'>${userData[1].fullname}</p>
-                `
                 document.querySelector('.chatBoxInfo').insertAdjacentHTML("beforeend", chatBoxInfoHTML);
 
                 // lấy danh sách toàn bộ message
@@ -126,16 +173,56 @@ class ListOfChat{
                 document.querySelector('.listOfChat').insertAdjacentHTML("beforeend", html);
                 document.querySelector('.listOfChat').scrollTop = document.querySelector('.listOfChat').scrollHeight;
                 socket.emit('sendMessage', message, roomCode)
-                document.querySelector('.lastMessage').textContent = message;
+
                 // sau khi gửi xong thì hiện lên cái khung chat
-                
+                let lastMessageElem = document.getElementById(`${roomCode}`)
+                lastMessageElem.querySelector(`.lastMessage`).textContent = message;
+                // update chữ vừa mới nhắn tin xong lên 
+                lastMessageElem.querySelector(".lastMessageTime").textContent = "1 minute ago"
+                // nhắn tin xong đẩy lên cái đầu tiên trong chat
+                let listUser = document.querySelector('.listUser')
+                console.log(listUser)
+                listUser.prepend(lastMessageElem)
             })
         }
     }
+    
+    #getUserStatus(){
+        // hàm cập nhật trạng thái online offline
+        socket.on('getUsers', (activeUsers)=>{
+            activeUsers.forEach((activeUser) => {
+                let userDiv = document.querySelector(`.${activeUser.slug}`)
+                console.log(userDiv)
+                if(userDiv != null){
+                    let userStatus = userDiv.querySelector('.status')
+                    let lastClassOfUserDiv = userStatus.classList[userStatus.classList.length-1]
+                    userStatus.classList.remove(`${lastClassOfUserDiv}`)
+                    userStatus.classList.add(`${activeUser.status}`)
+                    console.log(activeUser.status)
+                }
+                // update thời gian tin nhắn cuối cùng
+                // if(document.querySelector(".listChat .lastMessageTime")){
+                //     messTime = document.querySelector(".listChat .lastMessageTime")?.textContent || ""
+                //     if(messTime){
+                //         document.querySelector(".listChat .lastMessageTime").textContent = timeAgo(messTime)
+                //     }
+                // } 
+            })
+            
+        })
+        // cập nhật trạng thái on off sau mỗi 30s tránh quá tải 
+        setInterval(()=>{
+            socket.emit('requestUsers')
+        }, 30000)
+
+    }
+
     #getRoomCode(){
         return this.#roomCode;
     }
 }
+
+
 
 export default new ListOfChat();
 

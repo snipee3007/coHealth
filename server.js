@@ -23,7 +23,7 @@ const io = new Server(server, {
         methods: ["GET", "POST"]
     }
   });
-  
+let onlineUsers = [];
 io.on("connection", async (socket) => {
   try{
     console.log(socket.id)
@@ -47,7 +47,9 @@ io.on("connection", async (socket) => {
       )
     }
     console.log(`User ${currentUser.fullname} is now online`);
-
+    if(!onlineUsers.includes(currentUser._id)){
+      onlineUsers.push({slug: currentUser.slug, status: "online", lastSeen: currentUser.lastSeen})
+    }
     socket.on("sendMessage", (message, room) => {
       if(room===''){
         alert('Please enter a rooom')
@@ -74,9 +76,21 @@ io.on("connection", async (socket) => {
           { _id: currentUser._id },
           { status: "offline", lastSeen: new Date()},
           { new: true }
-      );
+      )
+      // socket.on("update");
+    // dùng để cập nhật mỗi 30s xem có online hay offline hay không
+    // socket.on('ping',()=> {
+
+    // })
+      onlineUsers.forEach((user) => {
+        if(user.slug === currentUser.slug){
+          user.status = 'offline';
+        }
+      })
   });
-    
+    socket.on('requestUsers', () => {
+      io.emit('getUsers', onlineUsers)
+    })
   }
   catch (error) {
     console.error('Error on socket.io connection:', error);
