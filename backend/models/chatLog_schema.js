@@ -7,7 +7,7 @@ const slugify = require('slugify');
 const chatLogSchema = new mongoose.Schema({
     date: {
       type: Date,
-      default: Date.now,
+      default: new Date(),
     },
     senderID: {
       type: mongoose.Schema.Types.ObjectId,

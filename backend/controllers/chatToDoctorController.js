@@ -76,17 +76,16 @@ exports.createChatRoom = catchAsync(async (req, res, next) => {
   exports.getAllChatRoomByUserID = catchAsync(async (req, res, next) => {
     const user = req.user;
     try{
-      const room = await ChatRoom.find({
+      const rooms = await ChatRoom.find({
         memberID: {$in: [user._id]}
-      }).populate({path: 'memberID' , select: 'email fullname image slug'}).populate({
+      }).populate({path: 'memberID' , select: 'email fullname image slug lastSeen status'}).populate({
         path: 'message', 
         populate: {
           path:'senderID', 
           select: 'email fullname image slug'
         }
       }).lean();
-      console.log(room[0].message.length)
-      if(room){
+      if(rooms){
         // console.log(room[0].memberID[0].fullname)
         // res.status(200).json({
         //   status: 'success',
@@ -94,7 +93,13 @@ exports.createChatRoom = catchAsync(async (req, res, next) => {
         //     room,
         //   },
         // });
-        req.room = room;
+        // sort trong js là tính giá trị 2 thứ trừ nhau, dương thì đổi chỗ
+        rooms.sort((a, b) => {
+          const lastMsgA = a.message?.[a.message.length - 1]?.date || 0;
+          const lastMsgB = b.message?.[b.message.length - 1]?.date || 0;
+          return new Date(lastMsgB) - new Date(lastMsgA);
+        });
+        req.room = rooms;
         next();
       }
       else{
@@ -158,7 +163,7 @@ exports.createChatRoom = catchAsync(async (req, res, next) => {
 
       const room = await ChatRoom.findOne({
         roomCode: roomCode,
-      }).populate({path:'memberID', select: 'fullname image slug'}).populate({
+      }).populate({path:'memberID', select: 'fullname image slug status lastSeen'}).populate({
         path: 'message', 
         populate: {
           path:'senderID', 
