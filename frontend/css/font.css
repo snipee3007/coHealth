@@ -1,0 +1,47 @@
+@layer base {
+  @font-face {
+    font-family: 'ABeeZee';
+    font-style: normal;
+    src: url('./font/ABeeZee-Regular.ttf');
+  }
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    src: url('./font/Inter/Inter-VariableFont_opsz.ttf');
+  }
+  @font-face {
+    font-family: 'Fustat';
+    font-style: medium;
+    src: url('./font/Fustat/Fustat-Medium.ttf');
+  }
+  @font-face {
+    font-family: 'Roca';
+    font-style: normal;
+    src: url('./font/Roca/fonnts.com-Roca.otf');
+  }
+  @font-face {
+    font-family: 'DM-Sans';
+    font-style: normal;
+    src: url('./font/Dm_Sans/DMSans-Regular.ttf');
+  }
+  @font-face {
+    font-family: 'Urbanist';
+    font-style: normal;
+    src: url('./font/Urbanist/Urbanist-Regular.ttf');
+  }
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    src: url('./font/Roboto/Roboto-Regular.ttf');
+  }
+  @font-face {
+    font-family: 'AbhayaLibre';
+    font-style: normal;
+    src: url('./font/AbhayaLibre/AbhayaLibre-Regular.ttf');
+  }
+  @font-face {
+    font-family: 'AbeeZee';
+    font-style: normal;
+    src: url('./font/ABeeZee/ABeeZee-Regular.ttf');
+  }
+}

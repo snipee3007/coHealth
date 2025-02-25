@@ -15,7 +15,7 @@ block body
                     .secondParagraph Now I'm working at #{doctor.doctorInfo[0].workAt}
                     .thirdParagraph I has working for #{doctor.doctorInfo[0].yearEXP} years
                     if user 
-                        button.chat.linearBackground.font-DM-Sans.text-white.py-2.rounded-xl.font-bold.mt-4.w-60(id = `${doctor.slug}`) Chat to this doctor
+                        button.chat.linearBackground.font-DM-Sans.text-white.py-2.rounded-xl.font-bold.mt-4.w-60.cursor-pointer(id = `${doctor.slug}`) Chat to this doctor
                     else 
                         .linearText.mt-8.font-AbhayaLibre.text-xl Please #[a(href='/signIn' class='hover:underline font-bold').italic.underline sign in] to chat with doctor
 

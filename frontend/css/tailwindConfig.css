@@ -1,54 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@layer base {
-  @font-face {
-    font-family: 'ABeeZee';
-    font-style: normal;
-    src: url('./font/ABeeZee-Regular.ttf');
-  }
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    src: url('./font/Inter/Inter-VariableFont_opsz.ttf');
-  }
-  @font-face {
-    font-family: 'Fustat';
-    font-style: medium;
-    src: url('./font/Fustat/Fustat-Medium.ttf');
-  }
-  @font-face {
-    font-family: 'Roca';
-    font-style: normal;
-    src: url('./font/Roca/fonnts.com-Roca.otf');
-  }
-  @font-face {
-    font-family: 'DM-Sans';
-    font-style: normal;
-    src: url('./font/Dm_Sans/DMSans-Regular.ttf');
-  }
-  @font-face {
-    font-family: 'Urbanist';
-    font-style: normal;
-    src: url('./font/Urbanist/Urbanist-Regular.ttf');
-  }
-  @font-face {
-    font-family: 'Roboto';
-    font-style: normal;
-    src: url('./font/Roboto/Roboto-Regular.ttf');
-  }
-  @font-face {
-    font-family: 'AbhayaLibre';
-    font-style: normal;
-    src: url('./font/AbhayaLibre/AbhayaLibre-Regular.ttf');
-  }
-  @font-face {
-    font-family: 'AbeeZee';
-    font-style: normal;
-    src: url('./font/ABeeZee/ABeeZee-Regular.ttf');
-  }
-}
+@import './font.css';
+@import './extendCSS.css';
 
 .nav-items {
   @apply mx-[2vw];
@@ -97,12 +50,12 @@
   @apply border-[#B0C7EB];
 }
 
-.chatItemActive{
+.chatItemActive {
   @apply bg-[#6E67F4]/80;
-  @apply text-white; 
+  @apply text-white;
 }
 
-.sender{
+.sender {
   @apply border-2;
   @apply p-4;
   @apply w-fit;
@@ -111,10 +64,9 @@
   @apply break-words;
   @apply text-balance;
   @apply rounded-[40px];
-  ;
 }
 
-.user{
+.user {
   @apply text-right;
   @apply border-2;
   @apply p-4;
@@ -127,17 +79,17 @@
   @apply text-balance;
   @apply rounded-[40px];
   @apply bg-[#6E67F4]/80;
-  @apply text-white; 
+  @apply text-white;
 }
 
-.online{
+.online {
   @apply h-4;
   @apply w-4;
   @apply bg-green-600;
   @apply rounded-full;
 }
 
-.offline{
+.offline {
   @apply h-4;
   @apply w-4;
   @apply bg-neutral-600;
@@ -223,7 +175,7 @@ label {
 }
 
 .newsItem:hover {
-  @apply -translate-y-1 !important;
+  @apply -translate-y-1!;
   @apply border;
   @apply border-black;
   @apply transition;
@@ -237,20 +189,20 @@ label {
   opacity: 1;
   font-family: Inter;
   background: none;
-  @apply w-7 !important;
-  @apply h-7 !important;
-  @apply text-lg !important;
-  @apply mx-3 !important;
-  @apply rounded-lg !important;
+  @apply w-7!;
+  @apply h-7!;
+  @apply text-lg!;
+  @apply mx-3!;
+  @apply rounded-lg!;
 }
 
 .swiper-pagination-bullet-active-news {
-  @apply opacity-100 !important;
+  @apply opacity-100!;
 }
 
 .swiper-pagination-bullet-active-news-main,
 .swiper-pagination-bullet-active-news {
-  @apply scale-100 !important;
+  @apply scale-100!;
 }
 
 .swiper-pagination-bullet-active-news-main {
