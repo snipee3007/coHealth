@@ -1,4 +1,4 @@
-class CalculateForm {
+class CalculateBMI {
   constructor() {
     this.#init();
   }
@@ -114,4 +114,4 @@ class CalculateForm {
   }
 }
 
-export default CalculateForm;
+new CalculateBMI();

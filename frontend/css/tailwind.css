@@ -1137,10 +1137,6 @@ video {
   align-content: center;
 }
 
-.content-end {
-  align-content: flex-end;
-}
-
 .items-end {
   align-items: flex-end;
 }

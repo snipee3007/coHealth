@@ -1,8 +1,8 @@
 extend base
 
 block append header 
-    link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css')
-    script(src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js')
+    script(defer, src="/src/newsController.js") 
+
     style(type="text/css").
         .swiper-pagination-bullet {
             background: none !important;

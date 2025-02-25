@@ -1,8 +1,8 @@
-class Slider {
+class Homepage {
   constructor() {
-    this.#init();
+    this.#homepageSlider();
   }
-  #init() {
+  #homepageSlider() {
     const swiper = new Swiper('.swiper', {
       pagination: {
         el: '.swiper-pagination',
@@ -21,4 +21,4 @@ class Slider {
   }
 }
 
-export default Slider;
+new Homepage();

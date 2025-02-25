@@ -213,4 +213,4 @@ class Profile {
   }
 }
 
-export default Profile;
+new Profile();

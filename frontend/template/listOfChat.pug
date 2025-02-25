@@ -1,6 +1,9 @@
 
 extend base
 
+block append header 
+    script(defer, src="/src/listOfChatController.js") 
+
 block body
     .containerScreen
         p.font-ABeeZee.text-2xl.p-4 List of Chat

@@ -22,8 +22,8 @@ const signUp = async function (data) {
 };
 
 class SignUp {
-  async init() {
-    await this.#signUp();
+  constructor() {
+    this.#signUp();
     this.#togglePasswordAndConfirmPassword();
     this.#handleYearOfBirthField();
     this.#handlePassword();
@@ -99,4 +99,4 @@ class SignUp {
   }
 }
 
-export default new SignUp();
+new SignUp();

@@ -2,7 +2,7 @@ const fs = require('fs');
 const replaceTemplate = require('./replaceTemplate.js');
 const New = require('./../models/news_schema.js');
 const User = require('./../models/users_schema.js');
-const Hospital = require('./../models/hospitals_schema.js')
+const Hospital = require('./../models/hospitals_schema.js');
 const catchAsync = require('./../utils/catchAsync.js');
 const Doctor = require('./../models/doctors_schema.js');
 
@@ -149,41 +149,42 @@ exports.getHistoryTemplate = async (req, res) => {
 exports.getChatToDoctorsTemplate = catchAsync(async (req, res, next) => {
   const doctors = await User.find({
     role: 'doctor',
-  }).populate({ path: 'doctorInfo'});
+  }).populate({ path: 'doctorInfo' });
 
-    res.status(200).render('chatToDoctor', {
+  res.status(200).render('doctors', {
     title: 'doctors',
     doctors,
   });
-  
-}); 
+});
 
 exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
-  console.log(req.params.name)
+  console.log(req.params.name);
   // console.log(req.originalUrl.split('/')[2])
   const doctor = await User.findOne({
     slug: req.originalUrl.split('/')[2],
     role: 'doctor',
-  }).populate({ path: 'doctorInfo'}); 
+  }).populate({ path: 'doctorInfo' });
   const recommendDoctors = await User.find({
     role: 'doctor',
-    _id: { $ne: doctor._id },  
-  }).populate({path: 'doctorInfo', match: {major: {$eq: doctor.doctorInfo[0].major}}});
+    _id: { $ne: doctor._id },
+  }).populate({
+    path: 'doctorInfo',
+    match: { major: { $eq: doctor.doctorInfo[0].major } },
+  });
 
   // if (recommendDoctors.length() < 3){
 
   // }
 
-  res.status(200).render('chatToDoctorItem', {
-    title: 'doctors',
+  res.status(200).render('doctorItem', {
+    title: 'Doctors',
     doctor,
     recommendDoctors,
-    
   });
 });
 exports.getListOfChatTemplate = async (req, res) => {
   res.status(200).render('listOfChat', {
     title: 'List of Chat',
-    rooms: req.room
+    rooms: req.room,
   });
 };

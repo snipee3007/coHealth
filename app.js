@@ -25,9 +25,7 @@ const historyRouter = require('./backend/routers/historyRoutes.js');
 const globalErrorHandler = require('./backend/controllers/errorController.js');
 const authController = require('./backend/controllers/authController.js');
 
-
 const app = express();
-
 
 const bodyParser = require('body-parser');
 
@@ -38,8 +36,6 @@ app.use(express.static(path.join(__dirname, `frontend`)));
 const cookieParser = require('cookie-parser');
 
 const oneDay = 1000 * 60 * 60 * 24;
-
-
 
 app.use(express.json());
 app.use(cookieParser());

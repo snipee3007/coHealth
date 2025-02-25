@@ -36,4 +36,4 @@ class News {
   }
 }
 
-export default News;
+new News();

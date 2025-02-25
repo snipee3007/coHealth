@@ -8,4 +8,4 @@ class AboutUs {
   }
 }
 
-export default new AboutUs();
+new AboutUs();

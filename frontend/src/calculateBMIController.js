@@ -1,10 +1,4 @@
 const breakfastContainer = document.querySelector('.breakfast');
-const lunchContainer = document.querySelector('.lunch');
-const teaContainer = document.querySelector('.tea');
-const dinnerContainer = document.querySelector('.dinner');
-const gymContainer = document.querySelector('.gym');
-const aerobicsContainer = document.querySelector('.aerobics');
-const exerciseContainer = document.querySelector('.exercise');
 
 class CalculateBMI {
   async renderBreakfast() {
@@ -27,4 +21,4 @@ class CalculateBMI {
   }
 }
 
-export default new CalculateBMI();
+new CalculateBMI();

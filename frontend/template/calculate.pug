@@ -1,5 +1,8 @@
 extend base
 
+block append header 
+    script(defer src="/src/calculateController.js") 
+
 block body
     .calculateBMIBody.flex.flex-1.items-center.justify-center.gap-20.my-12
         .calculateContent

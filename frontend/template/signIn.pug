@@ -1,7 +1,8 @@
 extend base
 
-block append header 
-    script(defer src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+block append header
+    script(defer, src='/src/signIn.js')
+    script(defer, src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
 
 block body 
     // Login

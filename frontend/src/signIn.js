@@ -18,8 +18,8 @@ const signIn = async function (data) {
 };
 
 class SignIn {
-  async init() {
-    await this.#signIn();
+  constructor() {
+    this.#signIn();
     this.#togglePassword();
   }
 
@@ -48,4 +48,4 @@ class SignIn {
   }
 }
 
-export default new SignIn();
+new SignIn();
