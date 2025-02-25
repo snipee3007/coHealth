@@ -6,7 +6,7 @@ class Doctor {
     this.#swiper();
   }
   #swiper() {
-    const swiper = new Swiper('.swiper', {
+    new Swiper('.swiper', {
       pagination: {
         el: '.swiper-pagination-1',
         clickable: true,
@@ -35,7 +35,6 @@ class Doctor {
         rows: 2,
       },
     });
-    this.swiper = swiper;
   }
 }
 

@@ -3,7 +3,7 @@ class News {
     this.#init();
   }
   #init() {
-    const swiper = new Swiper('.swiper', {
+    new Swiper('.swiper', {
       pagination: {
         el: '.swiper-pagination-1',
         clickable: true,
@@ -32,7 +32,6 @@ class News {
         rows: 2,
       },
     });
-    this.swiper = swiper;
   }
 }
 

@@ -3,7 +3,7 @@ class Homepage {
     this.#homepageSlider();
   }
   #homepageSlider() {
-    const swiper = new Swiper('.swiper', {
+    new Swiper('.swiper', {
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
@@ -17,7 +17,6 @@ class Homepage {
         pauseOnMouseEnter: true,
       },
     });
-    this.swiper = swiper;
   }
 }
 
