@@ -1,0 +1,22 @@
+.swiper 
+    .swiper-wrapper 
+        each newItem in mostViewNews 
+            .swiper-slide
+                .w-full.relative(class='h-[60vh]').overflow-hidden
+                    div(loading='lazy').w-full
+                        img.object-cover.object-top.w-full.sliderImage.blur-sm.brightness-50(src=`./../images/news/${newItem.imgSRC}` alt=`${newItem.imgAlt}`).relative
+                        .swiper-lazy-preload-white
+                    .sliderImageContent.absolute(class='top-1/2 left-[10%] w-2/5 text-justify -translate-y-2/4')
+                        .sliderImageTitle.font-Roca(class='text-[#517ded]').font-bold.text-5xl= newItem.name.toUpperCase() 
+                        .sliderImageContent.font-DM-Sans.my-4(class='text-[#c9d8ff]').font-semibold= newItem.sliderContent
+                        button.btn-slider-image(class='bg-[#4267C5]').py-2.px-6.text-white.font-DM-Sans Learn more
+
+                    
+
+    .swiper-pagination 
+    .swiper-button-prev.text-white
+        img(src='./../images/png/angle-left-svgrepo-com.png')
+    .swiper-button-next.text-white
+        img(src='./../images/png/angle-right-svgrepo-com.png')
+
+    .swiper-pagination

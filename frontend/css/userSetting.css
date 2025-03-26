@@ -1,0 +1,274 @@
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.right-div {
+  flex: 1;
+  margin-top: 30px;
+  margin-left: 30px;
+  border: 1px solid black;
+  border-radius: 2%;
+}
+
+.sidebar {
+  width: 20vw;
+  /* margin-left: 2vw; 14 + 3 = 17 */
+  margin-top: 30px;
+  height: 100%;
+}
+
+.titleItem {
+  border: 1px solid black;
+  margin-bottom: 20px;
+  border-radius: 9.88px;
+}
+
+.sideItems {
+  border: 1px solid black;
+  border-radius: 5%;
+  margin-bottom: 20px;
+}
+
+.sideItems a {
+  display: block;
+  width: 16vw;
+  padding: 1.5vh 1vw 1.5vh 1vw;
+  margin-top: 1.5vh;
+  margin-bottom: 1.5vh;
+  margin-right: 2vw;
+  cursor: pointer;
+  font-family: Inter;
+  font-size: 3vh;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit color from the parent */
+}
+
+/* Add this style to handle the active state */
+.sideItems a.activee {
+  color: rgb(68, 47, 292); /* Set the color for the active state */
+}
+.title {
+  width: 16vw;
+  padding: 1.5vh 1vw 1.5vh 1vw;
+  /* margin-top: 1.5vh;
+    margin-bottom: 1.5vh;
+    margin-right: 2vw; */
+  cursor: pointer;
+  font-family: Inter;
+  font-size: 3vh;
+  font-style: normal;
+  font-weight: bold;
+  line-height: normal;
+}
+
+.activee {
+  color: rgb(68, 47, 292);
+}
+
+.bodyInfo {
+  border: 1px solid black;
+}
+
+.basicInfo {
+  margin-left: 4vw;
+  margin-top: 3%;
+  font-family: 'ABeeZee-Regular', Helvetica;
+  font-size: 3vh;
+  font-weight: bold;
+}
+
+.containInfo {
+  margin-top: 4vh;
+}
+
+.titleInfo {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'ABeeZee-Regular', Helvetica;
+  font-size: 3vh;
+  margin-top: 4vh;
+}
+
+.title-left {
+  margin-left: 4vw;
+}
+
+.title-right {
+  margin-right: 20vw;
+}
+
+.boxInfoAll {
+  display: flex;
+  /* justify-items: center; */
+}
+
+.infoBox-left {
+  display: flex;
+  width: 20vw;
+  height: 5vh;
+  margin-top: 2vh;
+  margin-left: 4vw;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 14.51px;
+}
+
+.infoBox-right {
+  display: flex;
+  align-items: center;
+  width: 20vw;
+  height: 5vh;
+  margin-top: 2vh;
+  margin-left: 20.6vw;
+  border: 1px solid black;
+  border-radius: 14.51px;
+}
+
+.boxItems {
+  font-family: 'ABeeZee-Regular', Helvetica;
+  font-size: 2.5vh;
+  margin-left: 1vw;
+}
+
+.buttonContain {
+  margin-top: 11vh;
+  margin-bottom: 5vh;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btnnSignout {
+  width: 204px;
+  height: 53px;
+  border: none;
+  background: #cb2224;
+  border-radius: 14.51px;
+  color: #ffffff;
+  font-family: 'ABeeZee-Regular', Helvetica;
+  font-size: 15px;
+}
+
+.btnn {
+  width: 204px;
+  height: 53px;
+  border: none;
+  background: linear-gradient(
+    96.14deg,
+    rgb(22, 120, 242) 0%,
+    rgb(110.75, 57.8, 249.75) 100%
+  );
+  border-radius: 14.51px;
+  color: #ffffff;
+  font-family: 'ABeeZee-Regular', Helvetica;
+  font-size: 15px;
+}
+
+.right-div .label {
+  width: 297px;
+  height: 40px;
+}
+
+.right-div .label .text-wrapper {
+  position: relative;
+  width: 297px;
+  height: 40px;
+  top: 0;
+  left: 0;
+  font-family: 'Inter-Bold', Helvetica;
+  font-weight: 700;
+  color: #000000;
+  font-size: 28px;
+  letter-spacing: 0;
+  line-height: 23.7px;
+  top: 40px;
+  left: 40px;
+}
+.right-div .label .delete {
+  position: relative;
+  width: 297px;
+  height: 40px;
+  top: 0;
+  left: 0;
+  font-family: 'Inter-Bold', Helvetica;
+  font-weight: 700;
+  color: #cb2224;
+  font-size: 28px;
+  letter-spacing: 0;
+  line-height: 23.7px;
+  top: 40px;
+  left: 40px;
+}
+.right-div .label {
+  width: 912px;
+  height: 97px;
+}
+
+.right-div .lower-line {
+  width: 912px;
+  margin-bottom: 30px; /* Adjust the distance between the label and lower line */
+}
+
+.right-div .lower-line .text-wrapper {
+  font-family: 'Inter-Regular', Helvetica;
+  font-weight: 400;
+  color: #000000;
+  font-size: 18.7px;
+  position: relative;
+  left: 40px; /* Adjust the horizontal position */
+}
+
+.right-div .reset-button {
+  margin-top: 30px; /* Adjust the distance between text and button */
+  width: 204px;
+  height: 53px;
+  font-size: 16px; /* Adjust font size as needed */
+  font-family: 'Inter-Regular', Helvetica;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: none;
+  border-radius: 14.51px;
+  overflow: visible;
+  left: 40px;
+}
+
+.right-div .reset-button .rectangle {
+  display: flex;
+  font-family: 'ABeeZee-Regular', Helvetica;
+  font-size: 25px;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 14.51px;
+  background: linear-gradient(
+    96.14deg,
+    rgb(22, 120, 242) 0%,
+    rgb(110.75, 57.8, 249.75) 100%
+  );
+}
+.right-div .reset-button .deleterec {
+  display: flex;
+  font-family: 'ABeeZee-Regular', Helvetica;
+  font-size: 25px;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 14.51px;
+  background: #cb2224;
+}

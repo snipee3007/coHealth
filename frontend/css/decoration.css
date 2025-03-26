@@ -1,0 +1,36 @@
+.eclipse-1 {
+  width: 40%;
+  height: 40%;
+  flex-shrink: 0;
+  border-radius: 50%;
+  opacity: 0.5;
+  background: #2a72dd;
+  filter: blur(225.8274383544922px);
+  z-index: -1;
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+}
+
+.eclipse-2 {
+  width: 40%;
+  height: 40%;
+  flex-shrink: 0;
+  border-radius: 50%;
+  opacity: 0.4;
+  background: #2a72dd;
+  filter: blur(225.8274383544922px);
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+}
+
+.chatIcon {
+  width: 4vw;
+  height: 4vw;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+}

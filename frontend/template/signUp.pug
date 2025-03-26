@@ -1,0 +1,56 @@
+extend base 
+
+block append header 
+    script(defer src='/src/signUpController.js')
+
+block body 
+    .flex.flex-1.justify-center.w-full.pb-40.relative.overflow-hidden
+        .signUpBody(class='w-1/4').flex.flex-col.items-center
+            .signUpTitle.font-Roca(class='text-[#384FC0]').text-4xl.my-12.w-full.text-center Sign up to join us
+            
+            form.w-full.signUpForm#signUpForm(method='POST' action='/users/signUp')
+                .input-box.w-full
+                    label(for="fullname" class='text-[#4F555A]').px-2 Full name 
+                    .relative.my-4
+                        input.w-full#fullname(type='text' name='fullname' placeholder='Fullname' required min=8 class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
+                        img.w-4.absolute.right-3(src="./../images/png/close-circle-svgrepo-com.png" alt="Close icon" class='top-1/2 -translate-y-1/2').cursor-pointer
+
+                .input-box.w-full
+                    label(for="email" class='text-[#4F555A]').px-2 Email
+                    .relative.my-4
+                        input.w-full#email(type='email' name='email' placeholder='Username/E-mail' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
+                        img.w-4.absolute.right-3(src="./../images/png/close-circle-svgrepo-com.png" alt="Close icon" class='top-1/2 -translate-y-1/2').cursor-pointer
+
+                .input-box.w-full
+                    label(for='password' class='text-[#4F555A]').px-2 Password
+                    .relative.my-4
+                        input.w-full#password(type='password' name='password' placeholder='Password' min=8 required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
+                        img.togglePassword.w-4.absolute.right-3(src="./../images/png/eye-slash-svgrepo-com.png" alt="Toggle Password icon" class='top-1/2 -translate-y-1/2').cursor-pointer
+
+                .input-box.w-full
+                    label(for='confirmPassword' class='text-[#4F555A]').px-2 Confirm Password
+                    .relative.my-4
+                        input.w-full#confirmPassword(type='password' name='confirmPassword' min=8 placeholder='Confirm your password' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
+                        img.toggleConfirmPassword.w-4.absolute.right-3(src="./../images/png/eye-slash-svgrepo-com.png" alt="Toggle Password icon" class='top-1/2 -translate-y-1/2').cursor-pointer
+
+                .input-box.w-full.flex.flex-1.justify-between.gap-4
+                    .yearOfBirth(class='w-1/2') 
+                        label(for='yearOfBirth' class='text-[#4F555A]').px-2 Year Of Birth
+                        .relative.my-4
+                            input.w-full#yearOfBirth(type='text' name='yearOfBirth' placeholder='Year' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
+                    .gender(class='w-1/2')
+                        label(for='gender' class='text-[#4F555A]').px-2.inputCheck Gender
+                        .relative.my-4
+                            select.w-full#gender(name='gender' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2
+                                option(value="" disabled selected) Gender
+                                option(value="male" ) Male
+                                option(value="female" ) Female
+
+                button.w-full.py-2.linearBackground.my-4.text-white.font-DM-Sans.tracking-widest.font-bold.rounded-xl.cursor-pointer Sign Up 
+            
+            div(class='text-[#384FC0]').font-bold.my-2 Already had an account? Click #[a(href="/signIn" class='text-[#8396F7]').italic here] to sign in.
+
+        img.absolute.bottom-0.left-10.pointer-events-none(src='./../images/png/lifesavers-bust.png' alt='decoration image' class='h-4/5 translate-y-[20%]')
+
+block footer 
+    //disable

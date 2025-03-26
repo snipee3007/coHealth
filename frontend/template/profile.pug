@@ -1,0 +1,62 @@
+extend base
+
+block append header 
+    script(defer src='/src/profileController.js')
+
+block body
+    include userTemplate
+        block append user
+            form(method='POST' enctype="multipart/form-data")
+                input(type="hidden" name='prevUserProfile' value=`${user.image}`)
+                .userProfile.flex.flex-1.items-center.gap-12.my-8
+                    if user.role === 'user'
+                        .profileImage.relative
+                            label(for='userProfile').cursor-pointer
+                                input(type="file" name='userProfile' id='userProfile' style='display:none' accept='image/*' value=`${user.image}`).formInput.userProfile
+                                img(src="./../images/png/camera.png", alt="Camera Icon" ).absolute.right-0.bottom-0.z-40.w-6.h-6
+                                img(src=`./../images/users/profile/${user.image}`, alt=`${user.slug}-profile` id='profile').rounded-full.w-16.h-16
+                        p.linearText.text-2xl.font-ABeeZee.font-bold #{user.fullname}
+                    else
+                        .profileImage.relative
+                            label(for='userProfile').cursor-pointer
+                                input(type="file" name='userProfile' id='userProfile' style='display:none' accept='image/*' value=`${user.image}`).formInput.userProfile
+                                img(src="./../images/png/camera.png", alt="Camera Icon" ).absolute.right-0.bottom-0.z-40.w-6.h-6
+                                img(src=`./../images/users/profile/${user.image}`, alt=`${user.slug}-profile` id='profile').rounded-full.w-16.h-16
+                        .items-center        
+                            p.linearText.text-2xl.font-ABeeZee.font-bold #{user.fullname}
+                            p.linearText.text-2xl.font-ABeeZee.font-bold.inline I'm a doctor
+                .grid.grid-cols-2.items-center.font-Inter.gap-8
+                    .fullname.flex.flex-col(class='w-2/3')
+                        label(for='fullname').mb-2 Full name 
+                        input(type="text" value=`${user.fullname}` name='fullname' id='fullname' class='bg-[#EAF0F7]').mx-2.py-2.px-3.rounded-xl.formInput
+                    .gender.flex.flex-col(class='w-2/3')
+                        label(for='gender').mb-2 Gender
+                        select(name='gender' required class='bg-[#EAF0F7]' id='gender').mx-2.py-2.px-3.rounded-xl.formInput
+                            if (user.gender == 'male')
+                                option(value="male") Male
+                                option(value="female") Female
+                            else 
+                                option(value="male") Male
+                                option(value="female" selected) Female
+                    .address.flex.flex-col(class='w-2/3')
+                        label(for='address').mb-2 Address
+                        input(type="text" value=`${user.address || ''}` name='address' id='address' maxLength=64 class='bg-[#EAF0F7]').mx-2.py-2.px-3.rounded-xl.formInput
+                    .yearOfBirth.flex.flex-col(class='w-2/3')
+                        label(for='yearOfBirth').mb-2 Year of Birth
+                        input(type="text" value=`${user.yearOfBirth}` name='yearOfBirth' id='yearOfBirth' maxLength=4 class='bg-[#EAF0F7]').mx-2.py-2.px-3.rounded-xl.formInput.numberOnly
+                    .email.flex.flex-col(class='w-2/3')
+                        label(for='email').mb-2 Email
+                        input(type="email" value=`${user.email}` name='email' id='email' maxLength=64 required class='bg-[#EAF0F7]').mx-2.py-2.px-3.rounded-xl.formInput
+                    .phoneNumber.flex.flex-col(class='w-2/3')
+                        label(for='phoneNumber').mb-2 Phone Number
+                        input(type="text" value=`${user.phoneNumber || ''}` name='phoneNumber' id='phoneNumber' maxLength=16 class='bg-[#EAF0F7]').mx-2.py-2.px-3.rounded-xl.formInput.numberOnly
+
+                .infoSettingsButtons.flex.flex-1.justify-evenly.items-center.mt-8.font-ABeeZee
+                    button(type='submit' class='w-1/4' disabled).linearText.border.py-2.px-3.rounded-xl.editProfile.cursor-pointer Edit Profile
+                        
+                    a(href='#' class='w-1/4').changePassword.linearText.border.py-2.px-3.text-center.rounded-xl.cursor-pointer Change Password
+
+                    button(type='button' class='w-1/4').signOut.linearText.border.py-2.px-3.text-center.rounded-xl.cursor-pointer Sign Out
+
+
+    

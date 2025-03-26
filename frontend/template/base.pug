@@ -1,0 +1,23 @@
+doctype html 
+
+html 
+    header 
+        block header
+            title coHealth ! #{title}
+            link(rel="stylesheet" href="/css/tailwind.css")
+            link(rel="short icon" href="/images/Le Con.png")
+            script(defer, src="/socket.io/socket.io.js")
+            link(rel='stylesheet' href='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css')
+            script(defer, src='https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js')
+            script(defer, src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+
+
+    body 
+        // Navbar
+        include navbar 
+
+        // Actual body
+        block body 
+
+        // Footer
+        include footer

@@ -1,0 +1,14 @@
+.latestNews.my-32
+    .flex.flex-1.items-center.my-12.relative
+        p.font-Urbanist.font-extrabold.text-4xl.bg-clip-text.bg-gradient-to-r.text-transparent(class='from-[#3a8ef6] to-[#6f3afa] tracking-[1rem]') Latest News
+        .border.grow(class='h-[1px] border-[#1678F2]')
+        a.absolute.right-0.-top-6.flex.flex-1.items-center(href='/news')
+            p.font-Roca(class='text-[#384FC0]').text-2xl All
+            img.w-8.ml-2(src='./../images/png/right-arrow-svgrepo-com.png')
+    .grid.grid-cols-3.gap-24
+        each newsItem in latestNews 
+            a.newsCard.flex.flex-col.shadow-lg(href=`/news/${newsItem.slug}`)
+                img.h-52.object-cover.object-top(src=`./../images/news/${newsItem.imgSRC}`, alt="")
+                .p-4
+                    p.mb-4.text-2xl.font-Roca(class='text-[#384FC0]')= newsItem.name
+                    p.text-justify.truncate-3.font-Roboto(class='text-[#6F7CB2]')= newsItem.description

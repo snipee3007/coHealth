@@ -1,0 +1,17 @@
+extend base
+
+block append header 
+    script(defer, src="/src/homepageController.js") 
+
+block body
+
+    // News Slider
+    include newsSwiper
+
+    div(class='w-[90%] mx-auto my-4')
+
+        // Features
+        include features
+        
+        // Latest News Container
+        include latestNews

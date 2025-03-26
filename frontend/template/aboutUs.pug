@@ -1,0 +1,25 @@
+extend base
+
+block append header 
+    script(defer src="/src/aboutUsController.js") 
+
+block body 
+    .aboutUsContainer.flex.flex-1.justify-evenly.items-center.my-6.relative
+        img(src='./../images/png/Lifesavers-Sitting-1.png' class='w-1/4')
+        img(src='./../images/png/Ellipse-3.png').absolute.left-12.pointer-events-none
+        .aboutUsBox(class='w-1/3').flex.flex-col.items-center
+            .aboutUs_title.font-ABeeZee.linearText.text-5xl ABOUT US
+            .aboutUs_ContentIn.text-justify.my-6.font-ABeeZee In today's world, where awareness of personal health monitoring is steadily increasing, we developed #[span(class='text-[#384FC0]').italic coHealth] – an innovative solution that empowers users to easily track and manage their health from the comfort of their homes. With a mission to provide convenience and support in maintaining a healthy lifestyle, #[span(class='text-[#384FC0]').italic coHealth] is not just a tool but a trusted companion on your journey to better personal health.
+            if (!user)
+                .signUpButton.w-full.flex.justify-center
+                    a(href='/signUp' class='w-3/5')
+                        button.linearBackground.font-DM-Sans.text-white.py-2.w-full.rounded-xl.font-bold Sign up for free
+
+    .members.flex.flex-1.justify-evenly.items-center.my-20
+        .memberItem.flex.flex-col.items-center(class='w-[15%]')
+            img(src='./../images/members/ittoday.jpg' class='w-full').object-fill
+            .font-bold.font-Inter.text-xl.my-4 Lê Thiên Ân
+        .memberItem.flex.flex-col.items-center(class='w-[15%]')
+            img(src='./../images/members/snipee.jpg' class='w-full').object-fill
+            .font-bold.font-Inter.text-xl.my-4 Lê Minh Chánh
+
