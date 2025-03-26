@@ -1,12 +1,17 @@
 # coHealth
-This is Programming Integration Project in Semester 231. 
+
+This is Programming Integration Project in Semester 231.
+
 ## Usage
+
 **Prerequisites**
+
 - You need to install all necessary packages before run.
 
 ```
 $ npm install
 ```
+
 - **Note**: If u do not have NodeJS yet. So just download [here](https://nodejs.org/en/download/).
 
 **Running**
@@ -14,7 +19,7 @@ $ npm install
 Run the script as the following:
 
 ```
-$ node server.js
+$ npm start
 ```
 
 ## Go to localhost
