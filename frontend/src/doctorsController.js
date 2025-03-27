@@ -1,3 +1,5 @@
+const socket = io('http://127.0.0.1:3000');
+
 class Doctor {
   constructor() {
     this.#init();
@@ -10,10 +12,11 @@ class Doctor {
       pagination: {
         el: '.swiper-pagination-1',
         clickable: true,
-        bulletClass: 'swiper-pagination-bullet swiper-pagination-bullet-doctor',
+        bulletClass:
+          'swiper-pagination-bullet swiper-pagination-bullet-doctors',
         dynamicBullets: true,
         dynamicMainBullets: 6,
-        bulletActiveClass: 'swiper-pagination-bullet-active-doctor',
+        bulletActiveClass: 'swiper-pagination-bullet-active-doctors',
         renderBullet: function (index, className) {
           return (
             '<span class="' +

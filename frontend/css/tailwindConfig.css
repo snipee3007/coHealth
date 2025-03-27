@@ -64,6 +64,7 @@
   @apply break-words;
   @apply text-balance;
   @apply rounded-[40px];
+  @apply ml-4;
 }
 
 .user {

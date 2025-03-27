@@ -117,4 +117,3 @@ exports.editProfile = catchAsync(async (req, res, next) => {
     message: 'Update User Profile successful!',
   });
 });
-

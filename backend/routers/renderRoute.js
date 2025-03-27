@@ -1,6 +1,8 @@
 const express = require('express');
 const template = require('./../controllers/templateController.js');
 const authController = require('./../controllers/authController.js');
+const chatToDoctorController = require('./../controllers/chatToDoctorController.js');
+const userAppointmentController = require('./../controllers/userAppointmentController.js');
 const adultCompendiumController = require('./../controllers/adultCompendiumController.js');
 const router = express.Router();
 
@@ -43,10 +45,35 @@ router.get('/history', template.getHistoryTemplate);
 // About us
 router.get('/aboutUs', template.getAboutUsTemplate);
 
-// Chat
-router.get('/chat', template.getChatToDoctorsTemplate);
-
 // Doctor
-router.get('/doctor', template.getDoctorItemTemplate);
+router.get('/doctor', template.getDoctorsTemplate);
+router.get('/doctor/:name', template.getDoctorItemTemplate);
+
+// Chat
+router.get(
+  '/chat',
+  authController.restrictTo([]),
+  chatToDoctorController.getAllChatRoomByUserID,
+  template.getListOfChatTemplate
+);
+
+// APPOINTMENT
+router.get('/appointment', template.getAppointmentTemplate);
+
+// hàm dưới này là hiển thị trước 5 appointments cho user đã đăng nhập
+router.get(
+  '/appointment/list',
+  authController.restrictTo([]),
+  userAppointmentController.getAppointment,
+  template.getListAppointmentTemplate
+);
+
+// lấy thông tin chi tiết cuộc hẹn
+router.get(
+  '/appointment/list/:appointmentCode',
+  authController.restrictTo([]),
+  userAppointmentController.getAppointmentDetails,
+  template.getAppointmentDetailsTemplate
+);
 
 module.exports = router;

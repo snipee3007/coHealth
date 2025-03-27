@@ -58,7 +58,14 @@ class Navbar {
         .querySelector('.tools')
         .querySelector('.nav_links')
         .classList.add('active');
-    } else if (window.location.pathname.includes('/result')) {
+    } else if (
+      window.location.pathname.includes('/appointment') ||
+      window.location.pathname.includes('/doctor')
+    ) {
+      document
+        .querySelector('.tools')
+        .querySelector('.nav_links')
+        .classList.add('active');
     }
   }
 }

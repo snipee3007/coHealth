@@ -1,0 +1,56 @@
+extend base
+
+block append header 
+    script(defer src='/src/listAppointmentController.js')
+
+
+block body
+    include userTemplate
+        block append user
+            .flex.mt-4.p-4.justify-between.text-center.space-x-4.text-2xl
+                p.role(class='w-1/5') #{user.role === 'user'? 'Doctor' : 'User'}
+                p(class='w-1/5') Date
+                p(class='w-1/5') Time
+                p(class='w-1/5') Status
+                p(class='w-1/5') &nbsp; 
+            hr.w-full.my-4(class='border-[#9C9991]')
+            div#appointment-container.transition-opacity.duration-300
+                each appointment in appointments
+                    .flex.mt-4.p-4.justify-between.space-x-4.text-center
+                        p.text-xl.my-4(class='w-1/5') #{user.role === 'user'? appointment.doctorID.fullname: appointment.fullname}
+                        - const createdDate = new Date(appointment.time)
+                        - const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                        - const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];;
+                        - let date = createdDate.getDate()
+                        - if (date == 1) date = `${date}st`; else if (date == 2) date = `${date}nd`; else if (date == 3) date = `${date}rd`; else date = `${date}th`
+                        p.text-xl.my-4(class='w-1/5')= `${days[createdDate.getDay()]}, ${months[createdDate.getMonth()]} ${date} ${createdDate.getFullYear()}`
+                        p.text-xl.my-4(class='w-1/5') #{appointment.time.getHours()} : #{appointment.time.getMinutes() === 0? '00': '30'}
+                        if appointment.status == -1
+                            p.text-xl.my-4(class='w-1/5')
+                                //- bọc nội dung nhỏ không ảnh hưởng đến bố cục xung quanh 
+                                span.inline-block.bg-gray-200.rounded-xl.px-4.py-2 Unchecked
+                        else if appointment.status == 1
+                            p.text-xl.my-4(class='w-1/5')
+                                span.inline-block(class='text-[#4461F2]').bg-white.rounded-xl.px-4.py-2 Accepted
+                        else 
+                            p.text-xl.my-4(class='w-1/5')
+                                span.inline-block.bg-white.rounded-xl.p-4.text-red-300 Decline
+                        a.text-xl.my-4(href= `./list/${appointment.appointmentCode}`, class='w-1/5 text-[#4461F2] underline underline-offset-2') Details
+                    hr.w-full.my-4(class='border-[#9C9991]')
+            div.flex.justify-center.mt-4
+                button#prevPage(disabled)
+                    img(src="./../images/png/blue-left-arrow-svgrepo-com.png" class='w-6 h-6', alt="")
+                span#pageNumber.py-2.mx-4.text-xl.font-Inter(class=" text-[#3A8EF6]") 1
+                if totalPages === 1
+                    button#nextPage.opacity-20.cursor-not-allowed(disabled)
+                        img(src="./../images/png/blue-right-arrow-svgrepo-com.png" class='w-6 h-6', alt="")
+                else 
+                    button#nextPage
+                        img(src="./../images/png/blue-right-arrow-svgrepo-com.png" class='w-6 h-6', alt="")
+
+                
+                
+                    
+
+
+                        

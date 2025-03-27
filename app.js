@@ -23,7 +23,6 @@ app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(authController.isSignedIn);
 app.use('/', renderRouter);
 app.use('/api', apiRouter);
 

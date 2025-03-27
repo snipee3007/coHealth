@@ -1,0 +1,11 @@
+const express = require('express');
+const doctorController = require('./../../controllers/doctorController.js');
+const template = require('./../../controllers/templateController.js');
+
+const router = express.Router();
+
+router.get('/', doctorController.getAllDoctors);
+
+router.route('/:name').get(template.getDoctorItemTemplate);
+
+module.exports = router;

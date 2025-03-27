@@ -1,6 +1,34 @@
 const socket = io('http://127.0.0.1:3000');
 
-setInterval(() => {}, 30000);
+socket.on('receiveMessage', (message, roomCode) => {
+  // trên đây để hiện chat cho đối phương
+  console.log(roomCode);
+  const chatBoxId = document
+    .querySelector('.chatBoxInfo')
+    .firstElementChild?.getAttribute('data-room');
+  // kiểm tra firstChild của chatBox này phải
+  if (chatBoxId === roomCode) {
+    let html = `<div class= "sender"> ${message}</div>`;
+    document.querySelector('.listOfChat').insertAdjacentHTML('beforeend', html);
+    document.querySelector('.listOfChat').scrollTop =
+      document.querySelector('.listOfChat').scrollHeight;
+  }
+
+  // dưới đây để hiện nội dung chat ở trong cái button từng người
+  let lastMessageElem = document.getElementById(`${roomCode}`);
+  console.log(lastMessageElem);
+  lastMessageElem.querySelector(`.lastMessage`).textContent = message;
+  // update chữ vừa mới nhắn tin xong lên
+  lastMessageElem.querySelector('.lastMessageTime').textContent =
+    '1 minute ago';
+  // nhắn tin xong đẩy lên cái đầu tiên trong chat
+  let listUser = document.querySelector('.listUser');
+  listUser.prepend(lastMessageElem);
+  // nếu status của nó vẫn đang off thì cho nó on ngay lun
+  let senderDiv = document.querySelector(`#${roomCode} .status`);
+  senderDiv.classList.remove('offline');
+  senderDiv.classList.add('online');
+});
 
 const timeAgo = (timestamp) => {
   console.log(timestamp);
@@ -12,22 +40,9 @@ const timeAgo = (timestamp) => {
   else return `over 30 days ago`;
 };
 
-socket.on('receiveMessage', (message) => {
-  // trên đây để hiện chat cho đối phương
-  let html = `<div class= "sender"> ${message}</div>`;
-  document.querySelector('.listOfChat').insertAdjacentHTML('beforeend', html);
-  document.querySelector('.listOfChat').scrollTop =
-    document.querySelector('.listOfChat').scrollHeight;
-
-  // dưới đây để hiện nội dung chat ở trong cái button từng người
-  document.querySelector('.lastMessage').textContent = message;
-});
-
 const sendMessage = async function (message, roomCode) {
-  console.log(message);
-  console.log(roomCode);
   try {
-    const res = await fetch('/chat', {
+    const res = await fetch('/api/room/message/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,8 +52,10 @@ const sendMessage = async function (message, roomCode) {
         message: message,
       }),
     });
-    if (res.data.status == 'success') {
-      location.reload();
+    // do cái fetch này phải kèm res.json() mới ra được data.status chứ không là 0 có lên được
+    const data = res.json();
+    if (data.status == 'failed') {
+      alert(err.message);
     }
   } catch (err) {
     alert(err.message);
@@ -49,27 +66,26 @@ class ListOfChat {
   #roomCode;
   constructor() {
     this.#init();
-    this.#roomCode = document.querySelector('.chatItemActive')
-      ? document.querySelector('.chatItemActive').id
-      : '';
+    this.#roomCode = '';
   }
   #init() {
     this.#getMessageEachRoom();
     this.#createMessage();
-    this.#getRoomCode();
     this.#getUserStatus();
   }
   #getMessageEachRoom() {
     const buttons = document.querySelectorAll('.listChat');
-    const self = this;
-    buttons.forEach(function (button) {
-      button.addEventListener('click', async function (e) {
+    buttons.forEach((button) => {
+      button.addEventListener('click', async (e) => {
+        // toggle lại hidden của class text
+        document.querySelector('.text').classList.remove('hidden');
         // kết nối vào room
-        const currentRoomCode = self.#getRoomCode();
-        if (currentRoomCode !== '') {
-          socket.emit('leaveRoom', currentRoomCode);
-        }
+        const currentRoomCode = this.#roomCode;
+        // if (currentRoomCode !== '') {
+        //   socket.emit('leaveRoom', currentRoomCode);
+        // }
         socket.emit('joinRoom', button.id);
+        this.#roomCode = button.id;
 
         // xóa hết toán bộ đoạn chat khi chuyển người
         const parentElement = document.querySelector('.listOfChat');
@@ -87,13 +103,13 @@ class ListOfChat {
           insideButton.classList.remove('chatItemActive');
         });
         button.classList.add('chatItemActive');
-        const isChatRoom = await fetch(`/chat/room/${button.id}`, {
+        // lấy dữ liệu người dùng đang muốn chat đến
+        const isChatRoom = await fetch(`/api/room/${button.id}/message`, {
           method: 'GET', // Phải viết hoa 'GET'
           headers: {
             'Content-Type': 'application/json',
           },
         });
-        self.#roomCode = button.id;
 
         const data = await isChatRoom.json();
         console.log(data.data.room);
@@ -113,10 +129,8 @@ class ListOfChat {
         for (i; i <= 1; i++) {
           lastSeenUser.push(timeAgo(lastSeen[i]));
         }
-        console.log(lastSeenUser[1]);
-        // lấy cái slug name của bác sĩ trong button ở vị trí số 7 -> thêm class thì sửa cái này?
-        console.log(button.classList);
-        const slug = button.classList[7];
+        // lấy cái slug name của bác sĩ trong data-slug
+        const slug = button.getAttribute('data-slug');
         // console.log(userData[0].image)
         let userDataImage = '';
         let userDataName = '';
@@ -135,14 +149,14 @@ class ListOfChat {
           userDataName = userData[1].fullname;
           userDataStatus =
             status[1] == 'online'
-              ? `<p>Online</p>`
-              : `<p>Offline ${lastSeenUser[1]}</p>`;
+              ? `<p class='ml-4'>Online</p>`
+              : `<p class='ml-4'>Offline ${lastSeenUser[1]}</p>`;
           userDataStatusCircle = status[1] == 'online' ? 'online' : 'offline';
         }
         let chatBoxInfoHTML =
           `
-                    <div class='relative'>
-                        <img src='./../images/users/profile/${userDataImage}' class='h-16 rounded-full' alt='${userDataImage}-profile'>
+                    <div class='relative' data-room = '${button.id}'>
+                        <img src='./../images/users/profile/${userDataImage}'  class='h-16 rounded-full' alt='${userDataImage}-profile'>
                         <div class='${userDataStatusCircle} absolute right-0 bottom-0'></div>
                     </div>
                     
@@ -173,7 +187,6 @@ class ListOfChat {
 
         document.querySelector('.listOfChat').scrollTop =
           document.querySelector('.listOfChat').scrollHeight;
-        // báo cho server là vào room chat của bác sĩ - button.id là mã room của bác sĩ
       });
     });
   }
@@ -182,9 +195,10 @@ class ListOfChat {
     if (formMessage) {
       formMessage.addEventListener('submit', (e) => {
         e.preventDefault();
-        const roomCode = this.#getRoomCode();
+        const roomCode = this.#roomCode;
         const message = document.querySelector('.text input').value;
         sendMessage(message, roomCode);
+        console.log(roomCode);
         document.querySelector('.text input').value = '';
         let html = `<div class= "user"> ${message}</div>`;
         document
@@ -211,16 +225,19 @@ class ListOfChat {
   #getUserStatus() {
     // hàm cập nhật trạng thái online offline
     socket.on('getUsers', (activeUsers) => {
+      console.log(activeUsers);
       activeUsers.forEach((activeUser) => {
-        let userDiv = document.querySelector(`.${activeUser.slug}`);
+        let userDiv = document.querySelector(
+          `button[data-slug="${activeUser.slug}"]`
+        );
         console.log(userDiv);
-        if (userDiv != null) {
+        if (userDiv !== null) {
           let userStatus = userDiv.querySelector('.status');
           let lastClassOfUserDiv =
             userStatus.classList[userStatus.classList.length - 1];
           userStatus.classList.remove(`${lastClassOfUserDiv}`);
           userStatus.classList.add(`${activeUser.status}`);
-          console.log(activeUser.status);
+          // console.log(activeUser.status);
         }
         // update thời gian tin nhắn cuối cùng
         // if(document.querySelector(".listChat .lastMessageTime")){
@@ -234,11 +251,7 @@ class ListOfChat {
     // cập nhật trạng thái on off sau mỗi 30s tránh quá tải
     setInterval(() => {
       socket.emit('requestUsers');
-    }, 30000);
-  }
-
-  #getRoomCode() {
-    return this.#roomCode;
+    }, 120000);
   }
 }
 

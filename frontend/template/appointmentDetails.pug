@@ -1,0 +1,84 @@
+extend base
+
+block append header 
+    script(defer src='/src/appointmentDetailsController.js')
+
+block body
+    include userTemplate
+        block append user
+            .grid.grid-cols-2.items-center.font-Inter.gap-8
+                if user.role === 'user'
+                    .fullname.flex.flex-col(class='w-2/3')
+                        label(for='fullname').mb-2 Doctor name 
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= appointment.doctorID.fullname
+                    .email.flex.flex-col(class='w-2/3')
+                        label(for='email').mb-2 Email doctor
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= appointment.email
+                    .date.flex.flex-col(class='w-2/3')
+                        label(for='date').mb-2 Date
+                        - const createdDate = new Date(appointment.time)
+                        - const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                        - const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];;
+                        - let date = createdDate.getDate()
+                        - if (date == 1) date = `${date}st`; else if (date == 2) date = `${date}nd`; else if (date == 3) date = `${date}rd`; else date = `${date}th`
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= `${days[createdDate.getDay()]}, ${months[createdDate.getMonth()]} ${date} ${createdDate.getFullYear()}`
+                    .time.flex.flex-col(class='w-2/3')
+                        label(for='yearOfBirth').mb-2 Time
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]') #{appointment.time.getHours() === 9? '09' : appointment.time.getHours()} : #{appointment.time.getMinutes() === 0? '00': '30'}
+                    .phoneNumber.flex.flex-col(class='w-2/3')
+                        label(for='phoneNumber').mb-2 Phone Number
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= appointment.phoneNumber
+                    .status.flex.flex-col(class='w-2/3')
+                        label(for='status').mb-2 Status
+                        if(appointment.status != -1)
+                            if(appointment.status === 1)
+                                p.mx-2.py-2.px-3.rounded-xl(class='text-[#4461F2] bg-[#EAF0F7]') ACCEPTED
+                            else 
+                                p.mx-2.py-2.px-3.rounded-xl.text-red-500(class='bg-[#EAF0F7]') DECLINED
+                        else
+                            p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]') Unchecked
+
+                else 
+                    .fullname.flex.flex-col(class='w-2/3')
+                        label(for='fullname').mb-2 User name 
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= appointment.fullname
+                    .email.flex.flex-col(class='w-2/3')
+                        label(for='gender').mb-2 Email user
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= appointment.email
+                    .date.flex.flex-col(class='w-2/3')
+                        label(for='date').mb-2 Date
+                        - const createdDate = new Date(appointment.time)
+                        - const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                        - const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];;
+                        - let date = createdDate.getDate()
+                        - if (date == 1) date = `${date}st`; else if (date == 2) date = `${date}nd`; else if (date == 3) date = `${date}rd`; else date = `${date}th`
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= `${days[createdDate.getDay()]}, ${months[createdDate.getMonth()]} ${date} ${createdDate.getFullYear()}`
+                    .time.flex.flex-col(class='w-2/3')
+                        label(for='yearOfBirth').mb-2 Time
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]') #{appointment.time.getHours() === 9? '09' : appointment.time.getHours()} : #{appointment.time.getMinutes() === 0? '00': '30'}
+                    .phoneNumber.flex.flex-col(class='w-2/3')
+                        label(for='phoneNumber').mb-2 Phone Number
+                        p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= appointment.phoneNumber
+                    .status.flex.flex-col(class='w-2/3')
+                        label(for='status').mb-2 Status
+                        if(appointment.status != -1)
+                            if(appointment.status == 1)
+                                p.mx-2.py-2.px-3.rounded-xl(class='text-[#4461F2] bg-[#EAF0F7]') ACCEPTED
+                            else 
+                                p.mx-2.py-2.px-3.rounded-xl.text-red-500(class='bg-[#EAF0F7]') DECLINED
+                        else
+                            select#statusList.mx-2.py-2.px-3.rounded-xl.formInput(title='List of Speciality' class='bg-[#EAF0F7]')
+                                option(value='') Unchecked
+                                option(value=1 name='accept' id='accept' class='text-[#4461F2]') ACCEPT
+                                option(value=0 name='decline' id='decline').text-red-500 DECLINE
+            #popupOverlay.hidden(class=' bg-black/50').fixed.inset-0.flex.items-center.justify-center
+                .bg-white.p-6.rounded-lg.shadow-lg.w-96.text-center
+                    h2.text-xl.font-bold.mb-4 Change confirm
+                    p.text-gray-700.mb-4 Are you sure to change this status?
+                    .flex.justify-evenly
+                        button#cancelBtn.bg-red-100.text-red-500.px-4.py-2.rounded-lg.mr-2 Cancel
+                        button#confirmBtn(class='bg-[#EAF0F7] text-[#4461F2]').px-4.py-2.rounded-lg Confirm
+                
+
+
+    

@@ -68,8 +68,8 @@ exports.getResultBMITemplate = async (req, res) => {
 
 exports.getHospitalTemplate = async (req, res) => {
   const hospitals = await Hospital.find().limit(6);
-  res.status(200).render('findHospital', {
-    title: 'Find Hospital',
+  res.status(200).render('hospital', {
+    title: 'Hospital',
     hospitals,
   });
 };
@@ -125,7 +125,7 @@ exports.getHistoryTemplate = async (req, res) => {
   res.end(historyTemplate);
 };
 
-exports.getChatToDoctorsTemplate = catchAsync(async (req, res, next) => {
+exports.getDoctorsTemplate = catchAsync(async (req, res, next) => {
   const doctors = await User.find({
     role: 'doctor',
   }).populate({ path: 'doctorInfo' });
@@ -151,19 +151,39 @@ exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
     match: { major: { $eq: doctor.doctorInfo[0].major } },
   });
 
-  // if (recommendDoctors.length() < 3){
-
-  // }
-
   res.status(200).render('doctorItem', {
     title: 'Doctors',
     doctor,
     recommendDoctors,
   });
 });
+
 exports.getListOfChatTemplate = async (req, res) => {
   res.status(200).render('listOfChat', {
     title: 'List of Chat',
     rooms: req.room,
+  });
+};
+
+exports.getAppointmentTemplate = async (req, res) => {
+  res.status(200).render('appointment', {
+    title: 'Appointment',
+  });
+};
+
+exports.getListAppointmentTemplate = async (req, res) => {
+  res.status(200).render('listAppointment', {
+    title: 'List Appointment',
+    appointments: req.appointments,
+    totalPages: req.totalPages,
+    userProfileTitle: 'List of Appointment',
+  });
+};
+
+exports.getAppointmentDetailsTemplate = async (req, res) => {
+  res.status(200).render('appointmentDetails', {
+    title: 'Appointment Details',
+    appointment: req.appointment,
+    userProfileTitle: 'Appointment Details',
   });
 };

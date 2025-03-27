@@ -1,3 +1,5 @@
+const socket = io('http://127.0.0.1:3000');
+
 class DoctorItem {
   constructor() {
     this.#createChat();
@@ -8,7 +10,7 @@ class DoctorItem {
     if (button) {
       console.log(button.id);
       button.addEventListener('click', async function () {
-        const isChatRoom = await fetch(`/chat/room/g/${button.id}`, {
+        const isChatRoom = await fetch(`/api/room/${button.id}`, {
           method: 'GET', // Phải viết hoa 'GET'
           headers: {
             'Content-Type': 'application/json',
@@ -20,8 +22,7 @@ class DoctorItem {
             location.assign('/chat');
           }, 200);
         } else {
-          const res = await fetch('/chat/room/c', {
-            // Sửa lỗi truyền sai đối số
+          const res = await fetch('/api/room/create', {
             method: 'POST', // Phải viết hoa 'POST'
             headers: {
               'Content-Type': 'application/json',

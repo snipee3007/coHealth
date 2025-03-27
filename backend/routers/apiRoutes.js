@@ -4,10 +4,13 @@ const hospitalsController = require('../controllers/hospitalsController');
 const foodsController = require('../controllers/foodsController');
 const calculateRoutes = require('./api/resultBMIRoutes.js');
 const adultCompendiumRoutes = require('./api/adultCompendiumRoutes.js');
-
+const userRoutes = require('./api/userRoutes.js');
+const roomRoutes = require('./api/roomRoutes.js');
+const appointmentRoutes = require('./api/appointmentRoutes.js');
+const doctorRoutes = require('./api/doctorRoutes.js');
 const authController = require('./../controllers/authController.js');
 const router = express.Router();
-const userRoutes = require('./api/userRoutes.js');
+
 // NEWS API
 router.route('/get-6-nearest-news').get(newsGetController.get6NearsestNews);
 router.route('/getAllNews').get(newsGetController.getAllNews);
@@ -39,5 +42,13 @@ router.post('/signOut', authController.signOut);
 
 // USER API
 router.use('/user', userRoutes);
+
+// CHATROOM API
+router.use('/room', roomRoutes);
+
+// DOCTOR API
+router.use('/doctor', doctorRoutes);
+// APPOINTMENT API
+router.use('/appointment', appointmentRoutes);
 
 module.exports = router;
