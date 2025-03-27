@@ -6,6 +6,6 @@ const food = require('../../models/food_schema.js');
 
 const router = express.Router();
 
-router.post('/', resultController.calculateBMI);
+router.post('/', authController.isSignedIn, resultController.calculateBMI);
 
 module.exports = router;

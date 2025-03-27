@@ -16,7 +16,7 @@ block body
                     .gender.w-full
                         .w-full.outline-none.border-0.relative.font-AbhayaLibre
                             .genderSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
-                                input(type='text' name='gender' required placeholder='Gender' onkeydown="return false" autocomplete='off').bg-transparent.select-none.outline-none.cursor-pointer
+                                input(type='text' name='gender' required placeholder='Gender' onkeydown="return false" autocomplete='off' style='caret-color: transparent').bg-transparent.select-none.outline-none.cursor-pointer
                                 img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
                             .absolute.w-full.genderOptions.hidden.z-50
                                 .w-full(type='button' data-value='' class='bg-[#EAF0F7]').cursor-pointer.genderOption.py-2.px-2.rounded-t-xl.border-b Gender
@@ -33,7 +33,7 @@ block body
                     .methodLabel Calculate Method:
                     .methodSelect.relative
                         .methodSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
-                            input(type='text' name='method' required placeholder='Method' onkeydown="return false" autocomplete='off' value='Normal TDEE').bg-transparent.select-none.outline-none.cursor-pointer
+                            input(type='text' name='method' required placeholder='Method' onkeydown="return false" autocomplete='off' value='Normal TDEE' style='caret-color: transparent').bg-transparent.select-none.outline-none.cursor-pointer
                             img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
                         .absolute.methodOptions.z-40.w-full.hidden
                             .methodOption(class='bg-[#EAF0F7]' data-value='Normal TDEE').py-2.px-2.rounded-t-xl.border-b.cursor-pointer Normal TDEE
@@ -41,7 +41,7 @@ block body
                 .trainingIntensity.form_row.hidden
                     .w-full.outline-none.border-0.relative.font-AbhayaLibre
                         .trainingSelected.select-none.cursor-pointer.flex.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
-                            input(type='text' name='training' required placeholder='Training Intensity' onkeydown="return false" autocomplete='off').bg-transparent.select-none.outline-none.cursor-pointer
+                            input(type='text' name='training' placeholder='Training Intensity' onkeydown="return false" autocomplete='off' style='caret-color: transparent').bg-transparent.select-none.outline-none.cursor-pointer
                             img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
                         .absolute.w-full.trainingOptions.z-40.hidden
                             .w-full(type='button' data-value='' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.rounded-t-xl.border-b Training Intensity
@@ -53,21 +53,22 @@ block body
                             .w-full(type='button' data-value='Extra Active' class='bg-[#EAF0F7]').cursor-pointer.trainingOption.py-2.px-2.rounded-b-xl Extra Active: very intense exercise daily, or physical job
                 .activities.form_row.hidden.flex.flex-col.items-center.font-AbhayaLibre
                     button(type='button').addActivityButton.cursor-pointer Add activity
-                        
+                    .errorActivities.text-red-400
+ 
                 .target.form_row 
                     .w-full.outline-none.border-0.relative.font-AbhayaLibre
                         .targetSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
-                            input(type='text' name='target' required placeholder='Target' onkeydown="return false" autocomplete='off').bg-transparent.select-none.outline-none.cursor-pointer
+                            input(type='text' name='target' required placeholder='Target' onkeydown="return false" autocomplete='off' style='caret-color: transparent').bg-transparent.select-none.outline-none.cursor-pointer
                             img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
                         .absolute.w-full.targetOptions.z-50.hidden
                             .w-full(type='button' data-value='' class='bg-[#EAF0F7]').cursor-pointer.targetOption.py-2.px-2.rounded-t-xl.border-b Target
                             .w-full(type='button' data-value='Gain' class='bg-[#EAF0F7]').cursor-pointer.targetOption.py-2.px-2.border-b Gain Weight
                             .w-full(type='button' data-value='Maintain' class='bg-[#EAF0F7]').cursor-pointer.targetOption.py-2.px-2.border-b Maintain Weight
                             .w-full(type='button' data-value='Lose' class='bg-[#EAF0F7]').cursor-pointer.targetOption.py-2.px-2.rounded-b-xl Lose Weight
-                .speed.form_row 
+                .speed.form_row.hidden 
                     .w-full.outline-none.border-0.relative.font-AbhayaLibre
                         .speedSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
-                            input(type='text' name='speed' required placeholder='Speed' onkeydown="return false" autocomplete='off').bg-transparent.select-none.outline-none.cursor-pointer
+                            input(type='text' name='speed' required disabled placeholder='Speed' onkeydown="return false" autocomplete='off' style='caret-color: transparent').bg-transparent.select-none.outline-none.cursor-pointer
                             img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
                         .absolute.w-full.speedOptions.z-50.hidden
                             .w-full(type='button' data-value='' class='bg-[#EAF0F7]').cursor-pointer.speedOption.py-2.px-2.rounded-t-xl.border-b Speed
@@ -76,7 +77,7 @@ block body
                             .w-full(type='button' data-value='Fast' class='bg-[#EAF0F7]').cursor-pointer.speedOption.py-2.px-2.rounded-b-xl Fast
                 .targetWeight.form_row.w-full.font-AbhayaLibre.relative.hidden
                     p.font-AbhayaLibre.absolute.z-30.right-3(class='-translate-y-1/2 top-1/2') kg
-                    input(name='targetWeight' placeholder='Target Weight' maxLength=5 required).w-full.relative.numberOnly.inputCheck
+                    input(name='targetWeight' placeholder='Target Weight' maxLength=5 required disabled).w-full.relative.numberOnly.inputCheck
                 button(type='submit').linearBackground.text-white.font-AbhayaLibre.py-2.text-xl.rounded-xl.font-bold.tracking-widest.cursor-pointer Calculate
         .calculateImage 
             img(src="./../images/png/eating-donuts.png", alt="Eating Donut Picture")          
