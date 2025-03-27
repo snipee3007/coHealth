@@ -223,8 +223,8 @@ exports.sendEmail = catchAsync(async (req, res, next) => {
   // Nội dung email
   let subject =
     objAppointment.status === '1'
-      ? 'Your appointment is accepted'
-      : 'Your appointment is declined';
+      ? `YOUR APPOINTMENT IN ${objAppointment.date} HAS BEEN ACCEPTED `
+      : `YOUR APPOINTMENT IN ${objAppointment.date} HAS BEEN DECLINED`;
   let htmlContent = `
     <div style="max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
         <h2 style="color: #2E86C1; text-align: center;">Your Appointment Status</h2>
@@ -258,7 +258,7 @@ exports.sendEmail = catchAsync(async (req, res, next) => {
     </div>
     `;
   let info = await transporter.sendMail({
-    from: `"coHealth: " <${process.env.EMAIL_USER}>`,
+    from: `"coHealth " <${process.env.EMAIL_USER}>`,
     to: objAppointment.email, // Email người nhận
     subject: subject,
     html: htmlContent,
