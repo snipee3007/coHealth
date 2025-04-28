@@ -54,16 +54,9 @@ exports.getCalculateTemplate = async (req, res) => {
 };
 
 exports.getResultBMITemplate = async (req, res) => {
-  const resultBMITemplate = replaceTemplate.addDecoration(
-    await replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/resultBMI.html`,
-        'utf-8'
-      ),
-      req
-    )
-  );
-  res.end(resultBMITemplate);
+  res.status(200).render('result', {
+    title: 'Result',
+  });
 };
 
 exports.getHospitalTemplate = async (req, res) => {

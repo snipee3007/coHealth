@@ -2,7 +2,8 @@ const express = require('express');
 const newsGetController = require('../controllers/newsGetController.js');
 const hospitalsController = require('../controllers/hospitalsController');
 const foodsController = require('../controllers/foodsController');
-const calculateRoutes = require('./api/resultBMIRoutes.js');
+const calculateRoutes = require('./api/calculateBMIRoutes.js');
+const resultRoutes = require('./api/resultRoutes.js');
 const adultCompendiumRoutes = require('./api/adultCompendiumRoutes.js');
 const userRoutes = require('./api/userRoutes.js');
 const roomRoutes = require('./api/roomRoutes.js');
@@ -29,6 +30,7 @@ router.route('/getRandomDinner').get(foodsController.getRandomDinner);
 
 // CALCULATE API
 router.use('/calculate', calculateRoutes);
+router.use('/result', resultRoutes);
 router.use('/adultCompendium', adultCompendiumRoutes);
 
 // SIGN IN API

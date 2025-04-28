@@ -1,0 +1,87 @@
+extend base
+
+block append header 
+    script(type="module",defer, src="/src/resultController.js") 
+    style.
+        .outer {
+            height: 160px;
+            width: 160px;
+            padding: 20px;
+            box-shadow: 6px 6px 10px -1px rgba(0, 0, 0, 0.15),
+                -6px -6px 10px -1px rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+        }
+        .inner {
+            height: 120px;
+            width: 120px;
+            box-shadow: inset 4px 4px 6px -1px rgba(0, 0, 0, 0.2),
+                inset -4px -4px 6px -1px rgba(255, 255, 255, 0.7),
+                -0.5px -0.5px 0px rgba(255, 255, 255, 1),
+                0.5px 0.5px 0px rgba(0, 0, 0, 0.15), 0px 12px 10px -10px rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        svg.circularProgressBar {
+            transform: rotate(-90deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+
+block body 
+    .body.px-10.pt-6.pb-12
+        .font-AbhayaLibre.text-2xl.label YOUR PERSONAL SUMMARY
+        .calculateDisplayCards.px-20.grid.grid-cols-3.justify-center.items-center.place-items-center.mx-auto.font-Inter
+            .bmiCard.shadow-xl.py-5.px-7.w-60
+                .calculateItemCard.flex.flex-col.gap-12.items-center   
+                    .calculateItemCard--title.h-12 Body Mass Index (BMI)
+                    .calculateItemCard--info.flex.flex-col
+                        .bmi_circularProgressBar.relative.font-Inter
+                            .outer 
+                                .inner
+                                    .bmi_data.flex.flex-col.items-center.justify-center
+                                        .bmi_number.font-bold.text-3xl
+                                        .bmi_type.font-AbhayaLibre.text-xl BMI
+                            svg.circularProgressBar.w-full.h-full 
+                                use(href='images/png/icons.svg#bmiCircularProgressBar')
+
+                    .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
+                        .status_label Your BMI: 
+                        .bmi_status.font-bold
+            .tdeeCard.shadow-xl.py-5.px-7.w-60
+                .calculateItemCard.flex.flex-col.gap-12.items-center   
+                    .calculateItemCard--title.h-12 Total Daily Energy <br>Expenditure (TDEE)
+                    .calculateItemCard--info.flex.flex-col
+                        .tdee_circularProgressBar.relative.font-Inter
+                            .outer 
+                                .inner
+                                    .tdee_data.flex.flex-col.items-center.justify-center
+                                        .tdee_number.font-bold.text-3xl 
+                                        .tdee_type.font-AbhayaLibre.text-xl Calories
+                            svg.circularProgressBar.w-full.h-full 
+                                use(href='images/png/icons.svg#tdeeCircularProgressBar')
+
+                    .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
+                        .status_label 1500 (+/- 150) 
+                        .tdee_status.font-bold.text-center(class='text-[#384FC0]') Calories (Per day)
+            .weekAfterToAchieveTargetCard.shadow-xl.py-5.px-7.w-60
+                .calculateItemCard.flex.flex-col.gap-12.items-center   
+                    .calculateItemCard--title.h-12 Duration (Weeks)
+                    .calculateItemCard--info.flex.flex-col
+                        .weekAfterToAchieveTarget_circularProgressBar.relative.font-Inter
+                            .outer 
+                                .inner
+                                    .weekAfterToAchieveTarget_data.flex.flex-col.items-center.justify-center
+                                        .weekAfterToAchieveTarget_number.font-bold.text-3xl 
+                                        .weekAfterToAchieveTarget_type.font-AbhayaLibre.text-xl Weeks
+                            svg.circularProgressBar.w-full.h-full 
+                                use(href='images/png/icons.svg#weekAfterToAchieveTargetCircularProgressBar')
+
+                    .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
+                        .status_label To achieve: 
+                        .weekAfterToAchieveTarget_status.font-bold(class='text-[#D3B185]') Your dream weight
+        
