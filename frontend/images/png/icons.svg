@@ -1,0 +1,73 @@
+
+
+<svg style="position: absolute; width: 0; height: 0; overflow: hidden; background-color:black" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+	<style>
+        circle.bmi {
+            fill: none;
+            stroke: url(#bmiGradientColor);
+            stroke-width: 20px;
+            stroke-dasharray: 450;
+            stroke-dashoffset: 450;
+            animation: bmiCircularProgressBarAnimation 1s linear forwards;
+        }
+        circle.weekAfterToAchieveTarget {
+            fill: none;
+            stroke: url(#weekAfterToAchieveTargetGradientColor);
+            stroke-width: 20px;
+            stroke-dasharray: 450;
+            stroke-dashoffset: 450;
+            animation: weekAfterToAchieveTargetCircularProgressBarAnimation 1s linear forwards;
+        }
+        circle.tdee {
+            fill: none;
+            stroke: url(#tdeeGradientColor);
+            stroke-width: 20px;
+            stroke-dasharray: 450;
+            stroke-dashoffset: 450;
+            animation: tdeeCircularProgressBarAnimation 1s linear forwards;
+        }
+        @keyframes bmiCircularProgressBarAnimation {
+            100% {
+                stroke-dashoffset: var(--bmiPercentage);
+            }
+        }
+        @keyframes weekAfterToAchieveTargetCircularProgressBarAnimation {
+            100% {
+                stroke-dashoffset: var(--weekAfterToAchieveTargetPercentage);
+            }
+        }@keyframes tdeeCircularProgressBarAnimation {
+            100% {
+                stroke-dashoffset: var(--tdeePercentage);
+            }
+        }
+    </style>
+    <defs>
+        <symbol id="bmiCircularProgressBar">
+            <defs>
+                <linearGradient id="bmiGradientColor">
+                    <stop offset="0%" stop-color="#2F8BFA"></stop>
+                    <stop offset="100%" stop-color="#2FBFDD"></stop>
+                </linearGradient>
+            </defs>
+            <circle class="bmi" cx="80" cy="80" r="70" stroke-linecap="round"></circle>
+        </symbol>
+        <symbol id="tdeeCircularProgressBar">
+            <defs>
+                <linearGradient id="tdeeGradientColor">
+                    <stop offset="0%" stop-color="#FF6D9A"></stop>
+                    <stop offset="100%" stop-color="#FF9BAB"></stop>
+                </linearGradient>
+            </defs>
+            <circle class="tdee" cx="80" cy="80" r="70" stroke-linecap="round"></circle>
+        </symbol>
+        <symbol id="weekAfterToAchieveTargetCircularProgressBar">
+            <defs>
+                <linearGradient id="weekAfterToAchieveTargetGradientColor">
+                    <stop offset="0%" stop-color="#C58229"></stop>
+                    <stop offset="100%" stop-color="#E59A36"></stop>
+                </linearGradient>
+            </defs>
+            <circle class="weekAfterToAchieveTarget" cx="80" cy="80" r="70" stroke-linecap="round"></circle>
+        </symbol>
+    </defs>
+</svg>

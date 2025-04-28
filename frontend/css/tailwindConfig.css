@@ -221,3 +221,9 @@ label {
 button:disabled {
   opacity: 50%;
 }
+
+:root {
+  --bmiPercentage: 0;
+  --weekAfterToAchieveTargetPercentage: 0;
+  --tdeePercentage: 0;
+}

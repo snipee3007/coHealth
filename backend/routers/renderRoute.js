@@ -4,6 +4,7 @@ const authController = require('./../controllers/authController.js');
 const chatToDoctorController = require('./../controllers/chatToDoctorController.js');
 const userAppointmentController = require('./../controllers/userAppointmentController.js');
 const adultCompendiumController = require('./../controllers/adultCompendiumController.js');
+const resultController = require('./../controllers/resultController.js');
 const router = express.Router();
 
 router.use(authController.isSignedIn);

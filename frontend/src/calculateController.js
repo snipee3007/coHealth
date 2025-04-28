@@ -10,76 +10,86 @@ class CalculateBMI {
   }
 
   #selectField() {
-    ['gender', 'training', 'target', 'speed', 'method'].forEach((field) => {
-      const fieldButton = document.querySelector(`.${field}Selected`);
-      const fieldOptionList = document.querySelectorAll(`.${field}Option`);
+    ['gender', 'activityIntensity', 'target', 'speed', 'method'].forEach(
+      (field) => {
+        const fieldButton = document.querySelector(`.${field}Selected`);
+        const fieldOptionList = document.querySelectorAll(`.${field}Option`);
 
-      if (field !== 'method') fieldButton.classList.add('invalidInput');
-      else fieldButton.classList.add('validInput');
+        if (field !== 'method') fieldButton.classList.add('invalidInput');
+        else fieldButton.classList.add('validInput');
 
-      fieldButton.addEventListener('click', function (e) {
-        if (e.target.closest(`.${field}Selected`)) {
-          document.querySelector(`.${field}Options`).classList.toggle('hidden');
-        }
-      });
-      document.addEventListener('click', function (e) {
-        if (
-          !e.target.closest(`.${field}Selected`) &&
-          !e.target.closest(`.${field}Options`)
-        ) {
-          const fieldOptions = document.querySelector(`.${field}Options`);
-          if (!fieldOptions.classList.contains('hidden')) {
-            fieldOptions.classList.toggle('hidden');
-          }
-        }
-      });
-
-      fieldOptionList.forEach((fieldOption) => {
-        fieldOption.addEventListener('click', function (e) {
-          if (e.target.closest(`.${field}Option`)) {
+        fieldButton.addEventListener('click', function (e) {
+          if (e.target.closest(`.${field}Selected`)) {
             document
               .querySelector(`.${field}Options`)
               .classList.toggle('hidden');
-            const fieldInput = document.querySelector(`input[name='${field}']`);
-            fieldInput.value = e.target.dataset['value'];
-            if (e.target.dataset['value'] == '') {
-              fieldButton.classList.add('invalidInput');
-              fieldButton.classList.remove('validInput');
-              fieldInput.setCustomValidity(
-                'Missing input field! Please select different option!'
-              );
-            } else {
-              fieldButton.classList.remove('invalidInput');
-              fieldButton.classList.add('validInput');
-              fieldInput.setCustomValidity('');
-            }
-
-            if (fieldOption.closest('.target')) {
-              if (
-                e.target.dataset['value'] !== 'Maintain' &&
-                e.target.dataset['value'] !== ''
-              ) {
-                document
-                  .querySelector('.targetWeight')
-                  .classList.remove('hidden');
-                document.querySelector(
-                  'input[name="targetWeight"]'
-                ).disabled = false;
-                document.querySelector('.speed').classList.remove('hidden');
-                document.querySelector('input[name="speed"]').disabled = false;
-              } else {
-                document.querySelector('.targetWeight').classList.add('hidden');
-                document.querySelector(
-                  'input[name="targetWeight"]'
-                ).disabled = true;
-                document.querySelector('.speed').classList.add('hidden');
-                document.querySelector('input[name="speed"]').disabled = true;
-              }
+          }
+        });
+        document.addEventListener('click', function (e) {
+          if (
+            !e.target.closest(`.${field}Selected`) &&
+            !e.target.closest(`.${field}Options`)
+          ) {
+            const fieldOptions = document.querySelector(`.${field}Options`);
+            if (!fieldOptions.classList.contains('hidden')) {
+              fieldOptions.classList.toggle('hidden');
             }
           }
         });
-      });
-    });
+
+        fieldOptionList.forEach((fieldOption) => {
+          fieldOption.addEventListener('click', function (e) {
+            if (e.target.closest(`.${field}Option`)) {
+              document
+                .querySelector(`.${field}Options`)
+                .classList.toggle('hidden');
+              const fieldInput = document.querySelector(
+                `input[name='${field}']`
+              );
+              fieldInput.value = e.target.dataset['value'];
+              if (e.target.dataset['value'] == '') {
+                fieldButton.classList.add('invalidInput');
+                fieldButton.classList.remove('validInput');
+                fieldInput.setCustomValidity(
+                  'Missing input field! Please select different option!'
+                );
+              } else {
+                fieldButton.classList.remove('invalidInput');
+                fieldButton.classList.add('validInput');
+                fieldInput.setCustomValidity('');
+              }
+
+              if (fieldOption.closest('.target')) {
+                if (
+                  e.target.dataset['value'] !== 'Maintain' &&
+                  e.target.dataset['value'] !== ''
+                ) {
+                  document
+                    .querySelector('.targetWeight')
+                    .classList.remove('hidden');
+                  document.querySelector(
+                    'input[name="targetWeight"]'
+                  ).disabled = false;
+                  document.querySelector('.speed').classList.remove('hidden');
+                  document.querySelector(
+                    'input[name="speed"]'
+                  ).disabled = false;
+                } else {
+                  document
+                    .querySelector('.targetWeight')
+                    .classList.add('hidden');
+                  document.querySelector(
+                    'input[name="targetWeight"]'
+                  ).disabled = true;
+                  document.querySelector('.speed').classList.add('hidden');
+                  document.querySelector('input[name="speed"]').disabled = true;
+                }
+              }
+            }
+          });
+        });
+      }
+    );
   }
 
   #numberOnlyField() {
@@ -132,23 +142,28 @@ class CalculateBMI {
       'submit',
       function (e) {
         e.preventDefault();
-        console.log(this);
         if (this.error) return;
-        const gender = document.querySelector('input[name="gender"]')?.value;
+        const gender = document
+          .querySelector('input[name="gender"]')
+          ?.value.toLowerCase();
         const age = document.querySelector('input[name="age"]')?.value;
         const height = document.querySelector('input[name="height"]')?.value;
         const weight = document.querySelector('input[name="weight"]')?.value;
-        const target = document.querySelector('input[name="target"]')?.value;
-        const speed = document.querySelector('input[name="speed"]')?.value;
+        const target = document
+          .querySelector('input[name="target"]')
+          ?.value.toLowerCase();
+        const speed = document
+          .querySelector('input[name="speed"]')
+          ?.value.toLowerCase();
         const targetWeight = document.querySelector(
           'input[name="targetWeight"]'
         )?.value;
         const calculateMethod = document.querySelector('input[name="method"]');
         let data;
         if (calculateMethod?.value == 'Normal TDEE') {
-          const training = document.querySelector(
-            'input[name="training"]'
-          )?.value;
+          const activityIntensity = document
+            .querySelector('input[name="activityIntensity"]')
+            ?.value.toLowerCase();
 
           // Post Data using normal TDEE
           data = {
@@ -156,19 +171,22 @@ class CalculateBMI {
             age,
             height,
             weight,
-            training,
+            activityIntensity,
             target,
             speed,
             targetWeight,
-            method: 'Normal TDEE',
+            method: 'normal tdee',
           };
         } else {
           const activityItems = document.querySelectorAll('.activityItem');
           let activities = [];
           activityItems.forEach((item) => {
-            activities.push(
-              item.querySelector('input[name="activityCode"]').value
-            );
+            activities.push({
+              activityCode: item.querySelector('input[name="activityCode"]')
+                .value,
+              duration: item.querySelector('input[name="activityDuration"]')
+                .value,
+            });
           });
 
           // Post data using calculating TEE based on specific activity
@@ -181,7 +199,7 @@ class CalculateBMI {
             target,
             speed,
             targetWeight,
-            method: 'TEE',
+            method: 'tee',
           };
         }
 
@@ -194,11 +212,11 @@ class CalculateBMI {
     const methodInput = document.querySelector('input[name="method"]');
     setInterval(function () {
       if (methodInput.value == 'Normal TDEE') {
-        document.querySelector('.trainingIntensity').classList.remove('hidden');
+        document.querySelector('.activityIntensity').classList.remove('hidden');
         document.querySelector('.activities').classList.add('hidden');
       } else if (methodInput.value == 'TEE') {
         document.querySelector('.activities').classList.remove('hidden');
-        document.querySelector('.trainingIntensity').classList.add('hidden');
+        document.querySelector('.activityIntensity').classList.add('hidden');
       }
     }, 200);
   }
@@ -223,33 +241,34 @@ class CalculateBMI {
       'click',
       function (e) {
         // Toggle activity menu option
-        ['activityName', 'activityIntensity'].forEach(
+        ['activityName', 'activityDescription', 'activityDuration'].forEach(
           ((field) => {
             if (e.target.closest(`.${field}`)) {
               // Remove error String if click on activity button
               document.querySelector('.errorActivities').innerHTML = '';
               this.error = false;
               // Toggle view
-              if (
-                e.target
-                  .closest(`.${field}`)
-                  .querySelector(`.${field}Options`)
-                  .classList.contains('hidden')
-              ) {
-                const activityName = e.target.closest(`.${field}`);
-                document
-                  .querySelectorAll(`.${field}Options`)
-                  .forEach((option) => option.classList.add('hidden'));
-                activityName
-                  .querySelector(`.${field}Options`)
-                  .classList.remove('hidden');
-              } else {
-                const activityName = e.target.closest(`.${field}`);
+              if (field !== 'activityDuration')
+                if (
+                  e.target
+                    .closest(`.${field}`)
+                    .querySelector(`.${field}Options`)
+                    .classList.contains('hidden')
+                ) {
+                  const activityName = e.target.closest(`.${field}`);
+                  document
+                    .querySelectorAll(`.${field}Options`)
+                    .forEach((option) => option.classList.add('hidden'));
+                  activityName
+                    .querySelector(`.${field}Options`)
+                    .classList.remove('hidden');
+                } else {
+                  const activityName = e.target.closest(`.${field}`);
 
-                activityName
-                  .querySelector(`.${field}Options`)
-                  .classList.toggle('hidden');
-              }
+                  activityName
+                    .querySelector(`.${field}Options`)
+                    .classList.toggle('hidden');
+                }
             } else {
               document
                 .querySelectorAll(`.${field}Options`)
@@ -257,6 +276,8 @@ class CalculateBMI {
             }
           }).bind(this)
         );
+
+        // Input duration
 
         // Delete activity
         if (e.target.closest('.activityDelete')) {
@@ -273,18 +294,18 @@ class CalculateBMI {
           getCurrentActivityDescription(
             option
               .closest('.activityItem')
-              .querySelector('.activityIntensityOptions'),
+              .querySelector('.activityDescriptionOptions'),
             activityNameInput.value
           );
         }
 
         // Pick intensity
-        if (e.target.closest('.activityIntensityOption')) {
-          const option = e.target.closest('.activityIntensityOption');
-          const activityIntensity = option
-            .closest('.activityIntensity')
-            .querySelector('input[name="activityIntensity"]');
-          activityIntensity.value = option.dataset['value'];
+        if (e.target.closest('.activityDescriptionOption')) {
+          const option = e.target.closest('.activityDescriptionOption');
+          const activityDescription = option
+            .closest('.activityDescription')
+            .querySelector('input[name="activityDescription"]');
+          activityDescription.value = option.dataset['value'];
           e.target
             .closest('.activityItem')
             .querySelector('input[name="activityCode"]').value =
@@ -314,8 +335,10 @@ class CalculateBMI {
         for (let i = 0; i < activityItems.length; ++i) {
           const item = activityItems[i];
           if (
-            !item.querySelector('input[name="activityCode"]').value &&
-            item.querySelector('input[name="activityCode"]').value == ''
+            !item.querySelector('input[name="activityCode"]').value ||
+            item.querySelector('input[name="activityCode"]').value == '' ||
+            !item.querySelector('input[name="activityDuration"]').value ||
+            item.querySelector('input[name="activityDuration"]').value == ''
           ) {
             e.preventDefault();
             this.error = true;
@@ -351,7 +374,7 @@ const renderActivityNameOption = function (data) {
       <input type='hidden' name='activityCode'/>
       <div class="activityName relative">
         <div class="activityNameSelected select-none cursor-pointer flex items-center justify-between py-2 bg-[#EAF0F7] px-3 rounded-xl w-full">
-          <input type='text' name='activityName' required placeholder='Activity name' onkeydown="return false" autocomplete='off' class="bg-transparent select-none outline-none cursor-pointer w-full" readOnly/>
+          <input type='text' name='activityName' required placeholder='Name' onkeydown="return false" autocomplete='off' class="bg-transparent select-none outline-none cursor-pointer w-full" readOnly/>
           <img src='./../images/png/down-arrow-circle-svgrepo-com.png' class="h-4 w-4"/>
         </div>
         <div class="absolute w-full activityNameOptions z-40 max-h-44 overflow-y-auto hidden">
@@ -359,14 +382,18 @@ const renderActivityNameOption = function (data) {
             ${optionsHTML}
         </div>
       </div>
-      <div class="activityIntensity relative">
-        <div class="activityIntensitySelected select-none cursor-pointer flex items-center justify-between py-2 bg-[#EAF0F7] px-3 rounded-xl w-full">
-          <input type='text' name='activityIntensity' required placeholder='Activity Intensity' onkeydown="return false" autocomplete='off' class="bg-transparent select-none outline-none cursor-pointer w-full" readOnly/>
+      <div class="activityDescription relative">
+        <div class="activityDescriptionSelected select-none cursor-pointer flex items-center justify-between py-2 bg-[#EAF0F7] px-3 rounded-xl w-full">
+          <input type='text' name='activityDescription' required placeholder='Description' onkeydown="return false" autocomplete='off' class="bg-transparent select-none outline-none cursor-pointer w-full" readOnly/>
           <img src='./../images/png/down-arrow-circle-svgrepo-com.png' class="h-4 w-4"/>
         </div>
-        <div class="absolute w-full activityIntensityOptions z-40 max-h-44 overflow-y-auto hidden">
-            <div data-value='' class='w-full bg-[#EAF0F7] cursor-pointer activityIntensityOption py-2 px-2 rounded-xl'>No data</div>
+        <div class="absolute w-full activityDescriptionOptions z-40 max-h-44 overflow-y-auto hidden">
+            <div data-value='' class='w-full bg-[#EAF0F7] cursor-pointer activityDescriptionOption py-2 px-2 rounded-xl'>No data</div>
         </div>
+      </div>
+      <div class="activityDuration relative form_row">
+        <p class="font-AbhayaLibre absolute z-30 right-3 -translate-y-1/2 top-1/2">mins</p>
+        <input class="w-full relative numberOnly inputCheck" name="activityDuration" placeholder="Duration" maxLength=3 />
       </div>
       <div class="activityDelete border-dashed border rounded-full w-6 h-6 cursor-pointer text-center flex justify-center items-center shrink-0">-</div>
     </div>
@@ -380,20 +407,20 @@ const renderActivityDescriptionOption = function (container, data) {
   let optionsHTML = '';
   if (!data || data.length == 0)
     optionsHTML += `
-      <div data-value='' class='w-full bg-[#EAF0F7] cursor-pointer activityIntensityOption py-2 px-2 rounded-xl'>No data</div>
+      <div data-value='' class='w-full bg-[#EAF0F7] cursor-pointer activityDescriptionOption py-2 px-2 rounded-xl'>No data</div>
     `;
   else
     optionsHTML += `
-    <div data-value='' class='w-full bg-[#EAF0F7] cursor-pointer activityIntensityOption py-2 px-2 rounded-t-xl border-b'>Activity Intensity</div>
+    <div data-value='' class='w-full bg-[#EAF0F7] cursor-pointer activityDescriptionOption py-2 px-2 rounded-t-xl border-b'>Activity Intensity</div>
   `;
   data?.forEach((option, idx) => {
     if (idx == data.length - 1) {
       optionsHTML += `
-      <div data-value='${option.description}' data-activitycode=${option.activityCode} class='w-full bg-[#EAF0F7] cursor-pointer activityIntensityOption py-2 px-2 rounded-b-xl'>${option.description}</div>
+      <div data-value='${option.description}' data-activitycode=${option.activityCode} class='w-full bg-[#EAF0F7] cursor-pointer activityDescriptionOption py-2 px-2 rounded-b-xl'>${option.description}</div>
     `;
     } else {
       optionsHTML += `
-      <div data-value='${option.description}' data-activitycode=${option.activityCode} class='w-full bg-[#EAF0F7] cursor-pointer activityIntensityOption py-2 px-2 border-b'>${option.description}</div>
+      <div data-value='${option.description}' data-activitycode=${option.activityCode} class='w-full bg-[#EAF0F7] cursor-pointer activityDescriptionOption py-2 px-2 border-b'>${option.description}</div>
     `;
     }
   });
@@ -412,7 +439,9 @@ const calculateAPI = async function (data) {
       url: '/api/calculate',
       data,
     });
-    window.location = '/result';
+    if (res.data.status == 'success') {
+      window.location = '/result';
+    }
   } catch (err) {
     console.log(err);
   }
@@ -435,7 +464,6 @@ const getAllActivityNames = async function () {
 const getCurrentActivityDescription = async function (container, activity) {
   try {
     if (activity == '') {
-      console.log('Hello');
       renderActivityDescriptionOption(container);
       return;
     }
