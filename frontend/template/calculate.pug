@@ -74,9 +74,11 @@ block body
                             .w-full(type='button' data-value='Slow' class='bg-[#EAF0F7]').cursor-pointer.speedOption.py-2.px-2.border-b Slow
                             .w-full(type='button' data-value='Normal' class='bg-[#EAF0F7]').cursor-pointer.speedOption.py-2.px-2.border-b Normal
                             .w-full(type='button' data-value='Fast' class='bg-[#EAF0F7]').cursor-pointer.speedOption.py-2.px-2.rounded-b-xl Fast
-                .targetWeight.form_row.w-full.font-AbhayaLibre.relative.hidden
-                    p.font-AbhayaLibre.absolute.z-30.right-3(class='-translate-y-1/2 top-1/2') kg
-                    input(name='targetWeight' placeholder='Target Weight' maxLength=5 required disabled).w-full.relative.numberOnly.inputCheck
+                .targetWeight.w-full.font-AbhayaLibre.relative.hidden
+                    .form_row.relative
+                        p.font-AbhayaLibre.absolute.z-30.right-3(class='-translate-y-1/2 top-1/2') kg
+                        input(name='targetWeight' placeholder='Target Weight' maxLength=5 required disabled).w-full.relative.numberOnly.inputCheck
+                    .errorTarget.text-red-400
                 button(type='submit').linearBackground.text-white.font-AbhayaLibre.py-2.text-xl.rounded-xl.font-bold.tracking-widest.cursor-pointer Calculate
         .calculateImage 
             img(src="./../images/png/eating-donuts.png", alt="Eating Donut Picture")          

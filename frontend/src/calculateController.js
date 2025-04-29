@@ -7,6 +7,7 @@ class CalculateBMI {
     this.#calculateMethod();
     this.#addActivityButton();
     this.#calculateButton();
+    this.#targetWeightInputHandle();
   }
 
   #selectField() {
@@ -142,6 +143,9 @@ class CalculateBMI {
       'submit',
       function (e) {
         e.preventDefault();
+        // Check target weight input
+        checkTargetInput.bind(this)();
+
         if (this.error) return;
         const gender = document
           .querySelector('input[name="gender"]')
@@ -152,12 +156,12 @@ class CalculateBMI {
         const target = document
           .querySelector('input[name="target"]')
           ?.value.toLowerCase();
-        const speed = document
-          .querySelector('input[name="speed"]')
-          ?.value.toLowerCase();
         const targetWeight = document.querySelector(
           'input[name="targetWeight"]'
         )?.value;
+        const speed = document
+          .querySelector('input[name="speed"]')
+          ?.value.toLowerCase();
         const calculateMethod = document.querySelector('input[name="method"]');
         let data;
         if (calculateMethod?.value == 'Normal TDEE') {
@@ -353,9 +357,46 @@ class CalculateBMI {
       }.bind(this)
     );
   }
+
+  #targetWeightInputHandle() {
+    const targetWeightInput = document.querySelector(
+      'input[name="targetWeight"]'
+    );
+    targetWeightInput.addEventListener('input', checkTargetInput.bind(this));
+  }
 }
 
 // HELPER FUNCTION
+const checkTargetInput = function () {
+  const targetWeight = document.querySelector(
+    'input[name="targetWeight"]'
+  )?.value;
+  const target = document
+    .querySelector('input[name="target"]')
+    ?.value.toLowerCase();
+  const weight = document.querySelector('input[name="weight"]')?.value;
+  if (weight) {
+    this.error = false;
+    document.querySelector('.errorTarget').textContent = '';
+    console.log(target == 'gain', targetWeight, weight);
+    if (
+      (target == 'gain' && +targetWeight <= +weight) ||
+      (target == 'lose' && +targetWeight >= +weight)
+    ) {
+      this.error = true;
+      console.log('hello');
+      document.querySelector('.errorTarget').textContent =
+        '*Please provide valid target weight!';
+    } else {
+      this.error = false;
+      document.querySelector('.errorTarget').textContent = '';
+    }
+  } else {
+    this.error = true;
+    document.querySelector('.errorTarget').textContent =
+      '*Please provide your weight!';
+  }
+};
 const renderActivityNameOption = function (data) {
   let optionsHTML = ``;
   data.forEach((option, idx) => {

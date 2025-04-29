@@ -35,7 +35,7 @@ block append header
 block body 
     .body.px-10.pt-6.pb-12
         .font-AbhayaLibre.text-2xl.label YOUR PERSONAL SUMMARY
-        .calculateDisplayCards.px-20.grid.grid-cols-3.justify-center.items-center.place-items-center.mx-auto.font-Inter
+        .calculateDisplayCards.px-20.grid.grid-cols-3.justify-center.items-center.place-items-center.mx-auto.font-Inter.mt-6.mb-12
             .bmiCard.shadow-xl.py-5.px-7.w-60
                 .calculateItemCard.flex.flex-col.gap-12.items-center   
                     .calculateItemCard--title.h-12 Body Mass Index (BMI)
@@ -66,8 +66,8 @@ block body
                                 use(href='images/png/icons.svg#tdeeCircularProgressBar')
 
                     .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
-                        .status_label 1500 (+/- 150) 
-                        .tdee_status.font-bold.text-center(class='text-[#384FC0]') Calories (Per day)
+                        .tdee_status 1500 (+/- 150) 
+                        .tdee_label.font-bold.text-center(class='text-[#384FC0]') Calories (Per day)
             .weekAfterToAchieveTargetCard.shadow-xl.py-5.px-7.w-60
                 .calculateItemCard.flex.flex-col.gap-12.items-center   
                     .calculateItemCard--title.h-12 Duration (Weeks)
@@ -82,6 +82,22 @@ block body
                                 use(href='images/png/icons.svg#weekAfterToAchieveTargetCircularProgressBar')
 
                     .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
-                        .status_label To achieve: 
+                        .weekAfterToArchiveTarget_label To achieve: 
                         .weekAfterToAchieveTarget_status.font-bold(class='text-[#D3B185]') Your dream weight
+        
+        .font-AbhayaLibre.text-2xl PERSONALIZED MEAL & EXERCISE PLAN
+        .personalMealAndPlan
+            .timetable(class='w-4/5 border-[#B7B7B7]').mx-auto.border
+                .weeks.swiper
+                    .weeksContainer.swiper-wrapper
+                        
+                .days.flex.w-full.justify-evenly.py-2
+                    .monday.cursor-pointer Monday
+                    .tuesday.cursor-pointer Tuesday
+                    .wednesday.cursor-pointer Wednesday
+                    .thursday.cursor-pointer Thursday
+                    .friday.cursor-pointer Friday
+                    .saturday.cursor-pointer Saturday
+                    .sunday.cursor-pointer Sunday
+            
         
