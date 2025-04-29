@@ -7,15 +7,21 @@ class Result {
   weekAfterToAchieveTargetLower = 0;
 
   #calculateData;
+  #foodData;
   async init() {
     await this.#getRecentCalculate();
+    await this.#getFoodData();
     // this.#bmiRender();
     this.#valueCardRender();
-    // this.#tdeeRender();
+    this.#weeksRender();
   }
   async #getRecentCalculate() {
     this.#calculateData = await getRecentCalculate();
-    console.log(this.#calculateData);
+  }
+
+  async #getFoodData() {
+    this.#foodData = await getFoodValue();
+    console.log(this.#foodData);
   }
 
   #valueCardRender() {
@@ -67,6 +73,7 @@ class Result {
       }).bind(this)
     );
     this.#bmiStatusRender();
+    this.#tdeeStatusRender();
   }
 
   #bmiStatusRender() {
@@ -82,22 +89,32 @@ class Result {
     bmiStatus.textContent = this.#calculateData.result.bmiStatus;
   }
 
-  #tdeeRender() {
-    // Get root attribute
-    const r = document.querySelector(':root');
+  #tdeeStatusRender() {
+    // BMI Status
+    const tdeeStatus = document.querySelector('.tdee_status');
+    tdeeStatus.textContent = `${
+      this.#calculateData.result.tdee
+    } (+/- ${Math.round((this.#calculateData.result.tdee * 10) / 100)})`;
+  }
 
-    // TDEE Circular Progress Bar
-    const tdeeValue = this.#calculateData.result.tdee;
-    const upperTDEE = 4000;
-    const lowerTDEE = 0;
-    if (tdeeValue < lowerTDEE) {
-      r.style.setProperty('--tdeePercentage', 450);
-    } else if (tdeeValue > upperTDEE) {
-      r.style.setProperty('--tdeePercentage', 0);
-    } else {
-      const tdeePercentage = (tdeeValue - lowerTDEE) / (upperTDEE - lowerTDEE);
-      r.style.setProperty('--tdeePercentage', 450 - 450 * tdeePercentage);
-    }
+  #weeksRender() {
+    const swiper = new Swiper('.swiper', { slidesPerView: 7 });
+    const weekCaloriesList = this.#calculateData.result.caloriesIntakeList;
+    console.log(weekCaloriesList);
+    const weeksContainer = document.querySelector('.weeksContainer');
+
+    weekCaloriesList.forEach((value, idx) => {
+      const weekItemHTML = `
+        <div class="swiper swiper-slide cursor-pointer week-${
+          idx + 1
+        } border border-[#B7B7B7] py-2 px-3 w-full text-center ">
+          
+          <div class="weekLabel"> Week ${idx + 1} </div>
+          <div class=""weekCalories>(${value}cal)</div>
+        </div>
+      `;
+      weeksContainer.insertAdjacentHTML('beforeend', weekItemHTML);
+    });
   }
 }
 
@@ -108,21 +125,37 @@ const getRecentCalculate = async function () {
       url: '/api/result',
     });
     if (res.status == 204) {
-      const calculateRes = await axios({
-        method: 'post',
-        url: 'api/calculate',
-        data: JSON.parse(localStorage.getItem('calculateData')),
-      });
-      return {
-        basicInfo: JSON.parse(localStorage.getItem('calculateData')),
-        result: calculateRes.data.data,
-      };
+      if (localStorage.getItem('calculateData')) {
+        const calculateRes = await axios({
+          method: 'post',
+          url: 'api/calculate',
+          data: JSON.parse(localStorage.getItem('calculateData')),
+        });
+        return {
+          basicInfo: JSON.parse(localStorage.getItem('calculateData')),
+          result: calculateRes.data.data,
+        };
+      } else {
+        window.location = '/calculate';
+      }
     } else if (res.status == 200) {
       return {
         basicInfo: res.data.data[0].basicInfo,
         result: res.data.data[0].result,
       };
     }
+  } catch (err) {
+    console.log('hello');
+  }
+};
+
+const getFoodValue = async function (calories) {
+  try {
+    const res = await axios({
+      method: 'get',
+      url: `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=7dKdZHhuY8s4r8Os7xijqGyBaCeJHagOhgxqrtCA&query=vegetable`,
+    });
+    console.log(res);
   } catch (err) {
     console.log('hello');
   }

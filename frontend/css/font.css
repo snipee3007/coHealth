@@ -44,4 +44,21 @@
     font-style: normal;
     src: url('./font/ABeeZee/ABeeZee-Regular.ttf');
   }
+  @font-face {
+    font-family: 'Alice';
+    font-style: normal;
+    src: url('./font/Alice/Alice-Regular.ttf');
+  }
+}
+
+@theme {
+  --font-Fustat: 'Fustat';
+  --font-Roca: 'Roca';
+  --font-DM-Sans: 'DM-Sans';
+  --font-Urbanist: 'Urbanist';
+  --font-Roboto: 'Roboto';
+  --font-Inter: 'Inter';
+  --font-ABeeZee: 'ABeeZee';
+  --font-AbhayaLibre: 'AbhayaLibre';
+  --font-Alice: 'Alice';
 }
