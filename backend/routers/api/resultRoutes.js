@@ -8,4 +8,8 @@ router
   .route('/')
   .get(authController.isSignedIn, resultController.getRecentCalculate);
 
+router
+  .route('/:id')
+  .get(authController.isSignedIn, resultController.getCalculate);
+
 module.exports = router;

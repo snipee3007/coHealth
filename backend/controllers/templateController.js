@@ -4,6 +4,7 @@ const New = require('./../models/news_schema.js');
 const User = require('./../models/users_schema.js');
 const Hospital = require('./../models/hospitals_schema.js');
 const catchAsync = require('./../utils/catchAsync.js');
+const CalculateHistory = require('./../models/calculateHistory_schema.js');
 const Doctor = require('./../models/doctors_schema.js');
 const AdultCompendium = require('../models/adultCompendium_schema.js');
 
@@ -105,18 +106,58 @@ exports.getAccountTemplate = async (req, res) => {
   res.end(AccountTemplate);
 };
 
-exports.getHistoryTemplate = async (req, res) => {
-  const historyTemplate = replaceTemplate.addDecoration(
-    await replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/historyPage.html`,
-        'utf-8'
-      ),
-      req
-    )
+exports.getHealthHistoryTemplate = catchAsync(async (req, res) => {
+  const calculateHistory = await CalculateHistory.find({}).sort(
+    '-updatedAt -createdAt'
   );
-  res.end(historyTemplate);
-};
+  const calculateDateRange = [];
+
+  calculateHistory.forEach((history) => {
+    const takenDate = new Date(history.updatedAt);
+    let diff = (takenDate.getDay() == 0 ? 7 : takenDate.getDay()) - 1;
+    const startDayWeek = new Date(
+      takenDate.getTime() - 1000 * 60 * 60 * 24 * diff
+    );
+    const endDayWeek = new Date(
+      startDayWeek.getTime() + 1000 * 60 * 60 * 24 * 6
+    );
+    let existedRange = false;
+    for (let i = 0; i < calculateDateRange.length; ++i) {
+      const range = calculateDateRange[i];
+      if (
+        range.start.time.getTime() == startDayWeek.getTime() &&
+        range.end.time.getTime() == endDayWeek.getTime()
+      ) {
+        existedRange = true;
+        break;
+      }
+    }
+    if (!existedRange) {
+      const startDateFormat = `${startDayWeek
+        .getDate()
+        .toString()
+        .padStart(2, 0)}-${(startDayWeek.getMonth() + 1)
+        .toString()
+        .padStart(2, 0)}-${startDayWeek.getFullYear()}`;
+      const endDateFormat = `${endDayWeek
+        .getDate()
+        .toString()
+        .padStart(2, 0)}-${(endDayWeek.getMonth() + 1)
+        .toString()
+        .padStart(2, 0)}-${endDayWeek.getFullYear()}`;
+      calculateDateRange.push({
+        start: { format: startDateFormat, time: startDayWeek },
+        end: { format: endDateFormat, time: endDayWeek },
+      });
+    }
+  });
+  res.status(200).render('healthHistory', {
+    title: 'Health History',
+    calculateHistory: calculateHistory,
+    userProfileTitle: 'Health History',
+    calculateDateRange: calculateDateRange,
+  });
+});
 
 exports.getDoctorsTemplate = catchAsync(async (req, res, next) => {
   const doctors = await User.find({
