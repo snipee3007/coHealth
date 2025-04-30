@@ -1,11 +1,17 @@
+style.
+    .activeUserSettings{
+        color: #4461F2
+    }
+script(defer, src='/src/userSettingController.js')
+
 .userSettings(class='w-[15%]').font-Inter
     p.font-bold.text-xl.mb-8 User Settings
 
     .userSettingBox.border.rounded-xl.py-4.flex.flex-col.gap-6.pl-4
         a(href='/profile').profile.flex.flex-1.items-center 
-            img(src="/images/png/icon-active.png", alt="User Profile Icon").w-5.h-5.mr-4
-            p(class='text-[#4461F2]') PROFILE 
-        a(href='/history').healthHistory.flex.flex-1.items-center 
+            img(src="/images/png/icon-inactive.png", alt="User Profile Icon").w-5.h-5.mr-4
+            p PROFILE 
+        a(href='/healthHistory').healthHistory.flex.flex-1.items-center 
             img(src="/images/png/history-inactive.png", alt="History Icon").w-5.h-5.mr-4
             p HEALTH HISTORY 
         a(href='/appointment/list').appointment.flex.flex-1.items-center 

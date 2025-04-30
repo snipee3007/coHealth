@@ -1,0 +1,50 @@
+extend base
+
+block append header
+    style.
+        td,th {
+            margin: 0;
+            padding:0;
+        }
+        td{
+            height: 20px;
+        }
+
+block append body 
+    include userTemplate
+        block append user
+            .calculateHistory(class='w-9/10').mx-auto
+                .flex.flex-1.justify-between.items-center.mb-6
+                    .calculateHistoryLabel Calculate BMI/TDEE History
+                    .calculateHistoryOption
+                        select#calculateHistoryOption(name="calculateHistoryDate").py-1.px-2
+                            option(value='' selected)
+                            for range in calculateDateRange
+                                option(value=`${range.start.format}:${range.end.format}`)= `${range.start.format} -> ${range.end.format}`
+                .border.rounded-2xl.overflow-hidden.font-Inter
+                    .calculateHistoryHeader.grid.grid-cols-4.justify-center.place-items-center(class='bg-[#D9D9D9]')
+                        p.font-bold Date 
+                        p.font-bold BMI 
+                        p.font-bold TDEE 
+                        p.font-bold
+                    .calculateHistoryBody.h-56.overflow-y-auto
+                        each cal, idx in calculateHistory
+                            .calculateHistoryBodyRow.grid.grid-cols-4.justify-center.place-items-center.py-2(data-time=cal.createdAt)
+                                - const tmp = new Date(cal.updatedAt); const calculateDate = `${tmp.getDate().toString().padStart(2,0)}/${(tmp.getMonth() + 1).toString().padStart(2,0)}/${tmp.getFullYear()}`
+                                - const diff = idx < calculateHistory.length - 1 ? (cal.result.bmi - calculateHistory[idx + 1].result.bmi ).toFixed(1) : 0; const bmiDiff = diff >= 0 ? `(+${diff})` : `(${diff})`
+                                - 
+                                
+                                p.calculateDate= calculateDate
+                                if cal.result.bmiStatus.includes('Underweight')
+                                    p.calculateBMI(class='text-[#2A9FF3]') #{cal.result.bmi} #{bmiDiff}
+                                else if cal.result.bmiStatus.includes('Normal')
+                                    p.calculateBMI(class='text-[#28D74E]') #{cal.result.bmi} #{bmiDiff}
+                                else if cal.result.bmiStatus.includes('Overweight')    
+                                    p.calculateBMI.text-red-400 #{cal.result.bmi} #{bmiDiff}
+                                else if cal.result.bmiStatus.includes('Obese')
+                                    p.calculateBMI.text-red-700.font-bold #{cal.result.bmi} #{bmiDiff}
+                                p.calculateTDEE= cal.result.tdee
+                                p.calculateRef
+                                    a(href=`/result/${cal.id}` class='text-[#3EA2A6]') Details 
+            .symptonCheckHistory(class='w-9/10').mx-auto
+

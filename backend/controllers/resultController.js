@@ -155,6 +155,26 @@ exports.getRecentCalculate = catchAsync(async (req, res, next) => {
   }
 });
 
+exports.getCalculate = catchAsync(async (req, res, next) => {
+  if (req.user) {
+    const calculate = await CalculateHistory.findById(req.params.id);
+    if (calculate) {
+      res.status(200).json({
+        status: 'success',
+        data: calculate,
+      });
+    } else {
+      res.status(400).json({
+        status: 'failed',
+        message: 'No calculation with give ID! Please use different ID!',
+        data: [],
+      });
+    }
+  } else {
+    res.status(204).json();
+  }
+});
+
 // HELPER FUNCTION
 const mainCalculateFunction = async function ({
   method = 'normal TDEE',

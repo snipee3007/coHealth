@@ -21,6 +21,7 @@ router.get('/calculate', template.getCalculateTemplate);
 
 // Result after calculating BMI or TDEE
 router.get('/result', template.getResultBMITemplate);
+router.get('/result/:id', template.getResultBMITemplate);
 
 // Hospital
 router.get('/hospital', template.getHospitalTemplate);
@@ -41,7 +42,7 @@ router.get('/profile', template.getProfileTemplate);
 router.get('/account', template.getAccountTemplate);
 
 // User history calculate
-router.get('/history', template.getHistoryTemplate);
+router.get('/healthHistory', template.getHealthHistoryTemplate);
 
 // About us
 router.get('/aboutUs', template.getAboutUsTemplate);

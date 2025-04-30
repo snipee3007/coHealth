@@ -14,16 +14,20 @@ class Result {
   #foodData;
   async init() {
     await this.#getRecentCalculate();
-    console.log(this.#calculateData.result.caloriesIntakeList[0]);
-    await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
-    // this.#bmiRender();
     this.#valueCardRender();
+    console.log(this.#calculateData.result.caloriesIntakeList[0]);
+    // await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
+
     this.#weeksRender();
-    this.#dayHandler();
+    // this.#dayHandler();
     this.#overlayHandler();
   }
   async #getRecentCalculate() {
-    this.#calculateData = await getRecentCalculate();
+    if (window.location.pathname.split('/').length == 2)
+      this.#calculateData = await getRecentCalculate();
+    else if (window.location.pathname.split('/').length == 3) {
+      this.#calculateData = await getCalculate();
+    }
   }
 
   async #getFoodData(calories) {
@@ -116,8 +120,10 @@ class Result {
       bmiStatus.classList.add('text-[#2A9FF3]');
     } else if (this.#calculateData.result.bmiStatus.startsWith('Normal')) {
       bmiStatus.classList.add('text-[#28D74E]');
+    } else if (this.#calculateData.result.bmiStatus.startsWith('Overweight')) {
+      bmiStatus.classList.add('text-red-400');
     } else if (this.#calculateData.result.bmiStatus.startsWith('Obese')) {
-      bmiStatus.classList.add('text-red-500');
+      bmiStatus.classList.add('text-red-700', 'font-bold');
     }
     bmiStatus.textContent = this.#calculateData.result.bmiStatus;
   }
@@ -305,6 +311,41 @@ const getRecentCalculate = async function () {
       return {
         basicInfo: res.data.data[0].basicInfo,
         result: res.data.data[0].result,
+      };
+    }
+  } catch (err) {
+    if (err.status == 400 && err.response.data.data.length == 0) {
+      window.location = '/calculate';
+    }
+  }
+};
+
+const getCalculate = async function () {
+  try {
+    const id = window.location.pathname.split('/')[2];
+    const res = await axios({
+      method: 'get',
+      url: `/api/result/${id}`,
+    });
+    if (res.status == 204) {
+      if (localStorage.getItem('calculateData')) {
+        const calculateRes = await axios({
+          method: 'post',
+          url: 'api/calculate',
+          data: JSON.parse(localStorage.getItem('calculateData')),
+        });
+        return {
+          basicInfo: JSON.parse(localStorage.getItem('calculateData')),
+          result: calculateRes.data.data,
+        };
+      } else {
+        window.location = '/calculate';
+      }
+    } else if (res.status == 200) {
+      console.log(res);
+      return {
+        basicInfo: res.data.data.basicInfo,
+        result: res.data.data.result,
       };
     }
   } catch (err) {
