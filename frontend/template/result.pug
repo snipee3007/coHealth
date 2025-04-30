@@ -30,74 +30,130 @@ block append header
             top: 0;
             left: 0;
         }
+        .activeMealDay {
+            color: #001AFF;
+            font-weight: bold;
+        }
 
+        .activeWeek{
+            color: #001AFF;
+            font-weight: bold;
+        }
 
-block body 
-    .body.px-10.pt-6.pb-12
-        .font-AbhayaLibre.text-2xl.label YOUR PERSONAL SUMMARY
-        .calculateDisplayCards.px-20.grid.grid-cols-3.justify-center.items-center.place-items-center.mx-auto.font-Inter.mt-6.mb-12
-            .bmiCard.shadow-xl.py-5.px-7.w-60
-                .calculateItemCard.flex.flex-col.gap-12.items-center   
-                    .calculateItemCard--title.h-12 Body Mass Index (BMI)
-                    .calculateItemCard--info.flex.flex-col
-                        .bmi_circularProgressBar.relative.font-Inter
-                            .outer 
-                                .inner
-                                    .bmi_data.flex.flex-col.items-center.justify-center
-                                        .bmi_number.font-bold.text-3xl
-                                        .bmi_type.font-AbhayaLibre.text-xl BMI
-                            svg.circularProgressBar.w-full.h-full 
-                                use(href='images/png/icons.svg#bmiCircularProgressBar')
+block body
+    .body.min-h-screen
+        .mealPopup.overlay.w-full.min-h-full.absolute.z-30(class='bg-black/50').hidden
+            .mealPopupContainer(class='w-1/2 bg-[#D9D9D9] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2').flex.flex-1.absolute.rounded-xl.opacity-0.pointer-events-none.duration-200
+                svg.absolute.z-30.h-6.w-6.top-4.left-6.cursor-pointer.closeButton
+                    use(href='/images/png/icons.svg#closeButton')
+                .px-12.py-8.flex.flex-col.justify-center.items-center.gap-8.w-full
+                    img(src="https://img.spoonacular.com/recipes/632854-556x370.jpg", alt="breakfast").rounded-xl.popupMealImage
+                    .popUpMealInformation.flex.flex-col.font-AbhayaLibre.font-extrabold.w-full
+                        .mealType.text-center.text-3xl Breakfast 
+                        table.font-medium.text-xl.mt-6.mealInfoTable
+                            tr
+                                td.px-4 Name: 
+                                td.name Salad with chicken breast
+                            tr
+                                td.px-4 Ready in: 
+                                td.cooking_time 45 minutes
+                            tr 
+                                td.px-4 Serving: 
+                                td.serving 1
+                            tr 
+                                td.px-4 For more Information:
+                                td 
+                                    a.moreInfoLink.font-bold.text-blue-600(target="_blank" href="https://spoonacular.com/recipes/peanut-butter-and-chocolate-oatmeal-655219") Click Here!
 
-                    .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
-                        .status_label Your BMI: 
-                        .bmi_status.font-bold
-            .tdeeCard.shadow-xl.py-5.px-7.w-60
-                .calculateItemCard.flex.flex-col.gap-12.items-center   
-                    .calculateItemCard--title.h-12 Total Daily Energy <br>Expenditure (TDEE)
-                    .calculateItemCard--info.flex.flex-col
-                        .tdee_circularProgressBar.relative.font-Inter
-                            .outer 
-                                .inner
-                                    .tdee_data.flex.flex-col.items-center.justify-center
-                                        .tdee_number.font-bold.text-3xl 
-                                        .tdee_type.font-AbhayaLibre.text-xl Calories
-                            svg.circularProgressBar.w-full.h-full 
-                                use(href='images/png/icons.svg#tdeeCircularProgressBar')
+        .px-10.pt-6.pb-12
+            .font-AbhayaLibre.text-2xl.label YOUR PERSONAL SUMMARY
+            .calculateDisplayCards.px-20.grid.grid-cols-3.justify-center.items-center.place-items-center.mx-auto.font-Inter.mt-6.mb-12
+                .bmiCard.shadow-xl.py-5.px-7.w-60
+                    .calculateItemCard.flex.flex-col.gap-12.items-center   
+                        .calculateItemCard--title.h-12 Body Mass Index (BMI)
+                        .calculateItemCard--info.flex.flex-col
+                            .bmi_circularProgressBar.relative.font-Inter
+                                .outer 
+                                    .inner
+                                        .bmi_data.flex.flex-col.items-center.justify-center
+                                            .bmi_number.font-bold.text-3xl
+                                            .bmi_type.font-AbhayaLibre.text-xl BMI
+                                svg.circularProgressBar.w-full.h-full 
+                                    use(href='images/png/icons.svg#bmiCircularProgressBar')
 
-                    .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
-                        .tdee_status 1500 (+/- 150) 
-                        .tdee_label.font-bold.text-center(class='text-[#384FC0]') Calories (Per day)
-            .weekAfterToAchieveTargetCard.shadow-xl.py-5.px-7.w-60
-                .calculateItemCard.flex.flex-col.gap-12.items-center   
-                    .calculateItemCard--title.h-12 Duration (Weeks)
-                    .calculateItemCard--info.flex.flex-col
-                        .weekAfterToAchieveTarget_circularProgressBar.relative.font-Inter
-                            .outer 
-                                .inner
-                                    .weekAfterToAchieveTarget_data.flex.flex-col.items-center.justify-center
-                                        .weekAfterToAchieveTarget_number.font-bold.text-3xl 
-                                        .weekAfterToAchieveTarget_type.font-AbhayaLibre.text-xl Weeks
-                            svg.circularProgressBar.w-full.h-full 
-                                use(href='images/png/icons.svg#weekAfterToAchieveTargetCircularProgressBar')
+                        .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
+                            .status_label Your BMI: 
+                            .bmi_status.font-bold
+                .tdeeCard.shadow-xl.py-5.px-7.w-60
+                    .calculateItemCard.flex.flex-col.gap-12.items-center   
+                        .calculateItemCard--title.h-12 Total Daily Energy <br>Expenditure (TDEE)
+                        .calculateItemCard--info.flex.flex-col
+                            .tdee_circularProgressBar.relative.font-Inter
+                                .outer 
+                                    .inner
+                                        .tdee_data.flex.flex-col.items-center.justify-center
+                                            .tdee_number.font-bold.text-3xl 
+                                            .tdee_type.font-AbhayaLibre.text-xl Calories
+                                svg.circularProgressBar.w-full.h-full 
+                                    use(href='images/png/icons.svg#tdeeCircularProgressBar')
 
-                    .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
-                        .weekAfterToArchiveTarget_label To achieve: 
-                        .weekAfterToAchieveTarget_status.font-bold(class='text-[#D3B185]') Your dream weight
-        
-        .font-AbhayaLibre.text-2xl PERSONALIZED MEAL & EXERCISE PLAN
-        .personalMealAndPlan
-            .timetable(class='w-4/5 border-[#B7B7B7]').mx-auto.border
-                .weeks.swiper
-                    .weeksContainer.swiper-wrapper
-                        
-                .days.flex.w-full.justify-evenly.py-2
-                    .monday.cursor-pointer Monday
-                    .tuesday.cursor-pointer Tuesday
-                    .wednesday.cursor-pointer Wednesday
-                    .thursday.cursor-pointer Thursday
-                    .friday.cursor-pointer Friday
-                    .saturday.cursor-pointer Saturday
-                    .sunday.cursor-pointer Sunday
+                        .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
+                            .tdee_status 1500 (+/- 150) 
+                            .tdee_label.font-bold.text-center(class='text-[#384FC0]') Calories (Per day)
+                .weekAfterToAchieveTargetCard.shadow-xl.py-5.px-7.w-60
+                    .calculateItemCard.flex.flex-col.gap-12.items-center   
+                        .calculateItemCard--title.h-12 Duration (Weeks)
+                        .calculateItemCard--info.flex.flex-col
+                            .weekAfterToAchieveTarget_circularProgressBar.relative.font-Inter
+                                .outer 
+                                    .inner
+                                        .weekAfterToAchieveTarget_data.flex.flex-col.items-center.justify-center
+                                            .weekAfterToAchieveTarget_number.font-bold.text-3xl 
+                                            .weekAfterToAchieveTarget_type.font-AbhayaLibre.text-xl Weeks
+                                svg.circularProgressBar.w-full.h-full 
+                                    use(href='images/png/icons.svg#weekAfterToAchieveTargetCircularProgressBar')
+
+                        .calculateItemCard--status.flex.flex-col.items-center.justify-center.text-lg.h-12
+                            .weekAfterToArchiveTarget_label To achieve: 
+                            .weekAfterToAchieveTarget_status.font-bold(class='text-[#D3B185]') Your dream weight
             
+            .font-AbhayaLibre.text-2xl PERSONALIZED MEAL & EXERCISE PLAN
+            .personalMealAndPlan.font-Alice
+                .timetable(class='w-4/5 border-[#B7B7B7]').mx-auto.border.mt-6
+                    .weeks.swiper
+                        .weeksContainer.swiper-wrapper
+                            
+                    .days.flex.w-full.justify-evenly.py-2
+                        .day.monday.cursor-pointer.activeMealDay(data-day="monday") Monday
+                        .day.tuesday.cursor-pointer(data-day="tuesday") Tuesday
+                        .day.wednesday.cursor-pointer(data-day="wednesday") Wednesday
+                        .day.thursday.cursor-pointer(data-day="thursday") Thursday
+                        .day.friday.cursor-pointer(data-day="friday") Friday
+                        .day.saturday.cursor-pointer(data-day="saturday") Saturday
+                        .day.sunday.cursor-pointer(data-day="sunday") Sunday
+                
+                .mealInformation
+                    .mealInformationLabel.text-center.my-10.text-3xl.font-AbhayaLibre.font-bold #[span Monday]'s Meal Suggestion
+                    .mealItemContainer.grid.grid-cols-3.place-items-center.justify-center.mx-auto.my-6.px-20.duration-200(class='translate-y-10')
+                    .mealNutrients.font-AbhayaLibre.text-xl.flex.justify-evenly.w-full.px-20.mt-8
+                        .calories.flex.flex-col.justify-center.items-center
+                            svg.w-12.h-12
+                                use(href='/images/png/icons.svg#calories')
+                            .caloriesLabel Calories (cal)
+                            .caloriesValue
+                        .protein.flex.flex-col.justify-center.items-center
+                            svg.w-12.h-12
+                                use(href='/images/png/icons.svg#protein')
+                            .proteinLabel Protein (g)
+                            .proteinValue
+                        .fat.flex.flex-col.justify-center.items-center
+                            svg.w-12.h-12
+                                use(href='/images/png/icons.svg#fat')
+                            .fatLabel Fat (g)
+                            .fatValue
+                        .carbohydrates.flex.flex-col.justify-center.items-center
+                            svg.w-12.h-12
+                                use(href='/images/png/icons.svg#carbohydrates')
+                            .carbohydratesLabel Carbohydrates (g)
+                            .carbohydratesValue
         

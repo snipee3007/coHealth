@@ -67,10 +67,10 @@ const inputSchema = new mongoose.Schema({
         'lightly active',
         'moderately active',
         'very active',
-        'extra active',
+        'extremely active',
       ],
       message:
-        'The activity intensity must be sedentary, lightly active, moderately active, very active or extra active',
+        'The activity intensity must be sedentary, lightly active, moderately active, very active or extremely active',
     },
   },
   target: {

@@ -137,18 +137,18 @@ exports.getRecentCalculate = catchAsync(async (req, res, next) => {
       .sort('-createdAt -updatedAt')
       .limit(1);
 
-    console.log(recentCalculate);
     if (recentCalculate.length > 0)
       res.status(200).json({
         status: 'success',
         data: recentCalculate,
       });
     else {
-      res.writeHead(
-        302,
-        'This user do not make any calculation before! Please make some calculation in /calculateBMI'
-      );
-      res.end();
+      res.status(400).json({
+        status: 'failed',
+        message:
+          'No calculation before! Please use /calculate to make your calculation',
+        data: [],
+      });
     }
   } else {
     res.status(204).json();
@@ -219,7 +219,7 @@ const mainCalculateFunction = async function ({
       case 'very active':
         pal = 1.725;
         break;
-      case 'extra active':
+      case 'extremely active':
         pal = 1.9;
         break;
       default:

@@ -1,10 +1,10 @@
 const express = require('express');
 const newsGetController = require('../controllers/newsGetController.js');
 const hospitalsController = require('../controllers/hospitalsController');
-const foodsController = require('../controllers/foodsController');
 const calculateRoutes = require('./api/calculateBMIRoutes.js');
 const resultRoutes = require('./api/resultRoutes.js');
 const adultCompendiumRoutes = require('./api/adultCompendiumRoutes.js');
+const mealRoutes = require('./api/mealRoutes.js');
 const userRoutes = require('./api/userRoutes.js');
 const roomRoutes = require('./api/roomRoutes.js');
 const appointmentRoutes = require('./api/appointmentRoutes.js');
@@ -22,16 +22,13 @@ router.route('/news/:name').get(newsGetController.getNewsItem);
 // HOSPITAL API
 router.route('/hospitals').get(hospitalsController.getAllHospitals);
 
-// FOOD API
-router.route('/getRandomBreakfast').get(foodsController.getRandomBreakfast);
-router.route('/getRandomLunch').get(foodsController.getRandomLunch);
-router.route('/getRandomTea').get(foodsController.getRandomTea);
-router.route('/getRandomDinner').get(foodsController.getRandomDinner);
-
 // CALCULATE API
 router.use('/calculate', calculateRoutes);
 router.use('/result', resultRoutes);
 router.use('/adultCompendium', adultCompendiumRoutes);
+
+// FOOD API
+router.use('/meal', mealRoutes);
 
 // SIGN IN API
 router.post('/signUp', authController.signUp);

@@ -17,8 +17,3 @@ exports.getDescription = catchAsync(async (req, res, next) => {
     data,
   });
 });
-
-exports.getAllAdultCompendium = catchAsync(async (req, res, next) => {
-  const data = await AdultCompendium.find({});
-  res.status(200).json({});
-});
