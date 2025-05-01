@@ -1,7 +1,7 @@
 extend base
 
 block append header 
-    script(defer src="/src/calculateController.js") 
+    script(defer, type='module' src="/src/calculateController.js") 
 
 block body
     .calculateBMIBody.flex.flex-1.items-center.justify-center.my-12.gap-12

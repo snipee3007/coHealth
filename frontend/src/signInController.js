@@ -1,3 +1,5 @@
+import { renderPopup } from './utils/popup.js';
+
 const signIn = async function (data) {
   try {
     const res = await axios({
@@ -6,21 +8,33 @@ const signIn = async function (data) {
       data,
     });
     if (res.data.status == 'success') {
-      alert('Sign In successfully!');
-      window.setTimeout(() => {
-        location.assign('/');
-      }, 500);
+      renderPopup(
+        res.status,
+        'Sign In',
+        `Welcome back, ${res.data.data.user.fullname}`,
+        '/'
+      );
     }
   } catch (err) {
-    console.log(err);
-    alert(err.response.data.message);
+    renderPopup(err.response.status, 'Sign In', err.response.data.message);
   }
 };
 
 class SignIn {
   constructor() {
     this.#signIn();
+    this.#deleteIcon();
     this.#togglePassword();
+  }
+
+  #deleteIcon() {
+    document
+      .querySelector('.deleteValue')
+      .addEventListener('click', function (e) {
+        if (e.target.closest('.deleteValue')) {
+          document.querySelector('input#signInField').value = '';
+        }
+      });
   }
 
   #togglePassword() {

@@ -1,7 +1,7 @@
 extend base
 
 block append header 
-    script(defer src='/src/appointmentDetailsController.js')
+    script(defer, type='module' src='/src/appointmentDetailsController.js')
 
 block body
     include userTemplate

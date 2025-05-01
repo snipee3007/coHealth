@@ -1,33 +1,33 @@
 extend base
 
 block append header
-    script(defer, src='/src/signIn.js')
-    script(defer, src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+    script(defer, type='module' src='/src/signInController.js')
 
 block body 
     // Login
-    .title.font-Roca.linearText.text-4xl.flex.flex-1.justify-center.my-16 Nice to meet you again 
-        
-    .wrapper.flex.flex-1.justify-center
-        .formWelcom(class='w-1/4')
-            form.loginForm
-                .form_input_body 
-                    .input-box 
-                        label(for='signInField').px-2.text-xl.linearText.font-semibold Username or E-mail
-                        .relative.my-4
-                            input.w-full#signInField(type='text' name='email' placeholder='Username/E-mail' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
-                            img.w-4.absolute.right-3(src="./../images/png/close-circle-svgrepo-com.png" alt="Close icon" class='top-1/2 -translate-y-1/2').cursor-pointer
+    .body
+        .title.font-Roca.linearText.text-4xl.flex.flex-1.justify-center.my-16 Nice to meet you again 
+            
+        .wrapper.flex.flex-1.justify-center
+            .formWelcom(class='w-1/4')
+                form.loginForm
+                    .form_input_body 
+                        .input-box 
+                            label(for='signInField').px-2.text-xl.linearText.font-semibold Username or E-mail
+                            .relative.my-4
+                                input.w-full#signInField(type='text' name='email' placeholder='Username/E-mail' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
+                                img.w-4.absolute.right-3.deleteValue(src="./../images/png/close-circle-svgrepo-com.png" alt="Close icon" class='top-1/2 -translate-y-1/2').cursor-pointer
 
-                    .input-box
-                        label.px-2.text-xl.bg-clip-text.linearText.font-semibold Password
-                        .relative.my-4
-                            input.w-full#password(type='password' name='password' placeholder='Password' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
-                            img.togglePassword.w-4.absolute.right-3(src="./../images/png/eye-slash-svgrepo-com.png" alt="Toggle Password icon" class='top-1/2 -translate-y-1/2').cursor-pointer
+                        .input-box
+                            label.px-2.text-xl.bg-clip-text.linearText.font-semibold Password
+                            .relative.my-4
+                                input.w-full#password(type='password' name='password' placeholder='Password' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
+                                img.togglePassword.w-4.absolute.right-3(src="./../images/png/eye-slash-svgrepo-com.png" alt="Toggle Password icon" class='top-1/2 -translate-y-1/2').cursor-pointer
 
-                    button.w-full.py-2.linearBackground.cursor-pointer(type='Submit').my-8.text-white.font-DM-Sans.tracking-widest.font-bold.rounded-xl Sign In 
-                .signup-forgot.flex.flex-1.justify-between
-                    a.font-DM-Sans.linearText.text-lg(href='/signUp') Create an account
-                    a.font-DM-Sans.linearText.text-lg(href='/forgotPassword') Forgot Password
+                        button.w-full.py-2.linearBackground.cursor-pointer(type='Submit').my-8.text-white.font-DM-Sans.tracking-widest.font-bold.rounded-xl Sign In 
+                    .signup-forgot.flex.flex-1.justify-between
+                        a.font-DM-Sans.linearText.text-lg(href='/signUp') Create an account
+                        a.font-DM-Sans.linearText.text-lg(href='/forgotPassword') Forgot Password
 
 block footer 
     //disable

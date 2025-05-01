@@ -7,6 +7,8 @@ const adultCompendiumRoutes = require('./api/adultCompendiumRoutes.js');
 const mealRoutes = require('./api/mealRoutes.js');
 const userRoutes = require('./api/userRoutes.js');
 const roomRoutes = require('./api/roomRoutes.js');
+const commentRoutes = require('./api/commentRoute.js');
+
 const appointmentRoutes = require('./api/appointmentRoutes.js');
 const doctorRoutes = require('./api/doctorRoutes.js');
 const authController = require('./../controllers/authController.js');
@@ -18,6 +20,9 @@ router.route('/getAllNews').get(newsGetController.getAllNews);
 
 // NEWS API
 router.route('/news/:name').get(newsGetController.getNewsItem);
+
+// COMMENT API
+router.use('/comment', commentRoutes);
 
 // HOSPITAL API
 router.route('/hospitals').get(hospitalsController.getAllHospitals);

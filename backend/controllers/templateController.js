@@ -1,12 +1,11 @@
-const fs = require('fs');
-const replaceTemplate = require('./replaceTemplate.js');
 const New = require('./../models/news_schema.js');
 const User = require('./../models/users_schema.js');
 const Hospital = require('./../models/hospitals_schema.js');
 const catchAsync = require('./../utils/catchAsync.js');
 const CalculateHistory = require('./../models/calculateHistory_schema.js');
 const Doctor = require('./../models/doctors_schema.js');
-const AdultCompendium = require('../models/adultCompendium_schema.js');
+const Comment = require('./../models/commentsSchema.js');
+// const AdultCompendium = require('../models/adultCompendium_schema.js');
 
 //////////////////////////// EXPORT TEMPLATES /////////////////////////////////
 
@@ -19,12 +18,22 @@ exports.getNewsTemplate = catchAsync(async (req, res, next) => {
 });
 
 exports.getNewsItemTemplate = catchAsync(async (req, res, next) => {
-  const news = await New.find({ slug: req.originalUrl.split('/')[2] });
+  const news = await New.findOne({ slug: req.params.name });
   const recommendNews = await New.find().sort('-view').limit(3);
+  const comments = await Comment.find({ newsID: news.id })
+    .populate('userID')
+    .sort('-createAt -updatedAt');
   res.status(200).render('newsItem', {
     title: 'News',
-    news: news[0],
+    news,
     recommendNews,
+    comments,
+  });
+});
+
+exports.getUploadTemplate = catchAsync(async (req, res, next) => {
+  res.status(200).render('upload', {
+    title: 'Upload',
   });
 });
 
@@ -91,19 +100,6 @@ exports.getProfileTemplate = async (req, res) => {
     title: 'User Profile',
     userProfileTitle: 'Basic Info',
   });
-};
-
-exports.getAccountTemplate = async (req, res) => {
-  const AccountTemplate = replaceTemplate.addDecoration(
-    await replaceTemplate.addNavigation(
-      fs.readFileSync(
-        `${__dirname}/../../frontend/template/accountPage.html`,
-        'utf-8'
-      ),
-      req
-    )
-  );
-  res.end(AccountTemplate);
 };
 
 exports.getHealthHistoryTemplate = catchAsync(async (req, res) => {
@@ -200,8 +196,10 @@ exports.getListOfChatTemplate = async (req, res) => {
 };
 
 exports.getAppointmentTemplate = async (req, res) => {
+  const doctorMajors = await Doctor.find({}).distinct('major');
   res.status(200).render('appointment', {
     title: 'Appointment',
+    majors: doctorMajors,
   });
 };
 

@@ -206,10 +206,7 @@ exports.getAppointmentDetails = catchAsync(async (req, res, next) => {
 // hàm này để gửi email đến người dùng khi bác sĩ đã chấp nhận hoặc từ chối lịch hẹn
 exports.sendEmail = catchAsync(async (req, res, next) => {
   const objAppointment = req.body;
-  console.log(
-    'coi thử nó có cái gì trong đây mà sao éo có ra gì z',
-    objAppointment
-  );
+  console.log(process.env.EMAIL_USER, process.env.EMAIL_PASS);
   let transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
@@ -219,6 +216,7 @@ exports.sendEmail = catchAsync(async (req, res, next) => {
       pass: process.env.EMAIL_PASS,
     },
   });
+  console.log('hello World hehe');
 
   // Nội dung email
   let subject =
@@ -263,9 +261,8 @@ exports.sendEmail = catchAsync(async (req, res, next) => {
     subject: subject,
     html: htmlContent,
   });
-
   res.status(200).json({
-    message: 'success',
+    status: 'success',
     data: info,
   });
 });

@@ -1,10 +1,10 @@
 extend base 
 
 block append header 
-    script(defer src='/src/signUpController.js')
+    script(defer, type='module' src='/src/signUpController.js')
 
 block body 
-    .flex.flex-1.justify-center.w-full.pb-40.relative.overflow-hidden
+    .body.flex.flex-1.justify-center.w-full.pb-40.relative.overflow-hidden
         .signUpBody(class='w-1/4').flex.flex-col.items-center
             .signUpTitle.font-Roca(class='text-[#384FC0]').text-4xl.my-12.w-full.text-center Sign up to join us
             

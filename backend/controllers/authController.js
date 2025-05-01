@@ -193,13 +193,44 @@ exports.signOut = catchAsync(async (req, res, next) => {
 
 exports.restrictTo = (role) => {
   return (req, res, next) => {
-    if (!req.user || !req.user.role.includes(role)) {
-      res.writeHead(
-        302,
-        'This is a restrict route! You need to login with specific account to go to this page!',
-        { Location: '/' }
-      );
+    let authenticate = false;
+    for (let i = 0; i < role.length; ++i) {
+      if (
+        req.user &&
+        (req.user.role.includes(role[i]) || req.user.role.includes('admin'))
+      ) {
+        authenticate = true;
+        break;
+      }
+    }
+    if (!authenticate) {
+      res.writeHead(302, 'Unauthentication user!', { location: '/' });
       return res.end();
-    } else next();
+    } else {
+      next();
+    }
+  };
+};
+
+exports.restrictToAPI = (role) => {
+  return (req, res, next) => {
+    let authenticate = false;
+    for (let i = 0; i < role.length; ++i) {
+      if (
+        req.user &&
+        (req.user.role.includes(role[i]) || req.user.role.includes('admin'))
+      ) {
+        authenticate = true;
+        break;
+      }
+    }
+    if (!authenticate) {
+      res.status(401).json({
+        status: 'failed',
+        message: 'Bạn không có quyền sử dụng tính năng này!',
+      });
+    } else {
+      next();
+    }
   };
 };

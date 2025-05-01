@@ -1,7 +1,10 @@
 extend base
 
+block append header 
+    script(defer, type="module" src="/src/newsItemController.js") 
+
 block body 
-    .newsContainer 
+    .newsContainer(data-id= news.id)
         .newsTitle.flex.flex-1.justify-center.text-6xl.font-Roca.linearText.my-8= news.name
         .newsBox.py-6.px-20
             .newsFirstParagraph.flex.flex-1.items-center.gap-12.justify-between
@@ -39,40 +42,27 @@ block body
         .commentBox.px-16
             if user 
                 .flex.flex-1.items-center.justify-center.gap-12
-                    img(src=`./../images/users/profile//menAnonymous.jpg`).rounded-full.w-20.object-fill
+                    img(src=`./../images/users/profile/${user.image}`).rounded-full.w-20.object-fill.border
                     .relative.w-full
-                        input(type="text" placeholder='Write your comment here' class='border-[#EAF0F7]').w-full.border.py-2.px-3.rounded-lg
-                        img(src="./../images/png/send-svgrepo-com.png", alt="Send icon" class='top-1/2 -translate-y-1/2').absolute.right-4.w-6
+                        form(method='post').commentForm
+                            input(type="text" placeholder='Write your comment here...' class='border-[#EAF0F7]' name='comment').w-full.border.py-2.px-3.rounded-lg
+                            button(type='submit').cursor-pointer
+                                img(src="./../images/png/send-svgrepo-com.png", alt="Send icon" class='top-1/2 -translate-y-1/2').absolute.right-4.w-6
             else 
                 .linearText.text-center.font-AbhayaLibre.text-xl Please #[a(href='/signIn' class='hover:underline').italic.underline sign in] to comment on this news
-            .flex.flex-1.items-center.justify-center.gap-12.px-16.my-6
-                img(src=`./../images/users/profile/womanAnonymous.jpg`).rounded-full.w-20.object-fill
-                .comment.flex.flex-col.w-full 
-                    .commentInfo.flex.flex-1.px-6 
-                        .commentNameRating.flex.flex-1.gap-4 
-                            .commentUsername.font-AbhayaLibre.font-extrabold.text-2xl(class='text-[#6E67F4] min-w-56') Lê Minh Chánh
-                            .commentRating.flex.flex-1.gap-2.items-center.mx-6
-                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
-                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
-                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
-                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
-                                img(src="./../images/png/half-star-svgrepo-com.png", alt="half star" class='w-[1.1rem] h-[1.1rem]')
-                        .commentTime.font-Inter(color='text-[#667085]') 38 minutes ago
-                    .commentContent.font-Inter(color='text-[#667085]') This new is very useful for me
-            .flex.flex-1.items-center.justify-center.gap-12.px-16.my-6
-                img(src=`./../images/users/profile/Le Con.png`).rounded-full.w-20.object-fill
-                .comment.flex.flex-col.w-full 
-                    .commentInfo.flex.flex-1.px-6 
-                        .commentNameRating.flex.flex-1.gap-4 
-                            .commentUsername.font-AbhayaLibre.font-extrabold.text-2xl(class='text-[#6E67F4] min-w-56') Lê Thiên Ân
-                            .commentRating.flex.flex-1.gap-2.items-center.mx-6
-                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
-                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
-                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
-                                img(src="./../images/png/star-svgrepo-com.png", alt="full star").w-4.h-4
-                                img(src="./../images/png/half-star-svgrepo-com.png", alt="half star" class='w-[1.1rem] h-[1.1rem]')
-                        .commentTime.font-Inter(color='text-[#667085]') 58 minutes ago
-                    .commentContent.font-Inter(color='text-[#667085]') This new is very useful for me
+            if comments.length > 0
+                each comment in comments
+                    .flex.flex-1.items-center.justify-center.gap-12.px-16.my-6
+                        img(src=`./../images/users/profile/${comment.userID.image}`).rounded-full.w-20.object-fill.border.shadow-xl
+                        .comment.flex.flex-col.w-full 
+                            .commentInfo.flex.flex-1.px-6 
+                                .commentNameRating.flex.flex-1.gap-4 
+                                    .commentUsername.font-AbhayaLibre.font-extrabold.text-2xl(class='text-[#6E67F4] min-w-56')= comment.userID.fullname
+                                .commentTime.font-Inter(color='text-[#667085]')= comment.updatedAt
+                            .commentContent.font-Inter(color='text-[#667085]')= comment.message
+            else
+                .flex.flex-1.justify-center.h-24.items-center.text-2xl.text-center.rounded-lg.my-4.italic
+                    | There is no comment on this post yet! Make first comment!
                 
 
 
