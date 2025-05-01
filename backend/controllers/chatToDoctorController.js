@@ -7,68 +7,50 @@ const ChatLog = require('./../models/chatLog_schema.js');
 const errorController = require('./errorController.js');
 
 exports.createChatRoom = catchAsync(async (req, res, next) => {
-  try {
-    const doctorSlug = req.body.slug;
+  const doctorSlug = req.body.slug;
 
-    const secondUser = await User.findOne({
-      slug: doctorSlug,
-    });
-    const firstUser = req.user;
-    // const userSlug = req.params.user
-    // const firstUser = await User.findOne({
-    //   slug: userSlug,
-    // })
-    if (!firstUser || !secondUser) {
-      res.status(401).json({
-        status: 'failed',
-        message: 'User not found',
-      });
-      res.end();
-    } else if (firstUser.role === secondUser.role) {
-      res.status(401).json({
-        status: 'failed',
-        message: 'The room must have 1 doctor and 1 user',
-      });
-      res.end();
-    } else {
-      const room = await ChatRoom.findOne({
-        memberID: { $all: [firstUser._id, secondUser._id] },
-      });
-      console.log(room);
-      if (room) {
-        res.status(401).json({
-          status: 'failed',
-          message: 'This room has already been created',
-        });
-        res.end();
-      } else {
-        let result = '';
-        const characters =
-          'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength = characters.length;
-        let counter = 0;
-        while (counter < 32) {
-          result += characters.charAt(
-            Math.floor(Math.random() * charactersLength)
-          );
-          counter += 1;
-        }
-        const newRoom = await ChatRoom.create({
-          memberID: [firstUser._id, secondUser._id],
-          roomCode: result,
-        });
-        res.status(200).json({
-          status: 'success',
-          data: newRoom,
-        });
-      }
-    }
-  } catch (err) {
-    res.status(404).json({
+  const secondUser = await User.findOne({
+    slug: doctorSlug,
+  });
+  const firstUser = req.user;
+  // const userSlug = req.params.user
+  // const firstUser = await User.findOne({
+  //   slug: userSlug,
+  // })
+  if (!firstUser || !secondUser) {
+    return res.status(401).json({
       status: 'failed',
-      message: err.message,
+      message: 'User not found',
     });
-    res.end();
+  } else if (firstUser.role === secondUser.role) {
+    return res.status(401).json({
+      status: 'failed',
+      message: 'The room must have 1 doctor and 1 user',
+    });
+  } else {
+    const room = await ChatRoom.findOne({
+      memberID: { $all: [firstUser._id, secondUser._id] },
+    });
+    // console.log(room);
+    if (room) return res.status(204).json();
+
+    let result = '';
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < 32) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    const newRoom = await ChatRoom.create({
+      memberID: [firstUser._id, secondUser._id],
+      roomCode: result,
+    });
+    res.status(200).json({
+      status: 'success',
+      data: newRoom,
+    });
   }
 });
 

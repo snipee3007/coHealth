@@ -1,3 +1,5 @@
+import { renderPopup } from './utils/popup.js';
+
 const socket = io('http://127.0.0.1:3000');
 
 socket.on('receiveMessage', (message, roomCode) => {
@@ -42,23 +44,19 @@ const timeAgo = (timestamp) => {
 
 const sendMessage = async function (message, roomCode) {
   try {
-    const res = await fetch('/api/room/message/create', {
+    const res = await axios({
       method: 'POST',
+      url: '/api/room/message/create',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      body: {
         roomCode: roomCode,
         message: message,
-      }),
+      },
     });
-    // do cái fetch này phải kèm res.json() mới ra được data.status chứ không là 0 có lên được
-    const data = res.json();
-    if (data.status == 'failed') {
-      alert(err.message);
-    }
   } catch (err) {
-    alert(err.message);
+    renderPopup(err.response.status, 'Send message', err.response.data.message);
   }
 };
 

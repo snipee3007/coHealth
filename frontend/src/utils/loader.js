@@ -1,7 +1,7 @@
 class Loader {
   create() {
     const template = `
-      <div class="overlayLoader absolute w-screen min-h-screen bg-black/50 flex flex-1 justify-center items-center z-30 loaderContainer">
+      <div class="overlayLoader absolute w-screen bg-black/50 flex flex-1 justify-center items-center z-30 loaderContainer">
           <div class="loader"></div>
       </div>
       `;

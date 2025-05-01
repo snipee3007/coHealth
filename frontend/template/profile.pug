@@ -1,7 +1,7 @@
 extend base
 
 block append header 
-    script(defer src='/src/profileController.js')
+    script(defer, type="module" src='/src/profileController.js')
 
 block body
     include userTemplate
@@ -12,8 +12,8 @@ block body
                     if user.role === 'user'
                         .profileImage.relative
                             label(for='userProfile').cursor-pointer
+                                img(src="./../images/png/camera.png", alt="Camera Icon" ).absolute.right-0.bottom-0.z-50.w-6.h-6
                                 input(type="file" name='userProfile' id='userProfile' style='display:none' accept='image/*' value=`${user.image}`).formInput.userProfile
-                                img(src="./../images/png/camera.png", alt="Camera Icon" ).absolute.right-0.bottom-0.z-40.w-6.h-6
                                 img(src=`./../images/users/profile/${user.image}`, alt=`${user.slug}-profile` id='profile').rounded-full.w-16.h-16
                         p.linearText.text-2xl.font-ABeeZee.font-bold #{user.fullname}
                     else

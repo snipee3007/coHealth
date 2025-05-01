@@ -1,5 +1,7 @@
 const socket = io('http://127.0.0.1:3000');
 
+import { renderPopup } from './utils/popup.js';
+
 class DoctorItem {
   constructor() {
     this.#createChat();
@@ -10,32 +12,21 @@ class DoctorItem {
     if (button) {
       console.log(button.id);
       button.addEventListener('click', async function () {
-        const isChatRoom = await fetch(`/api/room/${button.id}`, {
-          method: 'GET', // Phải viết hoa 'GET'
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        console.log(isChatRoom.status);
-        if (isChatRoom.status == '200') {
-          window.setTimeout(() => {
-            location.assign('/chat');
-          }, 200);
-        } else {
-          const res = await fetch('/api/room/create', {
-            method: 'POST', // Phải viết hoa 'POST'
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ slug: button.id }),
+        try {
+          const res = await axios({
+            method: 'post', // Phải viết hoa 'POST'
+            url: '/api/room/create',
+            data: { slug: button.id },
           });
-          if (res.status == '200') {
-            window.setTimeout(() => {
-              location.assign('/chat');
-            }, 200);
-          } else {
-            alert('Can not create chat room');
+          if (res.status.toString().startsWith('2')) {
+            location.assign('/chat');
           }
+        } catch (err) {
+          renderPopup(
+            err.response.status,
+            'Create chat room',
+            err.response.data.message
+          );
         }
       });
     }

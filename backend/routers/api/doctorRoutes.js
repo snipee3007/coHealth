@@ -4,7 +4,7 @@ const template = require('./../../controllers/templateController.js');
 
 const router = express.Router();
 
-router.get('/', doctorController.getAllDoctors);
+router.get('/', doctorController.getDoctors);
 
 router.route('/:name').get(template.getDoctorItemTemplate);
 

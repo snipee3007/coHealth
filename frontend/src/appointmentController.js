@@ -1,30 +1,35 @@
+import { renderPopup } from './utils/popup.js';
+import Loader from './utils/loader.js';
 const socket = io('http://127.0.0.1:3000');
 
-const sendAppointment = async function (objAppointment) {
+const sendAppointment = async function (data) {
   try {
-    const res = await fetch('/api/appointment/create', {
+    // console.log(data);
+    Loader.create();
+    const res = await axios({
       method: 'POST',
+      url: '/api/appointment/create',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        time: objAppointment.date,
-        specialty: objAppointment.specialty,
-        docFullname: objAppointment.docFullname,
-        fullname: objAppointment.fullname,
-        email: objAppointment.email,
-        phoneNumber: objAppointment.phoneNumber,
-        reason: objAppointment.reason,
-      }),
+      data,
     });
-    // do cái fetch này phải kèm res.json() mới ra được data.status chứ không là 0 có lên được
-    const data = await res.json();
-    if (data.status == 'success') {
-      alert('Make appointment successfully');
-      location.reload();
+    if (res.data.status == 'success') {
+      renderPopup(
+        res.status,
+        'Creating appointment',
+        'Your appointment has been created! Please wait for the doctor checking it!',
+        'reload'
+      );
+      Loader.destroy();
     }
   } catch (err) {
-    alert(err.message);
+    renderPopup(
+      err.response.status,
+      'Creating appointment',
+      err.response.data.message
+    );
+    Loader.destroy();
   }
 };
 
@@ -84,14 +89,11 @@ class Appointment {
   }
 
   async #getListBooked() {
-    const res = await fetch(`/api/appointment/get`, {
+    const res = await axios({
       method: 'GET', // viết hoa
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      url: `/api/appointment/get`,
     });
-    const data = await res.json();
-    const appointments = data.appointments;
+    const appointments = res.data.data;
     // de coi la luu vao db co can luu doctorID khong hay luu doctorFullname voi doctorSpecialty thoi
     appointments.forEach((appointment) =>
       this.#listBooked.push({
@@ -100,7 +102,7 @@ class Appointment {
         time: new Date(appointment.time),
       })
     );
-    console.log(this.#listBooked);
+    // console.log(this.#listBooked);
   }
 
   #listTime() {
@@ -276,7 +278,11 @@ class Appointment {
       const schedule = document.querySelector('input[name="schedule"]').value;
       const time = this.#time;
       if (this.#time === '') {
-        alert('Please select time to make appointment');
+        renderPopup(
+          400,
+          'Creating appointment',
+          'Please provide the time of appointment!'
+        );
         return;
       }
       // đống dữ liệu dưới đây để tạo cuộc hẹn
@@ -299,7 +305,7 @@ class Appointment {
         .querySelector('textarea[name="reason"]')
         .value.trim();
       const objAppointment = {
-        date: date,
+        time: date,
         specialty: specialty,
         docFullname: docFullname,
         fullname: fullname,
@@ -314,46 +320,23 @@ class Appointment {
   async #listSpecialityAndDoctor() {
     let speciality = document.querySelector('#specialtyList');
     let doctor = document.querySelector('#doctorList');
-    const doctorData = await fetch('/api/doctor', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await doctorData.json();
 
-    const doctors = data.data;
-    // lọc tất cả các giá trị về spec để làm option
-    let listSpec = [];
-    doctors.forEach((doctor) => listSpec.push(doctor.doctorInfo[0].major));
-    let specs = new Set(listSpec);
-    specs.forEach((spec) =>
-      speciality.insertAdjacentHTML(
-        'beforeend',
-        `
-          <option value='${spec}'>${spec}</option>
-        `
-      )
-    );
     // document.querySelector('').innerHTML = ''
     // lấy dữ liệu spec ở trên để lập list bác sĩ
-    speciality.addEventListener('change', () => {
-      let doctorOfSpec = [];
+    speciality.addEventListener('change', async function (e) {
+      const doctorData = await axios({
+        method: 'GET',
+        url: `/api/doctor?major=${e.target.value}`,
+      });
       const elements = document.querySelectorAll('.delete');
       elements.forEach((element) => {
         element.remove();
       });
-      const currentSpec = speciality.value;
-      doctors.forEach((doctor) => {
-        if (currentSpec === doctor.doctorInfo[0].major) {
-          doctorOfSpec.push(doctor.fullname);
-        }
-      });
-      doctorOfSpec.forEach((doc) => {
+      doctorData.data.data.forEach((doc) => {
         doctor.insertAdjacentHTML(
           'beforeend',
           `
-          <option value='${doc}' class='delete'>${doc}</option>
+          <option value='${doc.fullname}' class='delete'>${doc.fullname}</option>
         `
         );
       });

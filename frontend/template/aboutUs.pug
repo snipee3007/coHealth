@@ -1,7 +1,7 @@
 extend base
 
 block append header 
-    script(defer src="/src/aboutUsController.js") 
+    script(defer, type="module" src="/src/aboutUsController.js") 
 
 block body 
     .aboutUsContainer.flex.flex-1.justify-evenly.items-center.my-6.relative

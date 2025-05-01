@@ -24,13 +24,4 @@ router.get(
   chatToDoctorController.getMessageInRoom
 );
 
-// xem coi là đã có tạo cái phòng này chưa, chưa thì mình tạo
-router.get(
-  '/:slug',
-  authController.protect,
-  chatToDoctorController.getThisChatRoom
-);
-
 module.exports = router;
-
-// /api/room/:slug

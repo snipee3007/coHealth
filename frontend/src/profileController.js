@@ -1,3 +1,5 @@
+import { renderPopup } from './utils/popup.js';
+
 const editProfile = async function (data) {
   try {
     const res = await axios({
@@ -9,11 +11,19 @@ const editProfile = async function (data) {
       data,
     });
     if (res.data.status == 'success') {
-      alert(res.data.message);
-      location.reload();
+      renderPopup(
+        res.status,
+        'Update profile',
+        'Your profile has been updated!',
+        'reload'
+      );
     }
   } catch (err) {
-    alert(err.response.data.message);
+    renderPopup(
+      err.response.status,
+      'Update profile',
+      err.responee.data.message
+    );
   }
 };
 
@@ -24,13 +34,15 @@ const signOut = async function () {
       url: '/api/signOut',
     });
     if (res.data == '') {
-      alert('Sign Out successfully!');
-      window.setTimeout(() => {
-        location.assign('/');
-      }, 500);
+      renderPopup(
+        res.status,
+        'Sign Out',
+        'You will be redirected to home page!',
+        '/'
+      );
     }
   } catch (err) {
-    alert(err.response.data.message);
+    renderPopup(err.response.status, 'Sign Out', err.response.data.message);
   }
 };
 

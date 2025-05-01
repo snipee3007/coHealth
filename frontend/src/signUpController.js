@@ -1,3 +1,5 @@
+import { renderPopup } from './utils/popup.js';
+
 const signUp = async function (data) {
   try {
     if (data.gender == 'male') {
@@ -11,13 +13,15 @@ const signUp = async function (data) {
       data,
     });
     if (res.data.status == 'success') {
-      alert('Sign Up successfully!');
-      window.setTimeout(() => {
-        location.assign('/');
-      }, 500);
+      renderPopup(
+        res.status,
+        'Sign Up',
+        `Welcome aboard, ${data.fullname}`,
+        '/'
+      );
     }
   } catch (err) {
-    alert(err.response.data.message);
+    alert(err.response);
   }
 };
 

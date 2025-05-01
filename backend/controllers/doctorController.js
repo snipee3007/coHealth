@@ -3,12 +3,24 @@ const catchAsync = require('../utils/catchAsync.js');
 const AppError = require('../utils/appError.js');
 const Doctor = require('../models/doctors_schema.js');
 
-exports.getAllDoctors = catchAsync(async (req, res, next) => {
-  const doctors = await User.find({
+exports.getDoctors = catchAsync(async (req, res, next) => {
+  const doctorsList = await User.find({
     role: 'doctor',
-  })
-    .populate({ path: 'doctorInfo', select: 'major' })
-    .lean();
+  }).populate({ path: 'doctorInfo', select: 'major' });
+  const doctors = [];
+  doctorsList.forEach((doctor) => {
+    console.log(
+      doctor.doctorInfo[0].major == req.query.major,
+      doctor.id != req.user.id
+    );
+    if (
+      doctor.doctorInfo[0].major == req.query.major &&
+      doctor.id != req.user.id
+    ) {
+      doctors.push(doctor);
+    }
+  });
+
   res.status(200).json({
     status: 'success',
     data: doctors,
