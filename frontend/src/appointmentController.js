@@ -318,6 +318,7 @@ class Appointment {
   }
 
   async #listSpecialityAndDoctor() {
+    // canh rồi sửa lại distinct cho cái này
     let speciality = document.querySelector('#specialtyList');
     let doctor = document.querySelector('#doctorList');
 
