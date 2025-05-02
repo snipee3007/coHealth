@@ -17,12 +17,10 @@ exports.createAppointment = catchAsync(async (req, res, next) => {
       message: 'Can not find this doctor',
     });
   }
-  console.log('nguyên dãy doctor ở đây', doctors);
   const matchDoctor = doctors.find(
     (doctor) =>
       doctor.doctorInfo[0] && doctor.doctorInfo[0].major === req.body.specialty
   );
-  console.log('lọc lại còn 1 thằng matchDoctor nè', matchDoctor);
   if (!matchDoctor) {
     res.status(400).json({
       status: 'fail',

@@ -9,10 +9,10 @@ exports.getDoctors = catchAsync(async (req, res, next) => {
   }).populate({ path: 'doctorInfo', select: 'major' });
   const doctors = [];
   doctorsList.forEach((doctor) => {
-    console.log(
-      doctor.doctorInfo[0].major == req.query.major,
-      doctor.id != req.user.id
-    );
+    // console.log(
+    //   doctor.doctorInfo[0].major == req.query.major,
+    //   doctor.id != req.user.id
+    // );
     if (
       doctor.doctorInfo[0].major == req.query.major &&
       doctor.id != req.user.id
@@ -47,7 +47,7 @@ exports.getDoctor = catchAsync(async (req, res, next) => {
 
 exports.createDoctor = catchAsync(async (req, res, next) => {
   const doctor = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   if (doctor.role.includes('doctor')) {
     const newDoctor = await User.create({
       email: doctor.email,
@@ -59,7 +59,7 @@ exports.createDoctor = catchAsync(async (req, res, next) => {
       yearOfBirth: doctor.yearOfBirth,
       role: doctor.role,
     });
-    console.log(newDoctor);
+    // console.log(newDoctor);
     const docterExtend = await Doctor.create({
       major: doctor.major,
       workAt: doctor.workAt,
@@ -67,7 +67,7 @@ exports.createDoctor = catchAsync(async (req, res, next) => {
       yearEXP: doctor.yearEXP,
       userID: newDoctor._id,
     });
-    console.log(docterExtend);
+    // console.log(docterExtend);
 
     res.status(200).json({
       status: 'success',
