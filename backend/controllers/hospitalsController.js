@@ -11,16 +11,24 @@ exports.getAllNearestHospitals = async (req, res) => {
     // phải lưu theo long, lat thì mới xài được cái dưới
     // lọc theo geoWithin -> centerSphere là cái vòng tròn
     // tính theo miles -> 5km ~~ 3.1 miles
+
+    // const data = await Hospitals.find({
+    //   coordinates: {
+    //     $geoWithin: {
+    //       $centerSphere: [
+    //         [parseFloat(long), parseFloat(lat)],
+    //         3.10685596 / 3963.2,
+    //       ], // Chuyển đổi mét sang radians
+    //     },
+    //   },
+    // });
     const data = await Hospitals.find({
       coordinates: {
-        $geoWithin: {
-          $centerSphere: [
-            [parseFloat(long), parseFloat(lat)],
-            3.10685596 / 3963.2,
-          ], // Chuyển đổi mét sang radians
-        },
+        $nearSphere: [parseFloat(long), parseFloat(lat)],
+        $minDistance: 0, //radians
+        $maxDistance: 3.10685596 / 3963.2,
       },
-    }).sort('coordinates');
+    });
     res.status(200).json({
       message: 'success',
       data,

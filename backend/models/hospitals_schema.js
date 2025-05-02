@@ -4,7 +4,6 @@ const hospitalsSchema = new mongoose.Schema({
   id: {
     type: Number,
     required: [true, 'A hospital must have some id!'],
-
     unique: true,
   },
   name: {
