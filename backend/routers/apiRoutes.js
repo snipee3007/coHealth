@@ -72,15 +72,12 @@ router.use('/doctor', doctorRoutes);
 // APPOINTMENT API
 router.use('/appointment', appointmentRoutes);
 
-<<<<<<< HEAD
 // NOTIFICATION API
 router.use('/notification', notificationRoute);
-=======
 // SYMPTOM API
 router.use('/symptom', symptomRoutes);
 
 // DISEASE API
 router.use('/disease', diseaseRoutes);
->>>>>>> 49b60972610ee456f30705b3cf966d026b0df4c0
 
 module.exports = router;
