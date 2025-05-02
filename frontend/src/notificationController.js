@@ -44,7 +44,7 @@ const readNotification = async function (notificationID, redirectPath) {
     }
   } catch (err) {
     Loader.destroy();
-    renderPopup(400, 'Cập nhật thông báo', err.response.data.message);
+    renderPopup(400, 'Update Notification', err.response.data.message);
   }
 };
 

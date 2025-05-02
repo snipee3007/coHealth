@@ -24,7 +24,10 @@ const notificationSchema = new mongoose.Schema(
     from: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'user',
-      required: [true, 'Vui lòng điền ID người gửi của thông báo'],
+      required: [
+        true,
+        'Please provide userID of the person who sent the notification',
+      ],
       autopopulate: {
         select: 'fullname username',
       },
@@ -35,7 +38,7 @@ const notificationSchema = new mongoose.Schema(
         validator: function (arr) {
           return Array.isArray(arr) && arr.length > 0;
         },
-        message: 'Vui lòng điền ID đích đến của thông báo!',
+        message: 'Please provide the userID who received the notification',
       },
     },
     type: {
@@ -49,13 +52,12 @@ const notificationSchema = new mongoose.Schema(
           'news',
           'user',
         ],
-        message:
-          'Kiểu thông báo không hợp lệ! Vui lòng chọn lại kiểu thông báo',
+        message: 'Notification type is unvalid! Please choose another type!',
       },
     },
     content: {
       type: String,
-      required: [true, 'Vui lòng điền thông tin của thông báo này!'],
+      required: [true, 'Please provide the content of this notification'],
     },
     newsID: {
       type: mongoose.Schema.Types.ObjectId,

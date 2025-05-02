@@ -72,7 +72,7 @@ const renderNotification = function (data) {
     }
   } else {
     notificationStr = `
-          <p class="font-normal">No notification yet!!</p>
+          <p class="font-normal text-center">No notification yet!!</p>
         `;
   }
   notificationsBox.insertAdjacentHTML('afterbegin', notificationStr);

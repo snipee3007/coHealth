@@ -34,7 +34,7 @@ exports.updateReadNotification = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: 'success',
-      message: 'Cập nhật xem thông báo thành công!',
+      message: 'Update read notification successful!',
     });
   } else {
     next();
