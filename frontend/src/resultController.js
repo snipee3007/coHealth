@@ -17,8 +17,8 @@ class Result {
     this.#valueCardRender();
 
     // Sử dụng thì bỏ comment hai dòng dưới là được!
-    await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
-    this.#weeksRender();
+    // await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
+    // this.#weeksRender();
 
     this.#dayHandler();
     this.#overlayHandler();
