@@ -17,13 +17,14 @@ exports.createChatRoom = catchAsync(async (req, res, next) => {
   // const firstUser = await User.findOne({
   //   slug: userSlug,
   // })
+
   if (!firstUser || !secondUser) {
-    return res.status(401).json({
+    return res.status(400).json({
       status: 'failed',
       message: 'User not found',
     });
-  } else if (firstUser.role === secondUser.role) {
-    return res.status(401).json({
+  } else if (secondUser.role !== 'doctor') {
+    return res.status(400).json({
       status: 'failed',
       message: 'The room must have 1 doctor and 1 user',
     });
@@ -89,14 +90,14 @@ exports.getAllChatRoomByUserID = catchAsync(async (req, res, next) => {
       req.room = rooms;
       next();
     } else {
-      res.status(401).json({
+      res.status(400).json({
         status: 'failed',
         message: 'Can not find this chat room',
       });
       res.end();
     }
   } catch {
-    res.status(404).json({
+    res.status(400).json({
       status: 'failed',
       message: 'Can not find chat room',
     });
@@ -176,14 +177,14 @@ exports.getMessageInRoom = catchAsync(async (req, res, next) => {
       });
       next();
     } else {
-      res.status(401).json({
+      res.status(400).json({
         status: 'failed',
         message: 'This room is not created',
       });
       res.end();
     }
   } catch {
-    res.status(404).json({
+    res.status(400).json({
       status: 'failed',
       message: 'Can not find chat room',
     });
@@ -202,7 +203,7 @@ exports.createMessage = catchAsync(async (req, res, next) => {
       roomCode: roomCode,
     });
     if (!room) {
-      res.status(401).json({
+      res.status(400).json({
         status: 'failed',
         message: 'Can not find this chat room',
       });

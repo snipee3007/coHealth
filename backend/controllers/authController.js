@@ -183,7 +183,6 @@ exports.signOut = catchAsync(async (req, res, next) => {
       { status: 'offline', lastSeen: new Date() },
       { new: true }
     );
-    console.log('nó vô đây');
   }
   // sau đó thì xóa cookie như bình thường
 

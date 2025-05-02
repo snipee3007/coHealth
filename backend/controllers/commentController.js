@@ -2,7 +2,6 @@ const Comment = require('./../models/commentsSchema.js');
 const catchAsync = require('../utils/catchAsync.js');
 
 exports.createComment = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   const { message, newsID } = req.body;
   const userID = req.user.id;
   const data = await Comment.create({ message, newsID, userID });

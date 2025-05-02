@@ -23,7 +23,6 @@ let lastSlugNameSignOut = '';
 // let currentRoom = []
 io.on('connection', async (socket) => {
   try {
-    console.log(socket.id);
     // lấy user từ token để chuyển về trạng thái online
     const cookies = cookie.parse(socket.handshake.headers.cookie || '');
     const token = cookies.jwt;
@@ -45,14 +44,13 @@ io.on('connection', async (socket) => {
     const listRoom = await ChatRoom.find({
       memberID: { $in: [currentUser._id] },
     });
-    console.log(listRoom);
     listRoom.forEach((room) => {
       // currentRoom.push({user: currentUser._id, room: room._id});
       socket.join(room.roomCode);
-      console.log(`User ${currentUser.fullname} joined room ${room.roomCode}`);
+      // console.log(`User ${currentUser.fullname} joined room ${room.roomCode}`);
     });
 
-    console.log(`User ${currentUser.fullname} is now online`);
+    // console.log(`User ${currentUser.fullname} is now online`);
     // nó sẽ chạy offline trước rồi online
     // cập nhật nếu như có slugname trong cái mảng này rồi thì cho nó cập nhật thành on
     // tìm vị trí của phần tử có slug giống nhau, nếu có tức đã có trong danh sách
@@ -77,26 +75,24 @@ io.on('connection', async (socket) => {
     socket.on('sendMessage', (message, roomCode) => {
       if (roomCode === '') {
         alert('Please enter a rooom');
-        console.log('Roomcode nhập ở bên kia: ', roomCode);
       }
       // io.emit là gửi full cho cả người gửi và tất cả người đang connect
       // socket.broadcast gửi cho tất cả người connect mà 0 gửi cho người gửi
       else {
-        console.log('Nó vô đây 2 lần là được');
         // nhận tin nhắn từ room đã chọn
         socket.to(roomCode).emit('receiveMessage', message, roomCode);
       }
     });
     socket.on('joinRoom', (room) => {
       socket.join(room);
-      console.log(`${socket.id} joined room ${room}`);
+      // console.log(`${socket.id} joined room ${room}`);
     });
     socket.on('leaveRoom', (room) => {
       socket.leave(room);
-      console.log(`${socket.id} left room ${room}`);
+      // console.log(`${socket.id} left room ${room}`);
     });
     socket.on('disconnect', async () => {
-      console.log(`User ${currentUser.fullname} is now offline`);
+      // console.log(`User ${currentUser.fullname} is now offline`);
       await User.findOneAndUpdate(
         { _id: currentUser._id },
         { status: 'offline', lastSeen: new Date() },

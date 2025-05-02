@@ -50,7 +50,7 @@ const sendMessage = async function (message, roomCode) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: {
+      data: {
         roomCode: roomCode,
         message: message,
       },
@@ -158,8 +158,8 @@ class ListOfChat {
                         <div class='${userDataStatusCircle} absolute right-0 bottom-0'></div>
                     </div>
                     
-                    <div class='font-ABeeZee content-center space-x-4'>
-                        <p class='ml-4'>${userDataName}</p>                        
+                    <div class='font-ABeeZee content-center space-x-4 px-4'>
+                        <p>${userDataName}</p>                        
                 ` +
           userDataStatus +
           `</div>`;

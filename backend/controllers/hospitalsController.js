@@ -5,8 +5,8 @@ exports.getAllNearestHospitals = async (req, res) => {
     // dùng dấu ? thì xài query -> dùng cái / là params
     const lat = req.query.lat;
     const long = req.query.long;
-    console.log('kiểu dữ liệu của lat là', lat);
-    console.log('kiểu dữ liệu của long là', long);
+    // console.log('kiểu dữ liệu của lat là', lat);
+    // console.log('kiểu dữ liệu của long là', long);
 
     // phải lưu theo long, lat thì mới xài được cái dưới
     // lọc theo geoWithin -> centerSphere là cái vòng tròn
@@ -20,7 +20,7 @@ exports.getAllNearestHospitals = async (req, res) => {
           ], // Chuyển đổi mét sang radians
         },
       },
-    });
+    }).sort('coordinates');
     res.status(200).json({
       message: 'success',
       data,
