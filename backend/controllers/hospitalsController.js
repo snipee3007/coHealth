@@ -1,13 +1,41 @@
-const hospitals = require('./../models/hospitals_schema');
+const Hospitals = require('./../models/hospitals_schema');
+
+exports.getAllNearestHospitals = async (req, res) => {
+  try {
+    // dùng dấu ? thì xài query -> dùng cái / là params
+    const lat = req.query.lat;
+    const long = req.query.long;
+    console.log('kiểu dữ liệu của lat là', lat);
+    console.log('kiểu dữ liệu của long là', long);
+
+    // phải lưu theo long, lat thì mới xài được cái dưới
+    // lọc theo geoWithin -> centerSphere là cái vòng tròn
+    // tính theo miles -> 5km ~~ 3.1 miles
+    const data = await Hospitals.find({
+      coordinates: {
+        $geoWithin: {
+          $centerSphere: [
+            [parseFloat(long), parseFloat(lat)],
+            3.10685596 / 3963.2,
+          ], // Chuyển đổi mét sang radians
+        },
+      },
+    });
+    res.status(200).json({
+      message: 'success',
+      data,
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 exports.getAllHospitals = async (req, res) => {
   try {
-    // chua sort
-    const data = await hospitals.find().limit(6);
+    const data = await Hospitals.find();
     res.status(200).json({
-      status: 200,
-      length: data.length,
-      loc: data,
+      message: 'success',
+      data,
     });
   } catch (err) {
     console.error(err);

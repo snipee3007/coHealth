@@ -1,5 +1,3 @@
-const socket = io('http://127.0.0.1:3000');
-
 // 2 function dưới để thêm hiệu ứng khi chuyển trang
 function fadeOutContent() {
   document

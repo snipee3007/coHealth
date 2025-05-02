@@ -4,9 +4,15 @@ const Hospital = require('./../models/hospitals_schema.js');
 const catchAsync = require('./../utils/catchAsync.js');
 const CalculateHistory = require('./../models/calculateHistory_schema.js');
 const Doctor = require('./../models/doctors_schema.js');
+<<<<<<< HEAD
 const Comment = require('./../models/commentsSchema.js');
 // const AdultCompendium = require('../models/adultCompendium_schema.js');
 
+=======
+const AdultCompendium = require('../models/adultCompendium_schema.js');
+const dotenv = require('dotenv');
+dotenv.config();
+>>>>>>> 49b60972610ee456f30705b3cf966d026b0df4c0
 //////////////////////////// EXPORT TEMPLATES /////////////////////////////////
 
 exports.getNewsTemplate = catchAsync(async (req, res, next) => {
@@ -70,10 +76,11 @@ exports.getResultBMITemplate = async (req, res) => {
 };
 
 exports.getHospitalTemplate = async (req, res) => {
-  const hospitals = await Hospital.find().limit(6);
+  const hospitals = await Hospital.find();
   res.status(200).render('hospital', {
     title: 'Hospital',
     hospitals,
+    apiKey: process.env.GOOGLE_MAPS_API_KEY,
   });
 };
 
@@ -215,5 +222,11 @@ exports.getAppointmentDetailsTemplate = async (req, res) => {
     title: 'Appointment Details',
     appointment: req.appointment,
     userProfileTitle: 'Appointment Details',
+  });
+};
+
+exports.getSymptomCheckerTemplate = async (req, res) => {
+  res.status(200).render('symptomChecker', {
+    title: 'Symptom Checker',
   });
 };
