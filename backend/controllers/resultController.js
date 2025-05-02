@@ -69,19 +69,19 @@ exports.calculateBMI = catchAsync(async (req, res, next) => {
       method,
       next,
     });
-    console.log(
-      await mainCalculateFunction({
-        gender,
-        age,
-        weight: idealWeight,
-        height,
-        activityIntensity,
-        activities,
-        method,
-        next,
-      })
-    );
-    console.log(tdee, deltaCalories);
+    // console.log(
+    //   await mainCalculateFunction({
+    //     gender,
+    //     age,
+    //     weight: idealWeight,
+    //     height,
+    //     activityIntensity,
+    //     activities,
+    //     method,
+    //     next,
+    //   })
+    // );
+    // console.log(tdee, deltaCalories);
     if (target == 'maintain') {
       caloriesIntakeList.push((tdee || tee) + deltaCalories);
       idealWeight += 0.45 / (speed == 'slow' ? 4 : speed == 'normal' ? 2 : 1);
@@ -114,7 +114,7 @@ exports.calculateBMI = catchAsync(async (req, res, next) => {
         caloriesIntakeList,
       },
     });
-    console.log('Success create new calculate history!');
+    // console.log('Success create new calculate history!');
   }
   res.status(200).json({
     status: 'success',

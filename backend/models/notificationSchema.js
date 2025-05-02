@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const target = new mongoose.Schema({
   targetID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'user',
     required: [true, 'Vui lòng nhập ID của đích đến!'],
     autopopulate: {
       select: '_id fullname username email',
@@ -23,7 +23,7 @@ const notificationSchema = new mongoose.Schema(
     },
     from: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: 'User',
+      ref: 'user',
       required: [true, 'Vui lòng điền ID người gửi của thông báo'],
       autopopulate: {
         select: 'fullname username',
@@ -43,10 +43,10 @@ const notificationSchema = new mongoose.Schema(
       enum: {
         values: [
           'system',
-          'post-comment',
+          'news-comment',
           'reply-comment',
           'course',
-          'post',
+          'news',
           'user',
         ],
         message:
@@ -57,9 +57,9 @@ const notificationSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Vui lòng điền thông tin của thông báo này!'],
     },
-    postID: {
+    newsID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Khohoclieu',
+      ref: 'news',
       autopopulate: {
         select: 'title slug',
       },

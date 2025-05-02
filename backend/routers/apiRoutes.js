@@ -1,5 +1,6 @@
 const express = require('express');
 const newsGetController = require('../controllers/newsGetController.js');
+const newsController = require('../controllers/newsController.js');
 const hospitalsController = require('../controllers/hospitalsController');
 const calculateRoutes = require('./api/calculateBMIRoutes.js');
 const resultRoutes = require('./api/resultRoutes.js');
@@ -8,7 +9,7 @@ const mealRoutes = require('./api/mealRoutes.js');
 const userRoutes = require('./api/userRoutes.js');
 const roomRoutes = require('./api/roomRoutes.js');
 const commentRoutes = require('./api/commentRoute.js');
-
+const notificationRoute = require('./api/notificationRoutes.js');
 const appointmentRoutes = require('./api/appointmentRoutes.js');
 const doctorRoutes = require('./api/doctorRoutes.js');
 const authController = require('./../controllers/authController.js');
@@ -19,6 +20,15 @@ router.route('/get-6-nearest-news').get(newsGetController.get6NearsestNews);
 router.route('/getAllNews').get(newsGetController.getAllNews);
 
 // NEWS API
+router
+  .route('/news')
+  .post(
+    authController.protect,
+    authController.restrictToAPI(['doctor']),
+    newsController.uploadImages,
+    newsController.resizeImages,
+    newsController.createNews
+  );
 router.route('/news/:name').get(newsGetController.getNewsItem);
 
 // COMMENT API
@@ -54,5 +64,8 @@ router.use('/room', roomRoutes);
 router.use('/doctor', doctorRoutes);
 // APPOINTMENT API
 router.use('/appointment', appointmentRoutes);
+
+// NOTIFICATION API
+router.use('/notification', notificationRoute);
 
 module.exports = router;

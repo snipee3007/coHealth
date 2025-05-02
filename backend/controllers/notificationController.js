@@ -1,15 +1,15 @@
 const Notification = require('./../models/notificationSchema.js');
-const User = require('./../models/userSchema.js');
+const User = require('./../models/users_schema.js');
 const catchAsync = require('../utils/catchAsync.js');
-const AppError = require('../utils/catchAsync.js');
+const AppError = require('../utils/appError.js');
 exports.getNotification = catchAsync(async (req, res, next) => {});
 
 exports.updateReadNotification = catchAsync(async (req, res, next) => {
   // Click on the post that have the comment or reply notification
-  if (req.post && req.user) {
-    const post = req.post;
+  if (req.news && req.user) {
+    const news = req.news;
     const hello = await Notification.findOneAndUpdate(
-      { postID: post._id },
+      { newsID: news._id },
       {
         $set: {
           'to.$[element].haveRead': true,

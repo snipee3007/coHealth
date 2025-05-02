@@ -1,10 +1,10 @@
-import NotificationConstant from './../utils/notificationConstant.js';
+import NotificationConstant from '/src/utils/notificationConstant.js';
 
 const socket = io();
 class Socket {
-  newComment(userID, postID, content) {
+  newComment(userID, newsID, content) {
     try {
-      socket.emit('newComment', userID, postID, content);
+      socket.emit('newComment', userID, newsID, content);
     } catch (err) {
       console.log('ERROR');
     }
@@ -36,23 +36,24 @@ const renderNotification = function (data) {
 
   if (data && data.length > 0) {
     if (data.length > 0) {
-      data.forEach(noti => {
+      data.forEach((noti) => {
         if (noti.to[0].haveRead == false) ++notReadNoti;
         let message;
-        const nameList = noti.from.map(from => from.fullname);
-        if (noti.type == 'post-comment') {
-          noti.title = 'Bình luận';
-          message = NotificationConstant.newPostComment(nameList).message;
+        const nameList = noti.from.map((from) => from.fullname);
+        if (noti.type == 'news-comment') {
+          noti.title = 'Comment';
+          message = NotificationConstant.newNewsComment(nameList).message;
         } else if (noti.type == 'reply-comment') {
-          noti.title = 'Phản hồi';
+          noti.title = 'Reply';
           message = NotificationConstant.newReplyComment(nameList).message;
         }
+        console.log(noti);
         notificationStr += `
             <div class="notificationItem text-left font-normal flex flex-1 gap-3 x-4 py-2 rounded-xl hover:bg-[#D9D9D9] cursor-pointer" data-id="${
               noti.id
-            }" data-post="${noti.postID.slug}" data-type="${noti.type}">
+            }" data-news="${noti.newsID.slug}" data-type="${noti.type}">
               <svg class="w-6 h-6 shrink-0">
-                <use href='/images/icon.svg#sms'></use>
+                <use href='/images/png/icons.svg#sms'></use>
               </svg>
               <div class="${noti.to[0].haveRead ? 'haveRead' : ''}"> 
                 <div class="notificationTitle font-bold flex flex-1 items-center gap-4">
@@ -71,7 +72,7 @@ const renderNotification = function (data) {
     }
   } else {
     notificationStr = `
-          <p class="font-normal">Hiện không có thông báo nào!</p>
+          <p class="font-normal">No notification yet!!</p>
         `;
   }
   notificationsBox.insertAdjacentHTML('afterbegin', notificationStr);

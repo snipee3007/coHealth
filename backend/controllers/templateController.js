@@ -1,4 +1,4 @@
-const New = require('./../models/news_schema.js');
+const News = require('./../models/news_schema.js');
 const User = require('./../models/users_schema.js');
 const Hospital = require('./../models/hospitals_schema.js');
 const catchAsync = require('./../utils/catchAsync.js');
@@ -10,7 +10,7 @@ const Comment = require('./../models/commentsSchema.js');
 //////////////////////////// EXPORT TEMPLATES /////////////////////////////////
 
 exports.getNewsTemplate = catchAsync(async (req, res, next) => {
-  const allNews = await New.find().sort('createdAt');
+  const allNews = await News.find().sort('-createdAt -updatedAt');
   res.status(200).render('news', {
     title: 'News',
     allNews,
@@ -18,8 +18,8 @@ exports.getNewsTemplate = catchAsync(async (req, res, next) => {
 });
 
 exports.getNewsItemTemplate = catchAsync(async (req, res, next) => {
-  const news = await New.findOne({ slug: req.params.name });
-  const recommendNews = await New.find().sort('-view').limit(3);
+  const news = await News.findOne({ slug: req.params.name });
+  const recommendNews = await News.find().sort('-view').limit(3);
   const comments = await Comment.find({ newsID: news.id })
     .populate('userID')
     .sort('-createAt -updatedAt');
@@ -28,22 +28,25 @@ exports.getNewsItemTemplate = catchAsync(async (req, res, next) => {
     news,
     recommendNews,
     comments,
+    user: req.user,
   });
 });
 
 exports.getUploadTemplate = catchAsync(async (req, res, next) => {
+  const categories = await News.find({}).distinct('category');
   res.status(200).render('upload', {
     title: 'Upload',
+    categories,
   });
 });
 
 exports.getHomePageTemplate = catchAsync(async (req, res, next) => {
-  const mostViewNews = await New.find()
+  const mostViewNews = await News.find()
     .sort('-view')
     .sort('createDate')
     .limit(6);
 
-  const latestNews = await New.find().sort('createDate').limit(3);
+  const latestNews = await News.find().sort('createDate').limit(3);
   res.status(200).render('homepage', {
     title: 'Welcome',
     mostViewNews,
@@ -167,8 +170,6 @@ exports.getDoctorsTemplate = catchAsync(async (req, res, next) => {
 });
 
 exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
-  console.log(req.params.name);
-  // console.log(req.originalUrl.split('/')[2])
   const doctor = await User.findOne({
     slug: req.originalUrl.split('/')[2],
     role: 'doctor',

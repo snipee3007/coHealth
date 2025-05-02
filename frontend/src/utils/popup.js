@@ -66,7 +66,7 @@ const renderAlertTemplate = function ({ message = '' }) {
     <div class="alertOverlay w-full min-h-screen fixed z-40 flex items-center justify-center font-Cormorant opacity-0 pointer-events-none duration-100 bg-black/50">
       <div class="alertBox flex flex-col gap-4 bg-white w-1/2 translate-y-10 py-10 items-center rounded-xl duration-100">
         <svg class="w-24 h-24">
-          <use href="/images/icon.svg#orange-info"></use>
+          <use href="/images/png/icons.svg#orange-info"></use>
         </svg>
       <div class="alertMessage text-2xl w-2/3 text-center">
         ${message}
