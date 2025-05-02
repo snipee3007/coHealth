@@ -18,16 +18,13 @@ exports.getNewsTemplate = catchAsync(async (req, res, next) => {
 });
 
 exports.getNewsItemTemplate = catchAsync(async (req, res, next) => {
-  const news = await News.findOne({ slug: req.params.name });
   const recommendNews = await News.find().sort('-view').limit(3);
-  const comments = await Comment.find({ newsID: news.id })
-    .populate('userID')
-    .sort('-createAt -updatedAt');
+
   res.status(200).render('newsItem', {
     title: 'News',
-    news,
+    news: req.news,
     recommendNews,
-    comments,
+    comments: req.comments,
     user: req.user,
   });
 });

@@ -113,3 +113,35 @@ exports.createNews = catchAsync(async (req, res, next) => {
   });
   returnData(res, 201, newNews, '');
 });
+
+exports.getNews = catchAsync(async (req, res, next) => {
+  // Query
+  const news = await News.findOne({ slug: req.params.name }).populate({
+    path: 'userID',
+    select: 'fullname',
+  });
+  if (req.query.type == 'visit') {
+    await News.findOneAndUpdate(
+      { slug: req.params.name },
+      {
+        $inc: {
+          visit: 1,
+        },
+      }
+    );
+  }
+  if (!news) {
+    res.writeHead(
+      302,
+      "Can't find any news with given slug! Please try again later!",
+      {
+        location: '/notFound',
+      }
+    );
+    res.end();
+  } else {
+    // Return data
+    req.news = news;
+    next();
+  }
+});

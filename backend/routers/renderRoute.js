@@ -3,6 +3,9 @@ const template = require('./../controllers/templateController.js');
 const authController = require('./../controllers/authController.js');
 const chatToDoctorController = require('./../controllers/chatToDoctorController.js');
 const userAppointmentController = require('./../controllers/userAppointmentController.js');
+const notificationController = require('./../controllers/notificationController.js');
+const newsController = require('./../controllers/newsController.js');
+const commentController = require('./../controllers/commentController.js');
 const adultCompendiumController = require('./../controllers/adultCompendiumController.js');
 const resultController = require('./../controllers/resultController.js');
 const router = express.Router();
@@ -14,7 +17,13 @@ router.get(['/', '/home'], template.getHomePageTemplate);
 
 // NEWS
 router.get('/news', template.getNewsTemplate);
-router.get('/news/:name', template.getNewsItemTemplate);
+router.get(
+  '/news/:name',
+  newsController.getNews,
+  commentController.getComments,
+  notificationController.updateReadNotification,
+  template.getNewsItemTemplate
+);
 
 // NEWS UPLOAD
 router.get('/upload', template.getUploadTemplate);

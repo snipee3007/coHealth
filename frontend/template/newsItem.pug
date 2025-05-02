@@ -10,6 +10,9 @@ block body
             .newsDescription.font-AbhayaLibre.text-xl.text-center.font-bold.mx-auto(class='w-2/3').py-12= news.description
             .newsData(data-news=news.news data-slug=news.slug)
             .newsBox.font-Roboto.px-12.text-justify.mx-auto.pb-12
+            .mx-auto.text-right(class='w-2/3')
+                .newsTime.mx-auto.text-right= news.updatedAt
+                .newsUploader= news.userID.fullname
         hr.mx-16(class='border-[#1678F2] border-[1.5px]').my-12
         .recommendNewsContainer.px-20
             .recommendNews_title.linearText.font-ABeeZee.text-4xl.font-ABeeZee.mb-4.font-bold RECOMMEND

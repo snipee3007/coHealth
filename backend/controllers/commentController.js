@@ -28,3 +28,11 @@ exports.deleteComment = catchAsync(async (req, res, next) => {
     });
   }
 });
+
+exports.getComments = catchAsync(async (req, res, next) => {
+  const comments = await Comment.find({ newsID: req.news.id })
+    .populate('userID')
+    .sort('-createAt -updatedAt');
+  req.comments = comments;
+  next();
+});
