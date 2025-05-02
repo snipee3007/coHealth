@@ -1,0 +1,157 @@
+extend base
+
+block append header 
+    script(defer, src="/src/symptomCheckerController.js") 
+    style(type="text/css").
+        .active{
+            background: oklch(60.6% 0.25 292.717);
+        }
+        .disactive{
+            background: oklch(70.4% 0.04 256.788);
+        }
+        .step{
+            position: relative;
+            margin: 0 50px 0 0 ;
+            padding: 10px;
+            width: 140px;
+        }
+        .active:after{
+            content: '';
+            position: absolute;
+            right: -60px;
+            height: 30px;
+            width: 60px;
+            top: 0px;
+            border-top: 35px solid transparent;
+            border-left: 40px solid oklch(60.6% 0.25 292.717);
+            border-bottom: 35.5px solid transparent;
+        }
+        .disactive:after{
+            content: '';
+            position: absolute;
+            right: -60px;
+            height: 30px;
+            width: 60px;
+            top: 0px;
+            border-top: 35px solid transparent;
+            border-left: 40px solid oklch(70.4% 0.04 256.788);
+            border-bottom: 35.5px solid transparent;
+        }
+        .dropdown {
+            position: absolute;
+            z-index: 100;
+            background: white;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
+        }
+        .search-container {
+            position: relative;
+        }
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+            color: #6366f1;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .loading-spinner .animate-spin {
+            border-color: transparent;
+            border-bottom-color: #8b5cf6;
+        }
+
+        /* Optional transition effects */
+        .next, .loading-spinner {
+            transition: all 0.3s ease;
+        }
+
+        /* Style for the active disease button */
+        #top3Diseases button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .disease-active {
+            border-left: 4px solid oklch(60.6% 0.25 292.717);
+        }
+block body
+    .flex.flex-col.items-center.m-4
+        .pageTitle.linearText.font-ABeeZee.font-bold.text-6xl.my-6#title SYMPTOM CHECKER
+        .flex.justify-around.font-Roboto.text-white
+            .step.active.step1
+                p Step 1:
+                p Symptoms 
+            .step.disactive.step2
+                p Step 2:
+                p Result 
+            
+        .stepInformation.w-full.mx-6.my-4
+            .div.step1
+                .flex.justify-center.space-x-32.content-center.mx-12
+                    .div(class='w-2/3')
+                        p.font-ABeeZee.text-5xl.text-center.m-4(class = 'text-[#4F555A]') What are your symptoms?
+                        #tagSymptoms
+                            .flex.flex-wrap.space-x-8.my-4.mx-36
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.linearBackground.text-white(type="button").w-40 All
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Head
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Chest and Upper Back
+                            .flex.flex-wrap.mx-36.space-x-8.my-4
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Abdomen and Lower Back
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Arms
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Legs
+                            .flex.flex-wrap.mx-36.space-x-8.my-4
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Skin
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Nails
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 General Symptoms
+                        
+                        .overflow-y-auto(class='h-[550px]')#listSymptoms.p-2
+                            .search-container.sticky.top-0.bg-white.pb-2
+                                input#symptomSearch.border-1.p-2.bg-gray-200.rounded-xl.mb-2(name="symptoms", placeholder='Type your symptoms here', required).w-full
+                                #searchDropdown.dropdown.hidden
+                            #symptomsList
+                    div(class='w-1/3')
+                        p.font-ABeeZee.text-5xl(class = 'text-[#4F555A]').text-center.mb-4 My symptoms
+                        .overflow-y-auto(class='h-[800px] bg-[#D9D9D9]')#mySymptomsList.p-2
+                                     
+                .flex.gender.space-x-20.mb-8.font-Roboto.right-0.flex.justify-center
+                    button.mt-20.linearBackground.px-6.py-2.border-1.rounded-xl(type="button").block.text-white.font-Roboto.w-64.next Next
+            .div.step2.hidden
+                .flex.justify-center.space-x-32.content-center.mx-12
+                    .div(class='w-1/2')
+                        p.font-ABeeZee.text-5xl.text-center.m-4(class = 'text-[#4F555A]') Conditions that match your symptoms
+                        #top3Diseases.p-2.flex.flex-col
+                            button 
+                                .border-b-2.mb-12.bg-violet-400.text-white.rounded-xl.predict1.pointer-cursor
+                                    p.content-center.text-3xl.font-ABeeZee.p-4.border-b-2 Heart Attack
+                                    p.font-Roboto.p-4.text-xl Predictions: 60%
+                            button    
+                                .border-b-2.mb-12.bg-indigo-400.text-white.rounded-xl.predict2.pointer-cursor
+                                    p.content-center.text-3xl.font-ABeeZee.p-4.border-b-2 Heart Attack
+                                    p.font-Roboto.p-4.text-xl Predictions: 60%
+                            button
+                                .border-b-2.mb-12.bg-blue-400.text-white.rounded-xl.predict3.pointer-cursor
+                                    p.content-center.text-3xl.font-ABeeZee.p-4.border-b-2 Heart Attack
+                                    p.font-Roboto.p-4.text-xl Predictions: 60%
+                           
+                    div(class='w-1/2').m-4
+                        p.font-ABeeZee.text-5xl(class = 'text-[#4F555A]').text-center.mb-4 Details
+                        p.font-ABeeZee.text-3xl(class = 'text-[#4F555A]').text-center.mb-4 Heart Attack
+                            p.font-Roboto Trauma to the skull, scalp, or brain that can range from mild concussions to severe traumatic brain injuries, potentially causing cognitive impairment.
+                           
+                        
+                .flex.gender.justify-around.space-x-20.mb-8.font-Roboto
+                    button.mt-20.px-6.py-2.border-1.rounded-xl(type="button").block.font-Roboto.w-64 Previous
+                    button.mt-20.linearBackground.px-6.py-2.border-1.rounded-xl(type="button").block.text-white.font-Roboto.w-64 Next

@@ -12,6 +12,9 @@ const commentRoutes = require('./api/commentRoute.js');
 const notificationRoute = require('./api/notificationRoutes.js');
 const appointmentRoutes = require('./api/appointmentRoutes.js');
 const doctorRoutes = require('./api/doctorRoutes.js');
+const symptomRoutes = require('./api/symptomRoutes.js');
+const diseaseRoutes = require('./api/diseaseRoutes.js');
+
 const authController = require('./../controllers/authController.js');
 const router = express.Router();
 
@@ -36,6 +39,9 @@ router.use('/comment', commentRoutes);
 
 // HOSPITAL API
 router.route('/hospitals').get(hospitalsController.getAllHospitals);
+router
+  .route('/hospitals/nearest')
+  .get(hospitalsController.getAllNearestHospitals);
 
 // CALCULATE API
 router.use('/calculate', calculateRoutes);
@@ -62,10 +68,19 @@ router.use('/room', roomRoutes);
 
 // DOCTOR API
 router.use('/doctor', doctorRoutes);
+
 // APPOINTMENT API
 router.use('/appointment', appointmentRoutes);
 
+<<<<<<< HEAD
 // NOTIFICATION API
 router.use('/notification', notificationRoute);
+=======
+// SYMPTOM API
+router.use('/symptom', symptomRoutes);
+
+// DISEASE API
+router.use('/disease', diseaseRoutes);
+>>>>>>> 49b60972610ee456f30705b3cf966d026b0df4c0
 
 module.exports = router;
