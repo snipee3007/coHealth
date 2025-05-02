@@ -1,5 +1,3 @@
-const socket = io('http://127.0.0.1:3000');
-
 const sendAppointment = async function (objAppointment) {
   try {
     const res = await fetch('/api/appointment/create', {
@@ -312,6 +310,7 @@ class Appointment {
   }
 
   async #listSpecialityAndDoctor() {
+    // canh rồi sửa lại distinct cho cái này
     let speciality = document.querySelector('#specialtyList');
     let doctor = document.querySelector('#doctorList');
     const doctorData = await fetch('/api/doctor', {

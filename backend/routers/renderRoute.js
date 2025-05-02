@@ -76,4 +76,6 @@ router.get(
   template.getAppointmentDetailsTemplate
 );
 
+router.get('/symptom', template.getSymptomCheckerTemplate);
+
 module.exports = router;

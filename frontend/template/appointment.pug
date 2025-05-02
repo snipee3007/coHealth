@@ -32,11 +32,11 @@ block body
             p.text-5xl.my-6.font-bold Appointment details
             .flex.flex-col
                 label.text-2xl.font-semibold.my-4(for="major") Specialty 
-                select#specialtyList.border-1.p-2.bg-gray-200.rounded-xl(title='List of Speciality' required)
+                select#specialtyList.border-1.p-2.bg-gray-200.rounded-xl.cursor-pointer(title='List of Speciality' required)
                     option(value = 'noInfo' name='specialty' disabled selected) Please select a specialty first
                     //- thêm số speciality vô đây
                 label.text-2xl.font-semibold.my-4(for="doctor") Doctor
-                select#doctorList.border-1.p-2.bg-gray-200.rounded-xl(title='List of Doctor' required)
+                select#doctorList.border-1.p-2.bg-gray-200.rounded-xl.cursor-pointer(title='List of Doctor' required)
                     option(value='noInfo' name='doctor' disabled selected) Please select a doctor first
                     //- thêm các doctor vô đây
                 label.text-2xl.font-semibold.my-4(for="doctor") Reason
@@ -84,8 +84,8 @@ block body
                                 .p-1.bg-white.rounded-lg.w-8.h-8 Su 
                             .datepicker_day.grid.grid-cols-7.gap-2 
                             .datepicker_option.mt-2.flex.flex-1.gap-4 
-                                button.bg-gray-300.rounded-lg.py-1.datepicker_optionButton.cancelDatepicker(class="bg-[#F9F4E4] w-1/2" type="button") Cancel 
-                                button.linearBackground.text-white.rounded-lg.py-1.datepicker_optionButton.submitDatepicker(class='w-1/2' type="button") OK   
+                                button.bg-gray-300.rounded-lg.py-1.datepicker_optionButton.cancelDatepicker.cursor-pointer(class="bg-[#F9F4E4] w-1/2" type="button") Cancel 
+                                button.linearBackground.text-white.rounded-lg.py-1.datepicker_optionButton.submitDatepicker.cursor-pointer(class='w-1/2' type="button") OK   
             hr.w-full.my-4(class='border-[#9C9991]')
             p.text-2xl.my-6.time Time
             //- tạo các khung lựa chọn giờ ở đây flex-wrap để tự động xuống dòng

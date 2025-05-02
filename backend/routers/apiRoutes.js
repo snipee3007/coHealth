@@ -8,6 +8,9 @@ const userRoutes = require('./api/userRoutes.js');
 const roomRoutes = require('./api/roomRoutes.js');
 const appointmentRoutes = require('./api/appointmentRoutes.js');
 const doctorRoutes = require('./api/doctorRoutes.js');
+const symptomRoutes = require('./api/symptomRoutes.js');
+const diseaseRoutes = require('./api/diseaseRoutes.js');
+
 const authController = require('./../controllers/authController.js');
 const router = express.Router();
 
@@ -20,6 +23,9 @@ router.route('/news/:name').get(newsGetController.getNewsItem);
 
 // HOSPITAL API
 router.route('/hospitals').get(hospitalsController.getAllHospitals);
+router
+  .route('/hospitals/nearest')
+  .get(hospitalsController.getAllNearestHospitals);
 
 // FOOD API
 router.route('/getRandomBreakfast').get(foodsController.getRandomBreakfast);
@@ -48,7 +54,14 @@ router.use('/room', roomRoutes);
 
 // DOCTOR API
 router.use('/doctor', doctorRoutes);
+
 // APPOINTMENT API
 router.use('/appointment', appointmentRoutes);
+
+// SYMPTOM API
+router.use('/symptom', symptomRoutes);
+
+// DISEASE API
+router.use('/disease', diseaseRoutes);
 
 module.exports = router;

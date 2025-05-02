@@ -29,7 +29,7 @@ block navbar
         else
             a(href='/profile').a_links.afterSignIn.flex.items-center.gap-4
                 button.notification.btn 
-                    img(src='./../images/png/notification-bell-svgrepo-com.png' alt='Notification').w-6
+                    img(src='/../images/png/notification-bell-svgrepo-com.png' alt='Notification').w-6
                 button.relative.btn
-                    img.w-12.rounded-full.absolute.left-0(src=`./../images/users/profile/${user.image}` class='top-1/2 -translate-y-1/2' alt=`${user.slug}-profile's-icon`)
+                    img.w-12.rounded-full.absolute.left-0(src=`/../images/users/profile/${user.image}` class='top-1/2 -translate-y-1/2' alt=`${user.slug}-profile's-icon`)
                     .text-white.font-Inter.py-3.px-8.ml-6.font-bold.rounded-lg(class='bg-[#6E67F4]') #{user.fullname}

@@ -1,5 +1,3 @@
-const socket = io('http://127.0.0.1:3000');
-
 socket.on('receiveMessage', (message, roomCode) => {
   // trên đây để hiện chat cho đối phương
   console.log(roomCode);
@@ -76,9 +74,10 @@ class ListOfChat {
   #getMessageEachRoom() {
     const buttons = document.querySelectorAll('.listChat');
     buttons.forEach((button) => {
-      button.addEventListener('click', async (e) => {
+      const handleClick = async () => {
         // toggle lại hidden của class text
         document.querySelector('.text').classList.remove('hidden');
+        document.querySelector('.chatBoxInfo').classList.add('border-b-2');
         // kết nối vào room
         const currentRoomCode = this.#roomCode;
         // if (currentRoomCode !== '') {
@@ -98,7 +97,6 @@ class ListOfChat {
             parentElementChatBoxInfo.firstChild
           );
         }
-        e.preventDefault();
         buttons.forEach((insideButton) => {
           insideButton.classList.remove('chatItemActive');
         });
@@ -187,6 +185,11 @@ class ListOfChat {
 
         document.querySelector('.listOfChat').scrollTop =
           document.querySelector('.listOfChat').scrollHeight;
+      };
+      const debounceHandleClick = _.debounce(handleClick, 300).bind(this);
+      button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        debounceHandleClick();
       });
     });
   }

@@ -2,7 +2,7 @@ const editProfile = async function (data) {
   try {
     const res = await axios({
       method: 'POST',
-      url: '/users',
+      url: '/api/user',
       headers: {
         'Content-Type': 'multipart/form-data',
       },
