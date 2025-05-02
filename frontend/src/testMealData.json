@@ -1,0 +1,261 @@
+{
+  "monday": {
+    "meals": [
+      {
+        "id": 635446,
+        "image": "Blueberry-Cinnamon-Porridge-635446.jpg",
+        "imageType": "jpg",
+        "title": "Blueberry Cinnamon Porridge",
+        "readyInMinutes": 45,
+        "servings": 1,
+        "sourceUrl": "https://www.foodista.com/recipe/2HVQB6LT/blueberry-cinnamon-porridge"
+      },
+      {
+        "id": 638369,
+        "image": "Chicken-Tangsuyuk-(Korean-Sweet-n-Sour-Chicken)-638369.jpg",
+        "imageType": "jpg",
+        "title": "Korean Sweet n Sour Chicken",
+        "readyInMinutes": 30,
+        "servings": 4,
+        "sourceUrl": "https://www.foodista.com/recipe/6458DTC4/chicken-tangsuyuk-sweet-n-sour-chicken"
+      },
+      {
+        "id": 652130,
+        "image": "Mixed-Mushroom-Sauce-Over-Tagliatelle-Pasta-652130.jpg",
+        "imageType": "jpg",
+        "title": "Mixed Mushroom Sauce Over Tagliatelle Pasta",
+        "readyInMinutes": 45,
+        "servings": 2,
+        "sourceUrl": "https://www.foodista.com/recipe/72RK67LC/mixed-mushroom-sauce-over-tagliatelle-pasta"
+      }
+    ],
+    "nutrients": {
+      "calories": 2324.38,
+      "protein": 79.57,
+      "fat": 152.71,
+      "carbohydrates": 169.66
+    }
+  },
+  "tuesday": {
+    "meals": [
+      {
+        "id": 664054,
+        "image": "Turkey-Sausage--Chard---Sweet-Potato-Breakfast-Scramble-664054.jpg",
+        "imageType": "jpg",
+        "title": "Turkey Sausage, Chard & Sweet Potato Breakfast Scramble",
+        "readyInMinutes": 45,
+        "servings": 2,
+        "sourceUrl": "https://www.foodista.com/recipe/S3LTQRHW/turkey-sausage-chard-sweet-potato-breakfast-scramble"
+      },
+      {
+        "id": 650377,
+        "image": "Low-Carb-Brunch-Burger-650377.jpg",
+        "imageType": "jpg",
+        "title": "Low Carb Brunch Burger",
+        "readyInMinutes": 30,
+        "servings": 2,
+        "sourceUrl": "https://www.foodista.com/recipe/5SPTY657/low-carb-brunch-burger"
+      },
+      {
+        "id": 637908,
+        "image": "Chicken-and-Miso-Ramen-Noodle-Soup-637908.jpg",
+        "imageType": "jpg",
+        "title": "Chicken and Miso Ramen Noodle Soup",
+        "readyInMinutes": 30,
+        "servings": 2,
+        "sourceUrl": "https://www.foodista.com/recipe/LSGT2GRK/chicken-and-miso-ramen-noodle-soup"
+      }
+    ],
+    "nutrients": {
+      "calories": 2323.97,
+      "protein": 134.11,
+      "fat": 140.01,
+      "carbohydrates": 130.76
+    }
+  },
+  "wednesday": {
+    "meals": [
+      {
+        "id": 646982,
+        "image": "Homemade-Eggs-Benedict-646982.jpg",
+        "imageType": "jpg",
+        "title": "Meatless Eggs Benedict",
+        "readyInMinutes": 25,
+        "servings": 2,
+        "sourceUrl": "http://www.foodista.com/recipe/X8RJBK5X/homemade-eggs-benedict"
+      },
+      {
+        "id": 632874,
+        "image": "Asian-Salmon-Burgers-With-Tangy-Ginger-Lime-Sauce-632874.jpg",
+        "imageType": "jpg",
+        "title": "Asian Salmon Burgers With Tangy Ginger Lime Sauce",
+        "readyInMinutes": 30,
+        "servings": 4,
+        "sourceUrl": "https://www.foodista.com/recipe/FRT38YTC/asian-salmon-burgers-with-tangy-ginger-lime-sauce"
+      },
+      {
+        "id": 1697599,
+        "image": "baked-ziti-with-ricotta-and-italian-sausage-1697599.jpg",
+        "imageType": "jpg",
+        "title": "Baked Ziti with Ricotta and Italian Sausage",
+        "readyInMinutes": 75,
+        "servings": 6,
+        "sourceUrl": "https://maplewoodroad.com/baked-ziti-with-ricotta-and-italian-sausage/"
+      }
+    ],
+    "nutrients": {
+      "calories": 2323.91,
+      "protein": 102.72,
+      "fat": 151.67,
+      "carbohydrates": 138.1
+    }
+  },
+  "thursday": {
+    "meals": [
+      {
+        "id": 634882,
+        "image": "Best-Breakfast-Burrito-634882.jpg",
+        "imageType": "jpg",
+        "title": "Best Breakfast Burrito",
+        "readyInMinutes": 45,
+        "servings": 4,
+        "sourceUrl": "https://www.foodista.com/recipe/WLQNMQ5B/best-breakfast-burrito"
+      },
+      {
+        "id": 642585,
+        "image": "Farfalle-with-fresh-tomatoes--basil-and-mozzarella-642585.jpg",
+        "imageType": "jpg",
+        "title": "Farfalle with fresh tomatoes, basil and mozzarella",
+        "readyInMinutes": 15,
+        "servings": 4,
+        "sourceUrl": "https://www.foodista.com/recipe/B6CC3QXM/farfalle-with-fresh-tomatoes-basil-and-mozzarella"
+      },
+      {
+        "id": 647349,
+        "image": "Hooters-Hot-Wings-(Copy-Cat-)-647349.jpg",
+        "imageType": "jpg",
+        "title": "Hooter's Hot Wings (Copy Cat )",
+        "readyInMinutes": 45,
+        "servings": 6,
+        "sourceUrl": "https://www.foodista.com/recipe/L8MLQZB5/hooters-hot-wings-copy-cat-recipe"
+      }
+    ],
+    "nutrients": {
+      "calories": 2324.77,
+      "protein": 88.45,
+      "fat": 126.07,
+      "carbohydrates": 208.16
+    }
+  },
+  "friday": {
+    "meals": [
+      {
+        "id": 632928,
+        "image": "asparagus-eggs-benedict-632928.jpg",
+        "imageType": "jpg",
+        "title": "Asparagus Eggs Benedict",
+        "readyInMinutes": 30,
+        "servings": 2,
+        "sourceUrl": "https://www.foodista.com/recipe/SZT38TKR/asparagus-eggs-benedict"
+      },
+      {
+        "id": 650119,
+        "image": "Linguine-Alla-Carbonara-650119.jpg",
+        "imageType": "jpg",
+        "title": "Linguine Alla Carbonara",
+        "readyInMinutes": 30,
+        "servings": 4,
+        "sourceUrl": "https://www.foodista.com/recipe/X4N72XB2/linguine-alla-carbonara"
+      },
+      {
+        "id": 638248,
+        "image": "Chicken-Piccata-With-Angel-Hair-Pasta-638248.jpg",
+        "imageType": "jpg",
+        "title": "Chicken Piccata With Angel Hair Pasta",
+        "readyInMinutes": 45,
+        "servings": 2,
+        "sourceUrl": "https://www.foodista.com/recipe/7F7DBP8R/chicken-piccata-with-angel-hair-pasta"
+      }
+    ],
+    "nutrients": {
+      "calories": 2323.75,
+      "protein": 106.95,
+      "fat": 114.16,
+      "carbohydrates": 218.07
+    }
+  },
+  "saturday": {
+    "meals": [
+      {
+        "id": 640275,
+        "image": "Crab-Cakes-Eggs-Benedict-640275.jpg",
+        "imageType": "jpg",
+        "title": "Crab Cakes Eggs Benedict",
+        "readyInMinutes": 30,
+        "servings": 3,
+        "sourceUrl": "https://www.foodista.com/recipe/P53KDVS3/crab-cakes-eggs-benedict"
+      },
+      {
+        "id": 632275,
+        "image": "Alton-Browns-Baked-Macaroni-and-Cheese-632275.jpg",
+        "imageType": "jpg",
+        "title": "Alton Brown's Baked Macaroni and Cheese",
+        "readyInMinutes": 20,
+        "servings": 8,
+        "sourceUrl": "https://www.foodista.com/recipe/WH8B2YQT/alton-browns-baked-macaroni-and-cheese"
+      },
+      {
+        "id": 640869,
+        "image": "Crock-Pot-Shredded-French-Dip-640869.jpg",
+        "imageType": "jpg",
+        "title": "Crock Pot Shredded French Dip",
+        "readyInMinutes": 450,
+        "servings": 4,
+        "sourceUrl": "https://www.foodista.com/recipe/JZSG6DMV/crock-pot-shredded-french-dip"
+      }
+    ],
+    "nutrients": {
+      "calories": 2323.99,
+      "protein": 157.74,
+      "fat": 136.74,
+      "carbohydrates": 108.22
+    }
+  },
+  "sunday": {
+    "meals": [
+      {
+        "id": 649880,
+        "image": "Lemony-Blueberry-Banana-Bread-649880.jpg",
+        "imageType": "jpg",
+        "title": "Lemony Blueberry Banana Bread",
+        "readyInMinutes": 45,
+        "servings": 14,
+        "sourceUrl": "https://www.foodista.com/recipe/N2SJS588/lemony-blueberry-banana-bread"
+      },
+      {
+        "id": 650377,
+        "image": "Low-Carb-Brunch-Burger-650377.jpg",
+        "imageType": "jpg",
+        "title": "Low Carb Brunch Burger",
+        "readyInMinutes": 30,
+        "servings": 2,
+        "sourceUrl": "https://www.foodista.com/recipe/5SPTY657/low-carb-brunch-burger"
+      },
+      {
+        "id": 649405,
+        "image": "Lebanese-Lentil-Soup-649405.jpg",
+        "imageType": "jpg",
+        "title": "Lebanese Lentil Soup",
+        "readyInMinutes": 45,
+        "servings": 4,
+        "sourceUrl": "https://www.foodista.com/recipe/XSWN5NTY/lebanese-lentil-soup"
+      }
+    ],
+    "nutrients": {
+      "calories": 2323.99,
+      "protein": 84.2,
+      "fat": 172.25,
+      "carbohydrates": 116.97
+    }
+  }
+}

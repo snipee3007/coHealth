@@ -56,7 +56,7 @@ block append header
             background-color: #f3f4f6;
         }
         .search-container {
-            position: relative;
+            position: sticky;
         }
         .loading-spinner {
             display: flex;
@@ -117,17 +117,17 @@ block body
                                 button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Nails
                                 button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 General Symptoms
                         
-                        .overflow-y-auto(class='h-[550px]')#listSymptoms.p-2
-                            .search-container.sticky.top-0.bg-white.pb-2
+                        #listSymptoms.p-2.relative
+                            .search-container.top-0.bg-white.pb-2
                                 input#symptomSearch.border-1.p-2.bg-gray-200.rounded-xl.mb-2(name="symptoms", placeholder='Type your symptoms here', required).w-full
                                 #searchDropdown.dropdown.hidden
-                            #symptomsList
+                            #symptomsList.overflow-y-auto(class='h-[400px]')
                     div(class='w-1/3')
                         p.font-ABeeZee.text-5xl(class = 'text-[#4F555A]').text-center.mb-4 My symptoms
                         .overflow-y-auto(class='h-[800px] bg-[#D9D9D9]')#mySymptomsList.p-2
                                      
                 .flex.gender.space-x-20.mb-8.font-Roboto.right-0.flex.justify-center
-                    button.mt-20.linearBackground.px-6.py-2.border-1.rounded-xl(type="button").block.text-white.font-Roboto.w-64.next Next
+                    button.mt-20.linearBackground.px-6.py-2.border-1.rounded-xl(type="button").block.text-white.font-Roboto.w-64.next.cursor-pointer Next
             .div.step2.hidden
                 .flex.justify-center.space-x-32.content-center.mx-12
                     .div(class='w-1/2')
@@ -153,5 +153,4 @@ block body
                            
                         
                 .flex.gender.justify-around.space-x-20.mb-8.font-Roboto
-                    button.mt-20.px-6.py-2.border-1.rounded-xl(type="button").block.font-Roboto.w-64 Previous
-                    button.mt-20.linearBackground.px-6.py-2.border-1.rounded-xl(type="button").block.text-white.font-Roboto.w-64 Next
+                    button.mt-20.px-6.py-2.border-1.rounded-xl(type="button").block.font-Roboto.w-64.cursor-pointer Previous

@@ -1,6 +1,6 @@
 import { resize } from './utils/overlaySizeHandle.js';
 import Loader from './utils/loader.js';
-let firstReload = true;
+
 class Result {
   #bodyHeight;
   tdeeUpper = 4000;
@@ -15,10 +15,12 @@ class Result {
   async init() {
     await this.#getRecentCalculate();
     this.#valueCardRender();
-    // await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
 
+    // Sử dụng thì bỏ comment hai dòng dưới là được!
+    await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
     this.#weeksRender();
-    // this.#dayHandler();
+
+    this.#dayHandler();
     this.#overlayHandler();
   }
   async #getRecentCalculate() {
