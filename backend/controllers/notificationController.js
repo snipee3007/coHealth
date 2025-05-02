@@ -8,7 +8,7 @@ exports.updateReadNotification = catchAsync(async (req, res, next) => {
   // Click on the post that have the comment or reply notification
   if (req.news && req.user) {
     const news = req.news;
-    const hello = await Notification.findOneAndUpdate(
+    await Notification.findOneAndUpdate(
       { newsID: news._id },
       {
         $set: {

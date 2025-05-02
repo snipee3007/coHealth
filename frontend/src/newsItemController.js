@@ -6,6 +6,7 @@ class NewsItem {
     this.#createComment();
     this.#commentTimeRender();
     this.#renderNews();
+    this.#updateVisitPage();
   }
   #renderNews() {
     let newsHTML = '';

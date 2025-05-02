@@ -103,7 +103,7 @@ const newsSchema = new mongoose.Schema(
     },
     userID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'user',
       required: [true, 'Please provide userID for this news'],
     },
     visit: {
