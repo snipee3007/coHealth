@@ -2,6 +2,7 @@ class Navbar {
   constructor() {
     this.#init();
     this.#active();
+    this.#toggleNotification();
   }
 
   #init() {
@@ -67,6 +68,29 @@ class Navbar {
         .querySelector('.nav_links')
         .classList.add('active');
     }
+  }
+  #toggleNotification() {
+    const notificationButton = document.querySelector('.notificationButton');
+    notificationButton?.addEventListener('click', function (e) {
+      if (e.target.closest('.notificationButton')) {
+        const notificationContainer = document.querySelector(
+          '.notificationsContainer'
+        );
+        notificationContainer.classList.toggle('pointer-events-none');
+        notificationContainer.classList.toggle('opacity-0');
+      }
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.notifications')) {
+        const notificationContainer = document.querySelector(
+          '.notificationsContainer'
+        );
+        notificationContainer?.classList.add(
+          'pointer-events-none',
+          'opacity-0'
+        );
+      }
+    });
   }
 }
 

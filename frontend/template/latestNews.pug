@@ -4,11 +4,11 @@
         .border.grow(class='h-[1px] border-[#1678F2]')
         a.absolute.right-0.-top-6.flex.flex-1.items-center(href='/news')
             p.font-Roca(class='text-[#384FC0]').text-2xl All
-            img.w-8.ml-2(src='./../images/png/right-arrow-svgrepo-com.png')
+            img.w-8.ml-2(src='/images/png/right-arrow-svgrepo-com.png')
     .grid.grid-cols-3.gap-24
         each newsItem in latestNews 
             a.newsCard.flex.flex-col.shadow-lg(href=`/news/${newsItem.slug}`)
-                img.h-52.object-cover.object-top(src=`./../images/news/${newsItem.imgSRC}`, alt="")
+                img.h-52.object-cover.object-top(src=`/images/news/${newsItem.slug}/${newsItem.coverImage}`, alt=`${newsItem.slug}`)
                 .p-4
-                    p.mb-4.text-2xl.font-Roca(class='text-[#384FC0]')= newsItem.name
+                    p.mb-4.text-2xl.font-Roca(class='text-[#384FC0]')= newsItem.title
                     p.text-justify.truncate-3.font-Roboto(class='text-[#6F7CB2]')= newsItem.description

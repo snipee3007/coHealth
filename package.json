@@ -11,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "@tailwindcss/cli": "^4.1.1",
+    "@tiptap/core": "^2.11.9",
+    "@tiptap/pm": "^2.11.9",
+    "@tiptap/starter-kit": "^2.11.9",
     "autoprefixer": "^10.4.20",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",

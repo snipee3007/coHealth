@@ -30,7 +30,6 @@ exports.createAppointment = catchAsync(async (req, res, next) => {
     });
   } else {
     const userID = req.user ? req.user._id : null;
-    console.log(req.body);
     const appointment = await Appointment.create({
       fullname: req.body.fullname,
       email: req.body.email,
@@ -41,7 +40,6 @@ exports.createAppointment = catchAsync(async (req, res, next) => {
       userID: userID,
       appointmentCode: generateToken(),
     });
-    console.log(appointment);
     res.status(200).json({
       status: 'success',
       data: appointment,

@@ -1,26 +1,26 @@
 class Notification {
-  newPostComment(nameList) {
+  newNewsComment(nameList) {
     return {
-      type: 'post-comment',
-      message: notiTemplate(nameList, 'đã bình luận bài viết của bạn'),
+      type: 'news-comment',
+      message: notiTemplate(nameList, 'commented on your news!'),
     };
   }
   newReplyComment(nameList) {
     return {
       type: 'reply-comment',
-      message: notiTemplate(nameList, 'đã trả lời bình luận của bạn'),
+      message: notiTemplate(nameList, 'replied your comment!'),
     };
   }
-  newPostLike(nameList) {
+  newNewsLike(nameList) {
     return {
-      type: 'post-like',
-      message: notiTemplate(nameList, 'đã thích bài viết của bạn'),
+      type: 'news-like',
+      message: notiTemplate(nameList, 'liked your news!'),
     };
   }
-  newPost(postTitle) {
+  newNews(newsTitle) {
     return {
-      type: 'post-create',
-      message: `Bài "${postTitle}" đã được đăng! Hãy cùng đọc nào!`,
+      type: 'news-create',
+      message: `News with title "${newsTitle}" has been published! Read it now!`,
     };
   }
 }
@@ -28,7 +28,7 @@ class Notification {
 //HELPER FUNCTION
 const addAnd = function (nameList) {
   if (Array.isArray(nameList) && nameList.length == 2)
-    return `<strong>${nameList[1]}</strong> và <strong>${nameList[0]}</strong>`;
+    return `<strong>${nameList[1]}</strong> and <strong>${nameList[0]}</strong>`;
 };
 
 const notiTemplate = function (nameList, action) {
@@ -38,9 +38,9 @@ const notiTemplate = function (nameList, action) {
       return `<strong>${nameList[0]}</strong> ${action}`;
     else if (nameList.length == 2) return `${addAnd(nameList)} ${action}`;
     else {
-      return `<strong>${nameList[nameList.length - 1]}</strong> và ${
+      return `<strong>${nameList[nameList.length - 1]}</strong> and ${
         nameList.length - 1
-      } người khác ${action}`;
+      } other people ${action}`;
     }
   }
 };

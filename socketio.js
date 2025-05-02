@@ -123,10 +123,10 @@ io.on('connection', async (socket) => {
     });
 
     // Comment Notification
-    socket.on('newComment', async (userID, postID, content) => {
+    socket.on('newComment', async (userID, newsID, content) => {
       await socketServerController.notificationOnNewComment(
         userID,
-        postID,
+        newsID,
         content
       );
       await fetchNotification(socket.broadcast);

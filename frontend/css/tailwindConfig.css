@@ -100,6 +100,7 @@
 .unshown {
   @apply opacity-0;
   @apply duration-200;
+  @apply pointer-events-none;
 }
 
 .swiper-button-next::after,
@@ -313,4 +314,73 @@ button:disabled {
       -1.8em 1.8em 0 0em rgba(255, 255, 255, 0.5),
       -2.6em 0em 0 0em rgba(255, 255, 255, 0.7), -1.8em -1.8em 0 0em #ffffff;
   }
+}
+
+/* TIPTAP NEWS EDITOR */
+.tiptap p,
+.tiptap h1,
+.tiptap h2,
+.tiptap h3 {
+  @apply indent-12;
+}
+.tiptap ol {
+  @apply list-decimal;
+  @apply list-inside;
+  @apply ml-12;
+}
+.tiptap ul {
+  @apply list-disc;
+  @apply list-inside;
+  @apply ml-12;
+}
+.tiptap li::marker {
+  display: inline;
+}
+.tiptap li p {
+  display: inline;
+}
+
+.tiptap h1 {
+  @apply text-3xl;
+  @apply font-bold;
+}
+.tiptap h2 {
+  @apply text-2xl;
+  @apply font-bold;
+}
+.tiptap h3 {
+  @apply text-xl;
+  @apply font-bold;
+}
+.tiptap blockquote {
+  @apply p-0;
+  @apply m-0;
+  @apply mx-12;
+  @apply border-l-[3px];
+  @apply border-gray-300;
+  @apply pl-6;
+  @apply mb-4;
+}
+.tiptap a {
+  @apply underline;
+  @apply text-blue-500;
+}
+
+.tiptap img {
+  @apply w-3/4;
+  @apply mx-auto;
+}
+
+.editorToolbar .inactiveButton {
+  @apply opacity-50;
+  @apply cursor-default!;
+  @apply pointer-events-none;
+}
+
+.editorToolbar div {
+  @apply p-2;
+}
+.editorToolbar .styleActive {
+  @apply bg-[#47cef7];
+  @apply rounded-lg;
 }

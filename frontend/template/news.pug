@@ -14,17 +14,22 @@ block append header
 block body
     .flex.flex-col.items-center.my-20
         .pageTitle.linearText.font-ABeeZee.font-bold.text-6xl.my-6 NEWS
-        .swiper(class='w-4/5').swiper-1
-            .swiper-wrapper
-                each news in allNews 
-                    a.swiper-slide(class='w-1/4' href=`./news/${news.slug}`).shadow-xl.newsItem
-                        img(src=`./../images/news/${news.imgSRC}` class='h-56').w-full.object-cover
-                        .py-4.px-3
-                            .title.font-Roca.text-xl #{news.name}
-                            .description.truncate-3.text-justify.font-Roboto(class='text-[#6F7CB2]') #{news.description}
+        if (allNews && allNews.length > 0)
+            .swiper(class='w-4/5').swiper-1
+                .swiper-wrapper
+                    each news in allNews
+                        a.swiper-slide(class='w-1/4' href=`./news/${news.slug}`).shadow-xl.newsItem
+                            img(src=`./../images/news/${news.slug}/${news.coverImage}` class='h-56').w-full.object-cover
+                            .py-4.px-3
+                                .title.font-Roca.text-xl #{news.title}
+                                .description.truncate-3.text-justify.font-Roboto(class='text-[#6F7CB2]') #{news.description}
 
-            .swiper-pagination.swiper-pagination-1
-            .swiper-button-prev 
-                img(src="./../images/png/blue-left-arrow-svgrepo-com.png", alt="")
-            .swiper-button-next
-                img(src="./../images/png/blue-right-arrow-svgrepo-com.png", alt="")
+                .swiper-pagination.swiper-pagination-1
+                .swiper-button-prev 
+                    img(src="./../images/png/blue-left-arrow-svgrepo-com.png", alt="")
+                .swiper-button-next
+                    img(src="./../images/png/blue-right-arrow-svgrepo-com.png", alt="")
+        else
+            .w-full.flex.flex-1.justify-center.font-AlfaSlabOne.my-32
+                p.shadow-lg.bg-white.border.border-dashed.border-black.px-16.py-12.rounded-xl
+                    | There is no news have been created yet! Please check another time!

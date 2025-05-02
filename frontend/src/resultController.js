@@ -15,7 +15,6 @@ class Result {
   async init() {
     await this.#getRecentCalculate();
     this.#valueCardRender();
-    console.log(this.#calculateData.result.caloriesIntakeList[0]);
     // await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
 
     this.#weeksRender();
@@ -89,7 +88,6 @@ class Result {
 
         const fieldStep = fieldResult / (1000 / 50);
         for (let i = 0; i < 1000; ++i) {}
-        console.log(`${field} step:`, fieldStep);
         const fieldInterval = setInterval(
           function () {
             if (field == 'bmi') {
@@ -211,7 +209,6 @@ class Result {
     mealItemContainer.classList.add('translate-y-10');
     const meals = this.#foodData[day].meals;
     const mealNutrients = this.#foodData[day].nutrients;
-    console.log(meals);
     // Create new meal item card element
     meals.forEach((meal, idx) => {
       const mealItem = document.createElement('div');
@@ -368,7 +365,6 @@ const getFoodValue = async function (calories) {
     Loader.destroy();
     return res.data.week;
   } catch (err) {
-    console.log('hello');
     Loader.destroy();
   }
 };
