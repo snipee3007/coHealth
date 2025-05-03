@@ -7,20 +7,21 @@ exports.getDoctors = catchAsync(async (req, res, next) => {
   const doctorsList = await User.find({
     role: 'doctor',
   }).populate({ path: 'doctorInfo', select: 'major' });
-  const doctors = [];
+  let doctors = [];
+  // console.log('doctorList là ', doctorsList[0]._id);
+  // console.log('user id hiện tại là: ', req.user._id);
   doctorsList.forEach((doctor) => {
-    // console.log(
-    //   doctor.doctorInfo[0].major == req.query.major,
-    //   doctor.id != req.user.id
-    // );
-    if (
-      doctor.doctorInfo[0].major == req.query.major &&
-      doctor.id != req.user.id
-    ) {
-      doctors.push(doctor);
+    if (doctor.doctorInfo[0].major == req.query.major) {
+      if (req.user) {
+        if (!req.user._id.equals(doctor._id)) {
+          doctors.push(doctor);
+        }
+      } else {
+        doctors.push(doctor);
+      }
     }
   });
-
+  console.log(doctors);
   res.status(200).json({
     status: 'success',
     data: doctors,
