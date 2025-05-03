@@ -10,6 +10,9 @@ router.post(
   usersController.updateImagePath,
   usersController.editProfile
 );
+router.route('/forgotPassword').post(authController.forgotPassword);
+router.route('/resetPassword/:token').post(authController.resetPassword);
+
 //router.('/forgetPassword', usersController.forgetPassword);
 
 module.exports = router;
