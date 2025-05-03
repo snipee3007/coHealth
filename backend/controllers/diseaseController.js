@@ -14,8 +14,20 @@ exports.getAllDiseases = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getDetailsDisease = catchAsync(async (req, res, next) => {
+  const name = req.params.name;
+  console.log(name);
+  const disease = await Disease.findOne({
+    name: name,
+  }).lean();
+  res.status(200).json({
+    status: 'success',
+    data: disease,
+  });
+});
+
 exports.createDisease = catchAsync(async (req, res, next) => {
-  const folderPath = path.join(__dirname, '../datas/disease');
+  const folderPath = path.join(__dirname, '../datas/diseases');
   const allFiles = fs
     .readdirSync(folderPath)
     .filter((file) => file.endsWith('.json'));
