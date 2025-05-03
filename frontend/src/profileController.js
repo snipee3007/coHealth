@@ -65,6 +65,8 @@ class Profile {
     const yearOfBirth = document.querySelector('.yearOfBirth input').value;
     const email = document.querySelector('.email input').value;
     const phoneNumber = document.querySelector('.phoneNumber input').value;
+    const major = document.querySelector('.major input')?.value;
+    const workAt = document.querySelector('.workAt input')?.value;
     const profileImage = document
       .querySelector('.profileImage input')
       .value.split('\\')
@@ -78,6 +80,8 @@ class Profile {
       yearOfBirth: { value: yearOfBirth, isChanged: false },
       email: { value: email, isChanged: false },
       phoneNumber: { value: phoneNumber, isChanged: false },
+      major: { value: major, isChanged: false },
+      workAt: { value: workAt, isChanged: false },
       userProfile: { value: profileImage, isChanged: false },
       totalChanged: 0,
     };
@@ -188,6 +192,8 @@ class Profile {
       const yearOfBirth = document.querySelector('.yearOfBirth input').value;
       const email = document.querySelector('.email input').value;
       const phoneNumber = document.querySelector('.phoneNumber input').value;
+      const major = document.querySelector('.major input')?.value;
+      const workAt = document.querySelector('.workAt input')?.value;
       const profileImage = document
         .querySelector('.profileImage input')
         .value.split('\\')
@@ -203,6 +209,8 @@ class Profile {
         email,
         phoneNumber,
         profileImage,
+        major,
+        workAt,
         userProfile: files[0],
       };
 

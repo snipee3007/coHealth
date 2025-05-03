@@ -3,10 +3,10 @@ const sharp = require('sharp');
 const slugify = require('slugify');
 const rimraf = require('rimraf');
 
-const User = require('./../models/users_schema');
-
-const catchAsync = require('./../utils/catchAsync');
-const AppError = require('./../utils/appError');
+const User = require('./../models/users_schema.js');
+const Doctor = require('./../models/doctors_schema.js');
+const catchAsync = require('./../utils/catchAsync.js');
+const AppError = require('./../utils/appError.js');
 
 const multerStorage = multer.memoryStorage();
 
@@ -98,6 +98,18 @@ exports.getUserByToken = async (req) => {
 exports.editProfile = catchAsync(async (req, res, next) => {
   const currentUser = req.user;
   const data = req.body;
+  if (currentUser.role == 'doctor') {
+    await Doctor.findOneAndUpdate(
+      { userID: currentUser['_id'] },
+      {
+        major: data.major,
+        workAt: data.workAt,
+      },
+      {
+        runValidators: true,
+      }
+    );
+  }
   await User.findOneAndUpdate(
     currentUser['_id'],
     {
