@@ -23,10 +23,12 @@ class ListAppointment {
 
   #loadAppointments() {
     async function showPage(page) {
+      Loader.create();
       const res = await axios({
         method: 'GET',
         url: `/api/appointment/list/get?page=${page}`,
       });
+      Loader.destroy();
       const container = document.querySelector('#appointment-container');
       while (container.firstChild) {
         container.removeChild(container.lastChild);

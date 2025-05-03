@@ -69,7 +69,7 @@ const newsSchema = new mongoose.Schema(
       type: String,
       unique: [
         true,
-        'This name has already taken! Please provide different name!',
+        'This title has already taken! Please provide different title!',
       ],
       required: [true, 'Please provide the title for this news'],
       trim: true,

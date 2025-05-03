@@ -170,10 +170,7 @@ exports.getMessageInRoom = catchAsync(async (req, res, next) => {
       );
       res.status(200).json({
         status: 'success',
-        data: {
-          room,
-          // message
-        },
+        data: room,
       });
     } else {
       res.status(400).json({

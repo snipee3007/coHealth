@@ -1,5 +1,6 @@
 const socket = io('http://127.0.0.1:3000');
 
+import Loader from './utils/loader.js';
 import { renderPopup } from './utils/popup.js';
 
 class DoctorItem {
@@ -13,15 +14,18 @@ class DoctorItem {
       console.log(button.id);
       button.addEventListener('click', async function () {
         try {
+          Loader.create();
           const res = await axios({
             method: 'post', // Phải viết hoa 'POST'
             url: '/api/room/create',
             data: { slug: button.id },
           });
           if (res.status.toString().startsWith('2')) {
+            Loader.destroy();
             location.assign('/chat');
           }
         } catch (err) {
+          Loader.destroy();
           renderPopup(
             err.response.status,
             'Create chat room',
