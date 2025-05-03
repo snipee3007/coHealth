@@ -327,8 +327,12 @@ class Appointment {
     speciality.addEventListener('change', async function (e) {
       const doctorData = await axios({
         method: 'GET',
-        url: `/api/doctor?major=${e.target.value}`,
+        url: `/api/doctor`,
+        params: {
+          major: e.target.value,
+        },
       });
+      console.log(doctorData);
       const elements = document.querySelectorAll('.delete');
       elements.forEach((element) => {
         element.remove();
