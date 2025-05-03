@@ -22,8 +22,10 @@ class Notification {
         ) {
           readNotification(
             notification.dataset['id'],
-            `/news/${notification.dataset['news']}`
+            `/news/${notification.dataset['news']}#comment`
           );
+        } else if (notification.dataset['type'] == 'message') {
+          readNotification(notification.dataset['id'], `/chat`);
         }
       }
     });

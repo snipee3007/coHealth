@@ -16,13 +16,13 @@ exports.updateAppointment = catchAsync(async (req, res, next) => {
   } else {
     const status = req.body.status;
     const appointmentCode = req.body.appointmentCode;
-    console.log('appointment Code là cái này', appointmentCode);
+    // console.log('appointment Code là cái này', appointmentCode);
     const appointment = await Appointment.findOneAndUpdate(
       { appointmentCode: appointmentCode },
       { status: status },
       { new: true, upsert: true }
     );
-    console.log(appointment);
+    // console.log(appointment);
     res.status(200).json({
       message: 'success',
       data: appointment,
@@ -76,7 +76,7 @@ exports.getAppointment = catchAsync(async (req, res, next) => {
     // xong rồi xếp theo ngày, từ hiện tại -> tương lai
     const appointments = allAppointments
       .sort((a, b) => {
-        console.log('từng cái 1 nè ', a.status, ' cái thứ 2 nè ', b.status);
+        // console.log('từng cái 1 nè ', a.status, ' cái thứ 2 nè ', b.status);
         if (a.status != b.status) {
           if (
             (a.status === 1 && b.status === 0) ||
@@ -149,7 +149,7 @@ exports.getAppointmentEachPage = catchAsync(async (req, res, next) => {
     const allAppointments = await Appointment.find({
       doctorID: user._id,
     });
-    console.log('trước khi sort nó là v');
+    // console.log('trước khi sort nó là v');
     // muốn xếp theo -1 1 0
     // nó đang mặc định là -1 0 1
     // sort a-b là theo thứ tự tăng dần 1 -1 0 -> a-b = 1 --1 = 2 > 0 -> đổi thành -1 1 0 -> xong tới 1 0 thì 1 - 0 = 1 -> đổi lại b-a
@@ -174,7 +174,7 @@ exports.getAppointmentEachPage = catchAsync(async (req, res, next) => {
         }
       })
       .slice(skip, skip + limit);
-    console.log('đây là appointments sau khi slice', appointments);
+    // console.log('đây là appointments sau khi slice', appointments);
     const totalAppointments = await Appointment.countDocuments({
       userID: user._id,
     });

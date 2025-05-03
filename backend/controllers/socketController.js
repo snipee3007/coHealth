@@ -1,7 +1,50 @@
 const Notification = require('./../models/notificationSchema.js');
+const ChatRoom = require('./../models/chatRoom_schema.js');
 const News = require('./../models/news_schema.js');
 const Comment = require('./../models/commentsSchema.js');
 const User = require('./../models/users_schema.js');
+
+exports.notificationOnNewMessage = async (senderID, roomCode) => {
+  // Find the relevant notification in 1 hours ago
+  const room = await ChatRoom.findOne({ roomCode });
+  console.log(room);
+  let receiverID;
+  if (senderID == room.memberID[0].toString())
+    receiverID = room.memberID[1].toString();
+  else receiverID = room.memberID[0].toString();
+  const searchNotifiction = await Notification.findOne({
+    from: senderID,
+    'to.targetID': receiverID,
+    chatRoom: room._id,
+    type: 'message',
+    updatedAt: { $gte: new Date(Date.now() - 1000 * 60 * 60) },
+  });
+  //
+  if (searchNotifiction) {
+    await Notification.findOneAndUpdate(
+      {
+        from: senderID,
+        'to.targetID': receiverID,
+        type: 'message',
+        updatedAt: { $gte: new Date(Date.now() - 1000 * 60 * 60) },
+      },
+      {
+        updatedAt: Date.now(),
+        $set: {
+          'to.$[element].haveRead': false,
+        },
+      },
+      { arrayFilters: [{ 'element.targetID': receiverID }] }
+    );
+  } else {
+    await Notification.create({
+      from: senderID,
+      to: { targetID: receiverID },
+      chatRoom: room.id,
+      type: 'message',
+    });
+  }
+};
 
 exports.notificationOnNewComment = async (userID, newsID, content) => {
   const news = await News.findById(newsID);
@@ -13,9 +56,8 @@ exports.notificationOnNewComment = async (userID, newsID, content) => {
     updatedAt: { $gte: new Date(Date.now() - 1000 * 60 * 60) },
   });
   // If can find the notification, then update that notification
-  let data;
   if (searchNoti) {
-    data = await Notification.findOneAndUpdate(
+    await Notification.findOneAndUpdate(
       {
         newsID,
         'to.targetID': news.userID,
@@ -35,7 +77,7 @@ exports.notificationOnNewComment = async (userID, newsID, content) => {
   }
   // If can not find the notification, create new notification
   else {
-    data = await Notification.create({
+    await Notification.create({
       type: 'news-comment',
       from: userID,
       to: { targetID: news.userID },

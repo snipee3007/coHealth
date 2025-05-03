@@ -72,7 +72,7 @@ io.on('connection', async (socket) => {
         onlineUsers.findIndex((user) => user.slug === currentUser.slug)
       ].lastSeen = currentUser.lastSeen;
     }
-    socket.on('sendMessage', (message, roomCode) => {
+    socket.on('sendMessage', async (message, roomCode) => {
       if (roomCode === '') {
         alert('Please enter a rooom');
       }
@@ -82,6 +82,7 @@ io.on('connection', async (socket) => {
         // nhận tin nhắn từ room đã chọn
         socket.to(roomCode).emit('receiveMessage', message, roomCode);
       }
+      await fetchNotification(socket.broadcast);
     });
     socket.on('joinRoom', (room) => {
       socket.join(room);
@@ -127,12 +128,24 @@ io.on('connection', async (socket) => {
       );
       await fetchNotification(socket.broadcast);
     });
+
+    // Message Notification
+    socket.on('newMessage', async (roomCode) => {
+      await socketServerController.notificationOnNewMessage(
+        currentUser.id,
+        roomCode
+      );
+      await fetchNotification(socket.broadcast);
+    });
+
+    // Render Notification
     socket.on('renderNotification', async (userID, cb) => {
       if (userID) {
         const data = await socketServerController.getNotification(userID);
         cb(data);
       }
     });
+
     await fetchNotification(socket);
   } catch (error) {
     console.error('Error on socket.io connection:', error);

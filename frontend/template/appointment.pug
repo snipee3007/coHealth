@@ -26,87 +26,86 @@ block append header
     script(defer, type='module' src="./src/appointmentController.js") 
 
 block body
-    .body
-        .text-center.pageTitle.linearText.font-ABeeZee.font-bold.text-6xl.py-6 MAKE APPOINTMENT
-        form(method='POST').flex.justify-evenly.mx-4.py-6
-            .details.p-2.font-ABeeZee
-                p.text-5xl.my-6.font-bold Appointment details
-                .flex.flex-col
-                    label.text-2xl.font-semibold.my-4(for="major") Specialty 
-                    select#specialtyList.border-1.p-2.bg-gray-200.rounded-xl(title='List of Speciality' required)
-                        option(value = 'noInfo' name='specialty' disabled selected) Please select a specialty first
-                        each major in majors 
-                            option(value=major)= major 
-                    label.text-2xl.font-semibold.my-4(for="doctor") Doctor
-                    select#doctorList.border-1.p-2.bg-gray-200.rounded-xl(title='List of Doctor' required)
-                        option(value='noInfo' name='doctor' disabled selected) Please select a doctor first
-                        //- thêm các doctor vô đây
-                    label.text-2xl.font-semibold.my-4(for="doctor") Reason
-                    textarea.border-1.p-2.bg-gray-200.rounded-xl(name="reason", cols="30", rows="10", placeholder='Tell your reason in here') 
-                    p.text-5xl.my-4.font-bold Information
-                    label.text-2xl.font-semibold.my-4(for="fullname") Fullname
-                    if !user
-                        input.border-1.p-2.bg-gray-200.rounded-xl(name="fullname", placeholder='Tell your fullname here', required)
-                        label.text-2xl.font-semibold.my-4(for="email") Email 
-                        input.border-1.p-2.bg-gray-200.rounded-xl(type='email', name="email", placeholder='Tell your email here', required)
-                        label.text-2xl.font-semibold.my-4(for="phoneNumber") Phone number
-                        input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', required)
+    .text-center.pageTitle.linearText.font-ABeeZee.font-bold.text-6xl.py-6 MAKE APPOINTMENT
+    form(method='POST').flex.justify-evenly.mx-4.py-6
+        .details.p-2.font-ABeeZee
+            p.text-5xl.my-6.font-bold Appointment details
+            .flex.flex-col
+                label.text-2xl.font-semibold.my-4(for="major") Specialty 
+                select#specialtyList.border-1.p-2.bg-gray-200.rounded-xl(title='List of Speciality' required)
+                    option(value = 'noInfo' name='specialty' disabled selected) Please select a specialty first
+                    each major in majors 
+                        option(value=major)= major 
+                label.text-2xl.font-semibold.my-4(for="doctor") Doctor
+                select#doctorList.border-1.p-2.bg-gray-200.rounded-xl(title='List of Doctor' required)
+                    option(value='noInfo' name='doctor' disabled selected) Please select a doctor first
+                    //- thêm các doctor vô đây
+                label.text-2xl.font-semibold.my-4(for="doctor") Reason
+                textarea.border-1.p-2.bg-gray-200.rounded-xl(name="reason", cols="30", rows="10", placeholder='Tell your reason in here') 
+                p.text-5xl.my-4.font-bold Information
+                label.text-2xl.font-semibold.my-4(for="fullname") Fullname
+                if !user
+                    input.border-1.p-2.bg-gray-200.rounded-xl(name="fullname", placeholder='Tell your fullname here', required)
+                    label.text-2xl.font-semibold.my-4(for="email") Email 
+                    input.border-1.p-2.bg-gray-200.rounded-xl(type='email', name="email", placeholder='Tell your email here', required)
+                    label.text-2xl.font-semibold.my-4(for="phoneNumber") Phone number
+                    input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', required)
+                else 
+                    input.border-1.p-2.bg-gray-200.rounded-xl(name="fullname", placeholder='Tell your fullname here', value = `${user.fullname}`, required)
+                    label.text-2xl.font-semibold.my-4(for="email") Email 
+                    input.border-1.p-2.bg-gray-200.rounded-xl(name="email", placeholder='Tell your email here', value = `${user.email}`, required)
+                    label.text-2xl.font-semibold.my-4(for="phoneNumber") Phone number
+                    if user.phoneNumber
+                        input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', value =`${user.phoneNumber}`, required)
                     else 
-                        input.border-1.p-2.bg-gray-200.rounded-xl(name="fullname", placeholder='Tell your fullname here', value = `${user.fullname}`, required)
-                        label.text-2xl.font-semibold.my-4(for="email") Email 
-                        input.border-1.p-2.bg-gray-200.rounded-xl(name="email", placeholder='Tell your email here', value = `${user.email}`, required)
-                        label.text-2xl.font-semibold.my-4(for="phoneNumber") Phone number
-                        if user.phoneNumber
-                            input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', value =`${user.phoneNumber}`, required)
-                        else 
-                            input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', required)
-                button.linearBackground.font-DM-Sans.text-white.py-2.w-full.rounded-xl.mt-8.font-bold(type="submit").cursor-pointer Make Appointment
+                        input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', required)
+            button.linearBackground.font-DM-Sans.text-white.py-2.w-full.rounded-xl.mt-8.font-bold(type="submit").cursor-pointer Make Appointment
 
-            .dayTime.p-2.font-ABeeZee(class='w-1/3')
-                .text-5xl.my-6.font-bold Day and Time
-                .postOption__schedule.flex.flex-col.gap-2
-                    label.text-2xl.font-semibold.mt-4(for="datepicker") Day
-                    input#datepicker.rounded-lg.relative.schedule.px-3.py-2.border(type="text" name="schedule" class="bg-gray-200 border-[#6B7280]" placeholder="dd/mm/yyyy" autocomplete="off" disabled)
-                    .datepickerContainer.popup.relative.hidden.z-40
-                        .p-2.absolute.w-full.rounded-lg(class="bg-[#f0f2f5]")
-                            .datepicker_header.flex.flex-1.justify-between 
-                                button.datepicker_prevMonth.p-2(type="button")
-                                    | &lt;
-                                button.datepicker_monthYear(type="button")
-                                button.datepicker_nextMonth.p-2(type="button")
-                                    | &gt;
-                            .datepicker_body.text-center 
-                                .datepicker_weekdays.grid.grid-cols-7.gap-2.mb-1
-                                    .p-1.bg-white.rounded-lg.w-8.h-8 Mo 
-                                    .p-1.bg-white.rounded-lg.w-8.h-8 Tu 
-                                    .p-1.bg-white.rounded-lg.w-8.h-8 We 
-                                    .p-1.bg-white.rounded-lg.w-8.h-8 Th 
-                                    .p-1.bg-white.rounded-lg.w-8.h-8 Fr 
-                                    .p-1.bg-white.rounded-lg.w-8.h-8 Sa 
-                                    .p-1.bg-white.rounded-lg.w-8.h-8 Su 
-                                .datepicker_day.grid.grid-cols-7.gap-2 
-                                .datepicker_option.mt-2.flex.flex-1.gap-4 
-                                    button.bg-gray-300.rounded-lg.py-1.datepicker_optionButton.cancelDatepicker.cursor-pointer(class="bg-[#F9F4E4] w-1/2" type="button") Cancel 
-                                    button.linearBackground.text-white.rounded-lg.py-1.datepicker_optionButton.submitDatepicker.cursor-pointer(class='w-1/2' type="button") OK   
-                hr.w-full.my-4(class='border-[#9C9991]')
-                p.text-2xl.my-6.time Time
-                //- tạo các khung lựa chọn giờ ở đây flex-wrap để tự động xuống dòng
-                #listTime.flex.flex-wrap.gap-x-6.gap-y-4.hidden
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 09:00
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 09:30
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 10:00
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 10:30
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 11:00
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 11:30
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 13:00
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 13:30
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 14:00
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 14:30
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 15:00
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 15:30
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 16:00
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 16:30
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 17:00
-                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 17:30
-                img(src='./../images/png/appointment.png' alt="appointment-background")
+        .dayTime.p-2.font-ABeeZee(class='w-1/3')
+            .text-5xl.my-6.font-bold Day and Time
+            .postOption__schedule.flex.flex-col.gap-2
+                label.text-2xl.font-semibold.mt-4(for="datepicker") Day
+                input#datepicker.rounded-lg.relative.schedule.px-3.py-2.border(type="text" name="schedule" class="bg-gray-200 border-[#6B7280]" placeholder="dd/mm/yyyy" autocomplete="off" disabled)
+                .datepickerContainer.popup.relative.hidden.z-40
+                    .p-2.absolute.w-full.rounded-lg(class="bg-[#f0f2f5]")
+                        .datepicker_header.flex.flex-1.justify-between 
+                            button.datepicker_prevMonth.p-2(type="button")
+                                | &lt;
+                            button.datepicker_monthYear(type="button")
+                            button.datepicker_nextMonth.p-2(type="button")
+                                | &gt;
+                        .datepicker_body.text-center 
+                            .datepicker_weekdays.grid.grid-cols-7.gap-2.mb-1
+                                .p-1.bg-white.rounded-lg.w-8.h-8 Mo 
+                                .p-1.bg-white.rounded-lg.w-8.h-8 Tu 
+                                .p-1.bg-white.rounded-lg.w-8.h-8 We 
+                                .p-1.bg-white.rounded-lg.w-8.h-8 Th 
+                                .p-1.bg-white.rounded-lg.w-8.h-8 Fr 
+                                .p-1.bg-white.rounded-lg.w-8.h-8 Sa 
+                                .p-1.bg-white.rounded-lg.w-8.h-8 Su 
+                            .datepicker_day.grid.grid-cols-7.gap-2 
+                            .datepicker_option.mt-2.flex.flex-1.gap-4 
+                                button.bg-gray-300.rounded-lg.py-1.datepicker_optionButton.cancelDatepicker.cursor-pointer(class="bg-[#F9F4E4] w-1/2" type="button") Cancel 
+                                button.linearBackground.text-white.rounded-lg.py-1.datepicker_optionButton.submitDatepicker.cursor-pointer(class='w-1/2' type="button") OK   
+            hr.w-full.my-4(class='border-[#9C9991]')
+            p.text-2xl.my-6.time Time
+            //- tạo các khung lựa chọn giờ ở đây flex-wrap để tự động xuống dòng
+            #listTime.flex.flex-wrap.gap-x-6.gap-y-4.hidden
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 09:00
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 09:30
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 10:00
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 10:30
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 11:00
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 11:30
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 13:00
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 13:30
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 14:00
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 14:30
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 15:00
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 15:30
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 16:00
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 16:30
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 17:00
+                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 17:30
+            img(src='./../images/png/appointment.png' alt="appointment-background")
 
