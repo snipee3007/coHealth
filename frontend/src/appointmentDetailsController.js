@@ -31,7 +31,7 @@ const updateStatusAppointment = async function (appointmentCode, status) {
 
 const sendAcceptedEmail = async function (data) {
   try {
-    console.log(data);
+    // console.log(data);
     Loader.create();
     const res = await axios({
       method: 'POST',
@@ -103,7 +103,7 @@ class AppointmentDetails {
           email: email,
           status: value,
         };
-        console.log(objAppointment.status);
+        // console.log(objAppointment.status);
         sendAcceptedEmail(objAppointment);
       });
   }

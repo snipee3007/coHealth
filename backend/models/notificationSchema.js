@@ -48,6 +48,7 @@ const notificationSchema = new mongoose.Schema(
           'system',
           'news-comment',
           'reply-comment',
+          'message',
           'course',
           'news',
           'user',
@@ -57,13 +58,40 @@ const notificationSchema = new mongoose.Schema(
     },
     content: {
       type: String,
-      required: [true, 'Please provide the content of this notification'],
+      validate: {
+        validator: function (v) {
+          if (this.type == 'news-comment' || this.type == 'reply-comment') {
+            return !!v;
+          }
+        },
+        message: 'Please input the content for this notification!',
+      },
     },
     newsID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'news',
       autopopulate: {
         select: 'title slug',
+      },
+      validate: {
+        validator: function (v) {
+          if (this.type == 'news-comment' || this.type == 'reply-comment') {
+            return !!v;
+          }
+        },
+        message: 'Please input the newsID for this notification!',
+      },
+    },
+    chatRoom: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'chatRoom',
+      validate: {
+        validator: function (v) {
+          if (this.type == 'message') {
+            return !!v;
+          }
+        },
+        message: 'Please input the chatRoomID for this notification!',
       },
     },
   },

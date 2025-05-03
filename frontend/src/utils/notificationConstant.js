@@ -23,6 +23,12 @@ class Notification {
       message: `News with title "${newsTitle}" has been published! Read it now!`,
     };
   }
+  newMessage(nameList) {
+    return {
+      type: 'message',
+      message: notiTemplate(nameList, 'just message you! Come check it out!'),
+    };
+  }
 }
 
 //HELPER FUNCTION

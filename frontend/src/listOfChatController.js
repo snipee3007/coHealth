@@ -1,10 +1,9 @@
 import { renderPopup } from './utils/popup.js';
-
+import Socket from './socketController.js';
 const socket = io('http://127.0.0.1:3000');
 
 socket.on('receiveMessage', (message, roomCode) => {
   // trên đây để hiện chat cho đối phương
-  console.log(roomCode);
   const chatBoxId = document
     .querySelector('.chatBoxInfo')
     .firstElementChild?.getAttribute('data-room');
@@ -56,6 +55,7 @@ const sendMessage = async function (message, roomCode) {
       },
     });
   } catch (err) {
+    console.log(err);
     renderPopup(err.response.status, 'Send message', err.response.data.message);
   }
 };
@@ -108,9 +108,9 @@ class ListOfChat {
             'Content-Type': 'application/json',
           },
         });
+        Socket.getAndRenderNotification();
 
         const data = await isChatRoom.json();
-        console.log(data.data.room);
         // lấy userData trong memberID của từng room
         const userData = data.data.room.memberID;
         // lấy slug name toàn bộ người trong room ra
@@ -147,8 +147,8 @@ class ListOfChat {
           userDataName = userData[1].fullname;
           userDataStatus =
             status[1] == 'online'
-              ? `<p class='ml-4'>Online</p>`
-              : `<p class='ml-4'>Offline ${lastSeenUser[1]}</p>`;
+              ? `<p>Online</p>`
+              : `<p>Offline ${lastSeenUser[1]}</p>`;
           userDataStatusCircle = status[1] == 'online' ? 'online' : 'offline';
         }
         let chatBoxInfoHTML =
@@ -171,7 +171,6 @@ class ListOfChat {
         // lấy danh sách toàn bộ message
         const listOfMessage = data.data.room.message;
         // console.log(listOfMessage)
-        console.log(slug);
         let html = '';
         listOfMessage.forEach((message) => {
           html +=
@@ -201,7 +200,7 @@ class ListOfChat {
         const roomCode = this.#roomCode;
         const message = document.querySelector('.text input').value;
         sendMessage(message, roomCode);
-        console.log(roomCode);
+        // console.log(roomCode);
         document.querySelector('.text input').value = '';
         let html = `<div class= "user"> ${message}</div>`;
         document
@@ -210,7 +209,7 @@ class ListOfChat {
         document.querySelector('.listOfChat').scrollTop =
           document.querySelector('.listOfChat').scrollHeight;
         socket.emit('sendMessage', message, roomCode);
-
+        Socket.newMessage(roomCode);
         // sau khi gửi xong thì hiện lên cái khung chat
         let lastMessageElem = document.getElementById(`${roomCode}`);
         lastMessageElem.querySelector(`.lastMessage`).textContent = message;
@@ -219,7 +218,7 @@ class ListOfChat {
           '1 minute ago';
         // nhắn tin xong đẩy lên cái đầu tiên trong chat
         let listUser = document.querySelector('.listUser');
-        console.log(listUser);
+        // console.log(listUser);
         listUser.prepend(lastMessageElem);
       });
     }
@@ -228,12 +227,12 @@ class ListOfChat {
   #getUserStatus() {
     // hàm cập nhật trạng thái online offline
     socket.on('getUsers', (activeUsers) => {
-      console.log(activeUsers);
+      // console.log(activeUsers);
       activeUsers.forEach((activeUser) => {
         let userDiv = document.querySelector(
           `button[data-slug="${activeUser.slug}"]`
         );
-        console.log(userDiv);
+        // console.log(userDiv);
         if (userDiv !== null) {
           let userStatus = userDiv.querySelector('.status');
           let lastClassOfUserDiv =

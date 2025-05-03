@@ -19,113 +19,113 @@ block append header
         };
 
 block append body
-    .body
-        form(enctype="multipart/form-data").w-full.newsForm.h-full
-            .newsEditorLabel.text-ABeeZee.text-5xl.linearText.text-center.font-bold News Editor
-            .newsEditorContainer.py-6.px-20
-                .coverImageContainer.mb-6
-                    label(for="coverImage").relative.cursor-pointer
-                        .coverImageBox.relative
-                            .coverImageOverlay.rounded-xl.h-44.border.border-dashed.bg-no-repeat.bg-cover(class="bg-[#DCDCDC] border-[#ABABAB]")
-                            .coverImageLabel.absolute.top-0.w-full.h-full.flex.flex-col.justify-center.items-center 
-                                .coverImageLabelContainer.flex.gap-4.px-4.py-2.rounded-xl(class='bg-[#F7F7F7]')
-                                    svg.w-6.h-6 
-                                        use(href="/images/png/icons.svg#upload")
-                                    p.font-ABeeZee.font-semibold(class='text-[#6D6D6D]') Upload cover image!
-                        input#coverImage.hidden(type='file' accept='image/*' name="coverImage") 
-                .newsEditorContainer__title.font-ABeeZee.my-2.px-3.py-1.relative.min-h-10(class='border-b border-soft-black/50')
-                    input.title(type="text" name="title" hidden)
-                    .w-full.h-full.outline-none.titleContent(placeholder="Enter news title..." contenteditable="true")
-                .newsEditorContainer__subtitle.font-ABeeZee.my-2.min-h-10.px-3.py-1(class='border-b border-soft-black/50')
-                    input.description(type="text" name="description" hidden)
-                    .w-full.h-full.outline-none.descriptionContent(placeholder="Enter news description..." contenteditable="true")
-                .editorToolbar.flex.flex-1.gap-4.justify-center.my-6
-                    // Undo
-                    .undo.cursor-pointer
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#undo")
 
-                    // Redo
-                    .redo.cursor-pointer
-                        svg.w-6.h-6(class="scale-x-[-1]")
-                            use(href="/images/png/icons.svg#undo")
+    form(enctype="multipart/form-data").w-full.newsForm.h-full
+        .newsEditorLabel.text-ABeeZee.text-5xl.linearText.text-center.font-bold News Editor
+        .newsEditorContainer.py-6.px-20
+            .coverImageContainer.mb-6
+                label(for="coverImage").relative.cursor-pointer
+                    .coverImageBox.relative
+                        .coverImageOverlay.rounded-xl.h-44.border.border-dashed.bg-no-repeat.bg-cover(class="bg-[#DCDCDC] border-[#ABABAB]")
+                        .coverImageLabel.absolute.top-0.w-full.h-full.flex.flex-col.justify-center.items-center 
+                            .coverImageLabelContainer.flex.gap-4.px-4.py-2.rounded-xl(class='bg-[#F7F7F7]')
+                                svg.w-6.h-6 
+                                    use(href="/images/png/icons.svg#upload")
+                                p.font-ABeeZee.font-semibold(class='text-[#6D6D6D]') Upload cover image!
+                    input#coverImage.hidden(type='file' accept='image/*' name="coverImage") 
+            .newsEditorContainer__title.font-ABeeZee.my-2.px-3.py-1.relative.min-h-10(class='border-b border-soft-black/50')
+                input.title(type="text" name="title" hidden)
+                .w-full.h-full.outline-none.titleContent(placeholder="Enter news title..." contenteditable="true")
+            .newsEditorContainer__subtitle.font-ABeeZee.my-2.min-h-10.px-3.py-1(class='border-b border-soft-black/50')
+                input.description(type="text" name="description" hidden)
+                .w-full.h-full.outline-none.descriptionContent(placeholder="Enter news description..." contenteditable="true")
+            .editorToolbar.flex.flex-1.gap-4.justify-center.my-6
+                // Undo
+                .undo.cursor-pointer
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#undo")
 
-                    // Heading 1
-                    .heading-1.cursor-pointer
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#heading-1")
+                // Redo
+                .redo.cursor-pointer
+                    svg.w-6.h-6(class="scale-x-[-1]")
+                        use(href="/images/png/icons.svg#undo")
 
-                    // Heading 2
-                    .heading-2.cursor-pointer
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#heading-2")
+                // Heading 1
+                .heading-1.cursor-pointer
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#heading-1")
 
-                    // Heading 3       
-                    .heading-3.cursor-pointer
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#heading-3")
+                // Heading 2
+                .heading-2.cursor-pointer
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#heading-2")
 
-                    // Bold
-                    .bold.cursor-pointer 
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#bold")
+                // Heading 3       
+                .heading-3.cursor-pointer
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#heading-3")
 
-                    // Italic
-                    .italic.cursor-pointer 
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#italic")
+                // Bold
+                .bold.cursor-pointer 
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#bold")
 
-                    // Underline
-                    .underline.cursor-pointer 
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#underline")
-                    
-                    // Link
-                    .link.cursor-pointer 
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#link")
+                // Italic
+                .italic.cursor-pointer 
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#italic")
 
-                    // Image
-                    .image.cursor-pointer
-                        label(for="image")
-                            svg.w-6.h-6.cursor-pointer 
-                                use(href='/images/png/icons.svg#image') 
-                        input#image(type="file" accept="image/*" hidden)
+                // Underline
+                .underline.cursor-pointer 
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#underline")
+                
+                // Link
+                .link.cursor-pointer 
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#link")
 
-                    // Quote
-                    .quote.cursor-pointer 
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#quote")
+                // Image
+                .image.cursor-pointer
+                    label(for="image")
+                        svg.w-6.h-6.cursor-pointer 
+                            use(href='/images/png/icons.svg#image') 
+                    input#image(type="file" accept="image/*" hidden)
 
-                    // Unorder List
-                    .unorderlist.cursor-pointer 
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#list-ul")
+                // Quote
+                .quote.cursor-pointer 
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#quote")
 
-                    // Order List
-                    .orderlist.cursor-pointer 
-                        svg.w-6.h-6 
-                            use(href="/images/png/icons.svg#list-ol")
-                #editor.outline-none.border.w-full.text-xl.py-4.overflow-y-auto(class="h-120" spellcheck="false")
-                .editorCategory.flex.flex-col.gap-2.my-3 
-                    label.font-semibold.px-2(for="category") Category
-                    .categorySelection.flex.justify-end.items-center.relative.cursor-pointer 
-                        .categoryInput.w-full.rounded-lg.leading-6.pl-3.pr-8.py-2.border.select-none(class="border-[#6B7280]")
-                            span.opacity-50.placeholder_category.pointer-events-none Choose category...
-                            div.category_selectContainer.overflow-x-auto.flex.gap-2.scroll-smooth.snap-x
-                            input#category(type="text" name="category" hidden)
-                        svg.absolute.w-3.h-3.right-3.pointer-events-none 
-                            use(href="/images/png/icons.svg#down-arrow")
-                    .categoryContainer.popup.w-full.relative.flex.flex-col.items-center.hidden(class="bg-[#FFFBF3]")
-                        .absolute.bg-white.w-full.p-2 
-                            .category_inputContainer.w-full.flex.flex-1.items-center.rounded-lg.py-1.mb-1(class='border-[#BDBDBD] border')
-                                svg.w-4.h-4.mx-1 
-                                    use(href="/images/png/icons.svg#tag")
-                                input.category_input.w-full.outline-none(placeholder="Add category...")
-                            .category_option.w-full.flex.flex-col.gap-2.h-14.overflow-auto
-                                if (categories && categories.length > 0)
-                                    each category in categories 
-                                        .category_option_item.rounded-lg.w-full.px-2.py-1.cursor-pointer(class='bg-[#F9F4E4]')= category
-            .flex.flex-col.w-full.items-center.justify-center.pb-12
-                button(type="submit").linearBackground.text-white.mx-auto.px-12.py-2.rounded-xl.cursor-pointer.uploadButton Upload!
-                .newsError.text-red-400.font-Inter
+                // Unorder List
+                .unorderlist.cursor-pointer 
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#list-ul")
+
+                // Order List
+                .orderlist.cursor-pointer 
+                    svg.w-6.h-6 
+                        use(href="/images/png/icons.svg#list-ol")
+            #editor.outline-none.border.w-full.text-xl.py-4.overflow-y-auto(class="h-120" spellcheck="false")
+            .editorCategory.flex.flex-col.gap-2.my-3 
+                label.font-semibold.px-2(for="category") Category
+                .categorySelection.flex.justify-end.items-center.relative.cursor-pointer 
+                    .categoryInput.w-full.rounded-lg.leading-6.pl-3.pr-8.py-2.border.select-none(class="border-[#6B7280]")
+                        span.opacity-50.placeholder_category.pointer-events-none Choose category...
+                        div.category_selectContainer.overflow-x-auto.flex.gap-2.scroll-smooth.snap-x
+                        input#category(type="text" name="category" hidden)
+                    svg.absolute.w-3.h-3.right-3.pointer-events-none 
+                        use(href="/images/png/icons.svg#down-arrow")
+                .categoryContainer.popup.w-full.relative.flex.flex-col.items-center.hidden(class="bg-[#FFFBF3]")
+                    .absolute.bg-white.w-full.p-2 
+                        .category_inputContainer.w-full.flex.flex-1.items-center.rounded-lg.py-1.mb-1(class='border-[#BDBDBD] border')
+                            svg.w-4.h-4.mx-1 
+                                use(href="/images/png/icons.svg#tag")
+                            input.category_input.w-full.outline-none(placeholder="Add category...")
+                        .category_option.w-full.flex.flex-col.gap-2.h-14.overflow-auto
+                            if (categories && categories.length > 0)
+                                each category in categories 
+                                    .category_option_item.rounded-lg.w-full.px-2.py-1.cursor-pointer(class='bg-[#F9F4E4]')= category
+        .flex.flex-col.w-full.items-center.justify-center.pb-12
+            button(type="submit").linearBackground.text-white.mx-auto.px-12.py-2.rounded-xl.cursor-pointer.uploadButton Upload!
+            .newsError.text-red-400.font-Inter

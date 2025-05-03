@@ -1,5 +1,6 @@
 const Notification = require('./../models/notificationSchema.js');
 const User = require('./../models/users_schema.js');
+const ChatRoom = require('./../models/chatRoom_schema.js');
 const catchAsync = require('../utils/catchAsync.js');
 const AppError = require('../utils/appError.js');
 exports.getNotification = catchAsync(async (req, res, next) => {});
@@ -17,10 +18,8 @@ exports.updateReadNotification = catchAsync(async (req, res, next) => {
       },
       { arrayFilters: [{ 'element.targetID': req.user._id }] }
     );
-    next();
-  }
-  // Click on the notification
-  else if (req.user) {
+    return next();
+  } else if (req.user) {
     const notificationID = req.params.id;
     await Notification.findByIdAndUpdate(
       notificationID,

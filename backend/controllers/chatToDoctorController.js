@@ -1,6 +1,7 @@
 const User = require('../models/users_schema.js');
 const catchAsync = require('./../utils/catchAsync.js');
 const AppError = require('./../utils/appError.js');
+const Notification = require('./../models/notificationSchema.js');
 const Doctor = require('./../models/doctors_schema.js');
 const ChatRoom = require('./../models/chatRoom_schema.js');
 const ChatLog = require('./../models/chatLog_schema.js');
@@ -90,18 +91,10 @@ exports.getAllChatRoomByUserID = catchAsync(async (req, res, next) => {
       req.room = rooms;
       next();
     } else {
-      res.status(400).json({
-        status: 'failed',
-        message: 'Can not find this chat room',
-      });
-      res.end();
+      next();
     }
   } catch {
-    res.status(400).json({
-      status: 'failed',
-      message: 'Can not find chat room',
-    });
-    res.end();
+    next();
   }
 });
 
@@ -145,8 +138,6 @@ exports.getThisChatRoom = catchAsync(async (req, res, next) => {
 exports.getMessageInRoom = catchAsync(async (req, res, next) => {
   const roomCode = req.params.roomCode;
   try {
-    console.log(roomCode);
-
     const room = await ChatRoom.findOne({
       roomCode: roomCode,
     })
@@ -163,11 +154,20 @@ exports.getMessageInRoom = catchAsync(async (req, res, next) => {
       })
       .lean();
 
-    // const message = await ChatLog.find({
-    //   roomID: room._id,
-    // }).populate('senderID')
-
     if (room) {
+      // Update notification
+      await Notification.findOneAndUpdate(
+        {
+          chatRoom: room._id,
+          'to.targetID': req.user._id,
+        },
+        {
+          $set: {
+            'to.$[element].haveRead': true,
+          },
+        },
+        { arrayFilters: [{ 'element.targetID': req.user._id }] }
+      );
       res.status(200).json({
         status: 'success',
         data: {
@@ -175,7 +175,6 @@ exports.getMessageInRoom = catchAsync(async (req, res, next) => {
           // message
         },
       });
-      next();
     } else {
       res.status(400).json({
         status: 'failed',

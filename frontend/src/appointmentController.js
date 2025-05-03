@@ -223,7 +223,7 @@ class Appointment {
               let minute = appointment.time.getMinutes() == 0 ? '00' : '30';
               let time = hour + ':' + minute;
               // lặp qua các nút, coi cái nào trùng giờ thì cho disabled
-              console.log(time);
+              // console.log(time);
               document
                 .querySelectorAll('#listTime button')
                 .forEach((button) => {
@@ -293,7 +293,7 @@ class Appointment {
         time.split(':')[0],
         time.split(':')[1]
       );
-      console.log(date);
+      // console.log(date);
       const specialty = document.querySelector('#specialtyList').value;
       const docFullname = document.querySelector('#doctorList').value;
       const fullname = document.querySelector('input[name="fullname"]').value;

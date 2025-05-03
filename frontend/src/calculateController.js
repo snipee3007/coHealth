@@ -378,13 +378,11 @@ const checkTargetInput = function () {
   if (weight) {
     this.error = false;
     document.querySelector('.errorTarget').textContent = '';
-    console.log(target == 'gain', targetWeight, weight);
     if (
       (target == 'gain' && +targetWeight <= +weight) ||
       (target == 'lose' && +targetWeight >= +weight)
     ) {
       this.error = true;
-      console.log('hello');
       document.querySelector('.errorTarget').textContent =
         '*Please provide valid target weight!';
     } else {
