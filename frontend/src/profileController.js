@@ -1,7 +1,8 @@
 import { renderPopup } from './utils/popup.js';
-
+import Loader from './utils/loader.js';
 const editProfile = async function (data) {
   try {
+    Loader.create();
     const res = await axios({
       method: 'POST',
       url: '/api/user',
@@ -11,6 +12,7 @@ const editProfile = async function (data) {
       data,
     });
     if (res.data.status == 'success') {
+      Loader.destroy();
       renderPopup(
         res.status,
         'Update profile',
@@ -19,6 +21,7 @@ const editProfile = async function (data) {
       );
     }
   } catch (err) {
+    Loader.destroy();
     renderPopup(
       err.response.status,
       'Update profile',
@@ -29,11 +32,13 @@ const editProfile = async function (data) {
 
 const signOut = async function () {
   try {
+    Loader.create();
     const res = await axios({
       method: 'POST',
       url: '/api/signOut',
     });
     if (res.data == '') {
+      Loader.destroy();
       renderPopup(
         res.status,
         'Sign Out',
@@ -42,6 +47,7 @@ const signOut = async function () {
       );
     }
   } catch (err) {
+    Loader.destroy();
     renderPopup(err.response.status, 'Sign Out', err.response.data.message);
   }
 };

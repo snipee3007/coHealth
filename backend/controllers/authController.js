@@ -199,9 +199,7 @@ exports.getOTP = catchAsync(async function (req, res, next) {
   const acc = await User.findOne({ email: data.email });
   if (acc) {
     return next(
-      new AppError(
-        'Email người dùng này đã tồn tại! Vui lòng sử dụng email khác!'
-      )
+      new AppError('This email has already taken! Please use different email!')
     );
   }
   if (req.user) {
