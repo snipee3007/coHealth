@@ -91,12 +91,24 @@ exports.getsignInTemplate = async (req, res) => {
 };
 
 exports.getForgotPasswordTemplate = async (req, res) => {
+  if (req.user) {
+    res.writeHead(302, 'Already Login! You will be redirect to homepage!', {
+      location: '/',
+    });
+    return res.end();
+  }
   res.status(200).render('forgotPassword', {
     title: 'Forgot Password',
   });
 };
 
 exports.getResetPasswordTemplate = (req, res) => {
+  if (req.user) {
+    res.writeHead(302, 'Already Login! You will be redirect to homepage!', {
+      location: '/',
+    });
+    return res.end();
+  }
   res.status(200).render('resetPassword', {
     title: 'Khôi phục mật khẩu',
   });

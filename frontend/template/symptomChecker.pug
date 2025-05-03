@@ -103,21 +103,21 @@ block body
                 .flex.justify-center.space-x-32.content-center.mx-12
                     .div(class='w-2/3')
                         p.font-ABeeZee.text-5xl.text-center.m-4(class = 'text-[#4F555A]') What are your symptoms?
-                        #tagSymptoms
-                            .flex.flex-wrap.space-x-8.my-4.mx-36
-                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.linearBackground.text-white(type="button").w-40 All
-                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Head
-                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Chest and Upper Back
-                            .flex.flex-wrap.mx-36.space-x-8.my-4
-                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Abdomen and Lower Back
-                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Arms
-                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Legs
-                            .flex.flex-wrap.mx-36.space-x-8.my-4
-                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Skin
-                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 Nails
-                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40 General Symptoms
+                        #tagSymptoms.flex.flex-col.gap-8
+                            .grid.grid-cols-3.place-items-center
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.linearBackground.text-white(type="button").w-40.h-20.cursor-pointer All
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40.h-20.cursor-pointer Head
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40.h-20.cursor-pointer Chest and Upper Back
+                            .grid.grid-cols-3.place-items-center
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40.h-20.cursor-pointer Abdomen and Lower Back
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40.h-20.cursor-pointer Arms
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40.h-20.cursor-pointer Legs
+                            .grid.grid-cols-3.place-items-center
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40.h-20.cursor-pointer Skin
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40.h-20.cursor-pointer Nails
+                                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl(type="button").w-40.h-20.cursor-pointer General Symptoms
                         
-                        #listSymptoms.p-2.relative
+                        #listSymptoms.p-2.relative.py-4
                             .search-container.top-0.bg-white.pb-2
                                 input#symptomSearch.border-1.p-2.bg-gray-200.rounded-xl.mb-2(name="symptoms", placeholder='Type your symptoms here', required).w-full
                                 #searchDropdown.dropdown.hidden
