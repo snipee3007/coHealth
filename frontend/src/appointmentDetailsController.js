@@ -4,6 +4,7 @@ const socket = io('http://127.0.0.1:3000');
 
 const updateStatusAppointment = async function (appointmentCode, status) {
   try {
+    Loader.create();
     const res = await axios({
       method: 'POST',
       url: '/api/appointment/update',
@@ -13,6 +14,7 @@ const updateStatusAppointment = async function (appointmentCode, status) {
       },
     });
     if (res.data.status == 'success') {
+      Loader.destroy();
       renderPopup(
         res.status,
         'Update appointment',
@@ -21,6 +23,7 @@ const updateStatusAppointment = async function (appointmentCode, status) {
       );
     }
   } catch (err) {
+    Loader.destroy();
     renderPopup(
       err.response.status,
       'Update appointment',
@@ -39,13 +42,13 @@ const sendAcceptedEmail = async function (data) {
       data,
     });
     if (res.data.status == 'success') {
+      Loader.destroy();
       renderPopup(
         res.status,
         'Confirm and send email',
         'The appointment has been confirmed and send the confirm email to client!',
         '/appointment/list'
       );
-      Loader.destroy();
     }
   } catch (err) {
     renderPopup(

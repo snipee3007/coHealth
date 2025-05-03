@@ -11,19 +11,19 @@ const convertFunction = function (time) {
   const inMonths = 1000 * 60 * 60 * 24 * 30;
   const inYears = 1000 * 60 * 60 * 24 * 30 * 12;
   if (Math.floor(diff / inYears) !== 0) {
-    str = `${Math.floor(diff / inYears)} năm trước`;
+    str = `${Math.floor(diff / inYears)} year(s) ago`;
   } else if (Math.floor(diff / inMonths) !== 0) {
-    str = `${Math.floor(diff / inMonths)} tháng trước`;
+    str = `${Math.floor(diff / inMonths)} month(s) ago`;
   } else if (Math.floor(diff / inWeeks) !== 0) {
-    str = `${Math.floor(diff / inWeeks)} tuần trước`;
+    str = `${Math.floor(diff / inWeeks)} week(s) ago`;
   } else if (Math.floor(diff / inDays) !== 0) {
-    str = `${Math.floor(diff / inDays)} ngày trước`;
+    str = `${Math.floor(diff / inDays)} day(s) ago`;
   } else if (Math.floor(diff / inHrs) !== 0) {
-    str = `${Math.floor(diff / inHrs)} tiếng trước`;
+    str = `${Math.floor(diff / inHrs)} hour(s) ago`;
   } else if (Math.floor(diff / inMins) !== 0) {
-    str = `${Math.floor(diff / inMins)} phút trước`;
+    str = `${Math.floor(diff / inMins)} minute(s) ago`;
   } else if (Math.floor(diff / inSecs) !== 0) {
-    str = `${Math.floor(diff / inSecs)} giây trước`;
+    str = `${Math.floor(diff / inSecs)} second(s) ago`;
   }
   return str;
 };

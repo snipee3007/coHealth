@@ -89,10 +89,12 @@ class Appointment {
   }
 
   async #getListBooked() {
+    Loader.create();
     const res = await axios({
       method: 'GET', // viết hoa
       url: `/api/appointment/get`,
     });
+    Loader.destroy();
     const appointments = res.data.data;
     // de coi la luu vao db co can luu doctorID khong hay luu doctorFullname voi doctorSpecialty thoi
     appointments.forEach((appointment) =>
@@ -325,6 +327,7 @@ class Appointment {
     // document.querySelector('').innerHTML = ''
     // lấy dữ liệu spec ở trên để lập list bác sĩ
     speciality.addEventListener('change', async function (e) {
+      Loader.create();
       const doctorData = await axios({
         method: 'GET',
         url: `/api/doctor`,
@@ -332,7 +335,7 @@ class Appointment {
           major: e.target.value,
         },
       });
-      console.log(doctorData);
+      Loader.destroy();
       const elements = document.querySelectorAll('.delete');
       elements.forEach((element) => {
         element.remove();

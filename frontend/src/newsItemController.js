@@ -1,6 +1,6 @@
 import { timeConvertShort } from './utils/timeConvert.js';
 import Socket from './socketController.js';
-
+import Loader from './utils/loader.js';
 class NewsItem {
   constructor() {
     this.#createComment();
@@ -54,15 +54,20 @@ class NewsItem {
 // HELPER FUNCTION
 const createComment = async function (data) {
   try {
+    Loader.create();
     const res = await axios({
       method: 'post',
       url: '/api/comment',
       data,
     });
     if (res.data.status == 'success') {
+      Loader.destroy();
       window.location.reload();
     }
-  } catch (err) {}
+  } catch (err) {
+    Loader.destroy();
+    console.log();
+  }
 };
 // Handle render post section
 let imageCount = 1;
