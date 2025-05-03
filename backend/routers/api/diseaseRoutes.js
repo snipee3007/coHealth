@@ -9,4 +9,6 @@ router.post('/create', diseaseController.createDisease);
 
 router.post('/predict', diseaseController.predictDisease);
 
+router.get('/:name', diseaseController.getDetailsDisease);
+
 module.exports = router;
