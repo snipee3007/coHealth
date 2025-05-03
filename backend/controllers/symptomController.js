@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 exports.getAllSymptoms = catchAsync(async (req, res, next) => {
-  const Symptoms = await Symptom.find({}).lean();
+  const Symptoms = await Symptom.find({}).sort({ symptom: 1 }).lean();
   res.status(200).json({
     status: 'success',
     data: Symptoms,
@@ -17,7 +17,9 @@ exports.getSymptomByTag = catchAsync(async (req, res, next) => {
   const tag = req.params.name;
   const Symptoms = await Symptom.find({
     body: tag,
-  }).lean();
+  })
+    .sort({ symptom: 1 })
+    .lean();
 
   res.status(200).json({
     status: 'success',
