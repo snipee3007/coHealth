@@ -330,7 +330,10 @@ class Appointment {
       Loader.create();
       const doctorData = await axios({
         method: 'GET',
-        url: `/api/doctor?major=${e.target.value}`,
+        url: `/api/doctor`,
+        params: {
+          major: e.target.value,
+        },
       });
       Loader.destroy();
       const elements = document.querySelectorAll('.delete');

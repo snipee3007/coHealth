@@ -41,7 +41,7 @@ block body
                 button#prevPage(disabled)
                     img(src="./../images/png/blue-left-arrow-svgrepo-com.png" class='w-6 h-6', alt="")
                 span#pageNumber.py-2.mx-4.text-xl.font-Inter(class=" text-[#3A8EF6]") 1
-                if totalPages === 1
+                if totalPages === 1 || totalPages === 0
                     button#nextPage.opacity-20.cursor-not-allowed(disabled)
                         img(src="./../images/png/blue-right-arrow-svgrepo-com.png" class='w-6 h-6', alt="")
                 else 
