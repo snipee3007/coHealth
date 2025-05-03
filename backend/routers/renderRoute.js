@@ -47,6 +47,11 @@ router.get('/signIn', template.getsignInTemplate);
 // Forgot Password
 router.get('/forgotPassword', template.getForgotPasswordTemplate);
 
+// Reset Password
+router
+  .route('/resetPassword/:token')
+  .get(authController.checkResetToken, template.getResetPasswordTemplate);
+
 // User profile
 router.get(
   '/profile',

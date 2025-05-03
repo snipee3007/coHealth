@@ -1,13 +1,15 @@
 import { renderPopup } from './utils/popup.js';
-
+import Loader from './utils/loader.js';
 const signIn = async function (data) {
   try {
+    Loader.create();
     const res = await axios({
       method: 'POST',
       url: '/api/signIn',
       data,
     });
     if (res.data.status == 'success') {
+      Loader.destroy();
       renderPopup(
         res.status,
         'Sign In',
@@ -16,6 +18,7 @@ const signIn = async function (data) {
       );
     }
   } catch (err) {
+    Loader.destroy();
     renderPopup(err.response.status, 'Sign In', err.response.data.message);
   }
 };
