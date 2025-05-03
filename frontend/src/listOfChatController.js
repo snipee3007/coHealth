@@ -1,4 +1,5 @@
 import { renderPopup } from './utils/popup.js';
+import Loader from './utils/loader.js';
 import Socket from './socketController.js';
 const socket = io('http://127.0.0.1:3000');
 
@@ -55,7 +56,6 @@ const sendMessage = async function (message, roomCode) {
       },
     });
   } catch (err) {
-    console.log(err);
     renderPopup(err.response.status, 'Send message', err.response.data.message);
   }
 };
@@ -102,17 +102,15 @@ class ListOfChat {
         });
         button.classList.add('chatItemActive');
         // lấy dữ liệu người dùng đang muốn chat đến
-        const isChatRoom = await fetch(`/api/room/${button.id}/message`, {
+        Loader.create();
+        const data = await axios({
           method: 'GET', // Phải viết hoa 'GET'
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          url: `/api/room/${button.id}/message`,
         });
         Socket.getAndRenderNotification();
-
-        const data = await isChatRoom.json();
+        Loader.destroy();
         // lấy userData trong memberID của từng room
-        const userData = data.data.room.memberID;
+        const userData = data.data.data.memberID;
         // lấy slug name toàn bộ người trong room ra
         const roomSlugName = [userData[0].slug, userData[1].slug];
         // chỉnh cái online offline và đăng nhập lần cuối là bao lâu
@@ -169,7 +167,7 @@ class ListOfChat {
           .insertAdjacentHTML('beforeend', chatBoxInfoHTML);
 
         // lấy danh sách toàn bộ message
-        const listOfMessage = data.data.room.message;
+        const listOfMessage = data.data.data.message;
         // console.log(listOfMessage)
         let html = '';
         listOfMessage.forEach((message) => {

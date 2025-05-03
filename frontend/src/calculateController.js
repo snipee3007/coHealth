@@ -474,15 +474,18 @@ const calculateAPI = async function (data) {
     localStorage.getItem('calculateData') &&
       localStorage.removeItem('calculateData');
     localStorage.setItem('calculateData', JSON.stringify(data));
+    Loader.create();
     const res = await axios({
       method: 'post',
       url: '/api/calculate',
       data,
     });
     if (res.data.status == 'success') {
+      Loader.destroy();
       window.location = '/result';
     }
   } catch (err) {
+    Loader.destroy();
     console.log(err);
   }
 };

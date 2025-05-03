@@ -288,11 +288,13 @@ class Result {
 
 const getRecentCalculate = async function () {
   try {
+    Loader.create();
     const res = await axios({
       method: 'get',
       url: '/api/result',
     });
     if (res.status == 204) {
+      Loader.destroy();
       if (localStorage.getItem('calculateData')) {
         const calculateRes = await axios({
           method: 'post',
@@ -307,12 +309,14 @@ const getRecentCalculate = async function () {
         window.location = '/calculate';
       }
     } else if (res.status == 200) {
+      Loader.destroy();
       return {
         basicInfo: res.data.data[0].basicInfo,
         result: res.data.data[0].result,
       };
     }
   } catch (err) {
+    Loader.destroy();
     if (err.status == 400 && err.response.data.data.length == 0) {
       window.location = '/calculate';
     }
@@ -322,11 +326,13 @@ const getRecentCalculate = async function () {
 const getCalculate = async function () {
   try {
     const id = window.location.pathname.split('/')[2];
+    Loader.create();
     const res = await axios({
       method: 'get',
       url: `/api/result/${id}`,
     });
     if (res.status == 204) {
+      Loader.destroy();
       if (localStorage.getItem('calculateData')) {
         const calculateRes = await axios({
           method: 'post',
@@ -341,13 +347,14 @@ const getCalculate = async function () {
         window.location = '/calculate';
       }
     } else if (res.status == 200) {
-      console.log(res);
+      Loader.destroy();
       return {
         basicInfo: res.data.data.basicInfo,
         result: res.data.data.result,
       };
     }
   } catch (err) {
+    Loader.destroy();
     if (err.status == 400 && err.response.data.data.length == 0) {
       window.location = '/calculate';
     }

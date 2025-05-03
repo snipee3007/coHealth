@@ -1,5 +1,5 @@
 import { renderPopup } from './utils/popup.js';
-
+import Loader from './utils/loader.js';
 const signUp = async function (data) {
   try {
     if (data.gender == 'male') {
@@ -7,12 +7,14 @@ const signUp = async function (data) {
     } else {
       data.image = 'womanAnonymous.jpg';
     }
+    Loader.create();
     const res = await axios({
       method: 'POST',
       url: '/api/signUp',
       data,
     });
     if (res.data.status == 'success') {
+      Loader.destroy();
       renderPopup(
         res.status,
         'Sign Up',
@@ -21,7 +23,8 @@ const signUp = async function (data) {
       );
     }
   } catch (err) {
-    alert(err.response);
+    Loader.destroy();
+    renderPopup(err.response.status, 'Sign Up', err.response.data.message);
   }
 };
 
