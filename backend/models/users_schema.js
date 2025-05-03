@@ -1,99 +1,103 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const AppError = require('./../utils/appError');
 const slugify = require('slugify');
 
-const userSchema = new mongoose.Schema({
-  fullname: {
-    type: String,
-    trim: true,
-    required: [true, 'Please provide your fullname'],
-  },
-  yearOfBirth: {
-    type: Number,
-    required: [true, 'Please provide your birthday'],
-  },
-  age: {
-    type: Number,
-    min: 0,
-  },
-  gender: {
-    type: String,
-    enum: {
-      values: ['male', 'female'],
-      message: 'Gender must be male or female',
+const userSchema = new mongoose.Schema(
+  {
+    fullname: {
+      type: String,
+      trim: true,
+      required: [true, 'Please provide your fullname'],
     },
-    required: [true, 'Please provide your gender'],
-    lowercase: true,
-  },
-  address: {
-    type: String,
-    trim: true,
-  },
-  phoneNumber: {
-    type: String,
-    trim: true,
-  },
-  email: {
-    type: String,
-    trim: true,
-    required: [true, 'Please provide your email'],
-    validate: {
-      validator: validator.isEmail,
-      message: 'Please provide a valid email',
+    yearOfBirth: {
+      type: Number,
+      required: [true, 'Please provide your birthday'],
     },
-    unique: true,
-  },
-  password: {
-    type: String,
-    trim: true,
-    required: [true, 'Please provide your password'],
-  },
-  confirmPassword: {
-    type: String,
-    trim: true,
-    required: [true, 'Please re-enter your password'],
-    validate: {
-      validator: function (el) {
-        return this.password === el;
+    age: {
+      type: Number,
+      min: 0,
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ['male', 'female'],
+        message: 'Gender must be male or female',
       },
-      message: 'The passwords are not the same',
+      required: [true, 'Please provide your gender'],
+      lowercase: true,
     },
-    select: false,
-  },
-  passwordChangedAt: Date,
-  token: {
-    type: String,
-    trim: true,
-  },
-  image: {
-    type: String,
-  },
-  slug: {
-    type: String,
-  },
-  role:
-    {
+    address: {
+      type: String,
+      trim: true,
+    },
+    phoneNumber: {
+      type: String,
+      trim: true,
+    },
+    email: {
+      type: String,
+      trim: true,
+      required: [true, 'Please provide your email'],
+      validate: {
+        validator: validator.isEmail,
+        message: 'Please provide a valid email',
+      },
+      unique: true,
+    },
+    password: {
+      type: String,
+      trim: true,
+      required: [true, 'Please provide your password'],
+    },
+    confirmPassword: {
+      type: String,
+      trim: true,
+      required: [true, 'Please re-enter your password'],
+      validate: {
+        validator: function (el) {
+          return this.password === el;
+        },
+        message: 'The passwords are not the same',
+      },
+      select: false,
+    },
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    token: {
+      type: String,
+      trim: true,
+    },
+    image: {
+      type: String,
+    },
+    slug: {
+      type: String,
+    },
+    role: {
       type: String,
       default: 'user',
       enum: ['user', 'doctor'],
     },
-  status: {
-    type: String,
-    default: 'online',
-    enum: ['online', 'offline'],
+    status: {
+      type: String,
+      default: 'online',
+      enum: ['online', 'offline'],
+    },
+    lastSeen: {
+      type: Date,
+      default: null,
+    },
   },
-  lastSeen: {
-    type: Date,
-    default: null,
-  }
-},{
-    toJSON: {virtuals: true},
-    toObject: {virtuals: true},
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
     timestamps: {},
-}
-      
+  }
 );
 
 userSchema.virtual('doctorInfo', {
@@ -101,8 +105,6 @@ userSchema.virtual('doctorInfo', {
   foreignField: 'userID',
   localField: '_id',
 });
-
-
 
 userSchema.pre('save', function (next) {
   this.fullname = this.fullname
@@ -132,6 +134,19 @@ userSchema.post('save', function (error, doc, next) {
     next(new AppError('Bad Request!!! 💥💥 ', 400));
   }
 });
+
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
+};
 
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
