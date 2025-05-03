@@ -96,6 +96,12 @@ exports.getForgotPasswordTemplate = async (req, res) => {
   });
 };
 
+exports.getResetPasswordTemplate = (req, res) => {
+  res.status(200).render('resetPassword', {
+    title: 'Khôi phục mật khẩu',
+  });
+};
+
 exports.getProfileTemplate = async (req, res) => {
   res.status(200).render('profile', {
     title: 'User Profile',
