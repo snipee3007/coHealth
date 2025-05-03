@@ -13,7 +13,7 @@ const signIn = async function (data) {
       renderPopup(
         res.status,
         'Sign In',
-        `Welcome back, ${res.data.data.user.fullname}`,
+        `Welcome back, ${res.data.data.user.fullname}!`,
         '/'
       );
     }
