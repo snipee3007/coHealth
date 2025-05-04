@@ -345,9 +345,15 @@ class SymptomChecker {
           });
           const data = res.data.data;
 
-          console.log(data.predictions);
           let dataArray = Object.entries(data.predictions);
           console.log(dataArray);
+
+          const tmp = await axios({
+            method: 'post',
+            url: `/api/history/symptom`,
+            data: { diseases: dataArray, symptoms: this.selectedSymptoms },
+          });
+          console.log(tmp);
           const backgroundColor = [
             'bg-violet-400',
             'bg-indigo-400',

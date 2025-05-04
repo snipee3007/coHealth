@@ -14,6 +14,7 @@ const appointmentRoutes = require('./api/appointmentRoutes.js');
 const doctorRoutes = require('./api/doctorRoutes.js');
 const symptomRoutes = require('./api/symptomRoutes.js');
 const diseaseRoutes = require('./api/diseaseRoutes.js');
+const historyRoutes = require('./api/historyRoutes.js');
 
 const authController = require('./../controllers/authController.js');
 const router = express.Router();
@@ -79,5 +80,8 @@ router.use('/symptom', symptomRoutes);
 
 // DISEASE API
 router.use('/disease', diseaseRoutes);
+
+// HISTORY API
+router.use('/history', historyRoutes);
 
 module.exports = router;
