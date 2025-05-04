@@ -9,11 +9,13 @@ block append header
         td{
             height: 20px;
         }
+    script(type="module", defer, src="/src/healthHistoryController.js") 
 
 block append body 
     include userTemplate
         block append user
-            .calculateHistory(class='w-9/10').mx-auto
+            //- CALCULATE BMI
+            .calculateHistory(class='w-9/10').mx-auto.historyContainer
                 .flex.flex-1.justify-between.items-center.mb-6
                     .calculateHistoryLabel Calculate BMI/TDEE History
                     .calculateHistoryOption
@@ -29,7 +31,7 @@ block append body
                         p.font-bold
                     .calculateHistoryBody.h-56.overflow-y-auto
                         each cal, idx in calculateHistory
-                            .calculateHistoryBodyRow.grid.grid-cols-4.justify-center.place-items-center.py-2(data-time=cal.createdAt)
+                            .calculateHistoryItem.historyItem.grid.grid-cols-4.justify-center.place-items-center.py-2(data-time=cal.createdAt)
                                 - const tmp = new Date(cal.updatedAt); const calculateDate = `${tmp.getDate().toString().padStart(2,0)}/${(tmp.getMonth() + 1).toString().padStart(2,0)}/${tmp.getFullYear()}`
                                 - const diff = idx < calculateHistory.length - 1 ? (cal.result.bmi - calculateHistory[idx + 1].result.bmi ).toFixed(1) : 0; const bmiDiff = diff >= 0 ? `(+${diff})` : `(${diff})` 
                                 
@@ -45,22 +47,24 @@ block append body
                                 p.calculateTDEE= cal.result.tdee
                                 p.calculateRef
                                     a(href=`/result/${cal.id}` class='text-[#3EA2A6]') Details 
-            .symptonCheckHistory(class='w-9/10').mx-auto.mt-8
+
+            //- SYMPTON CHECK
+            .symptonCheckHistory(class='w-9/10').mx-auto.mt-8.historyContainer
                 .flex.flex-1.justify-between.items-center.mb-6
-                    .calculateHistoryLabel History Symptom check
-                    .calculateHistoryOption
-                        select#calculateHistoryOption(name="calculateHistoryDate").py-1.px-2
+                    .symptomCheckHistoryLabel History Symptom check
+                    .symptomCheckHistoryOption
+                        select#symptomCheckHistoryOption(name="symptomCheckHistoryDate").py-1.px-2
                             option(value='' selected)
                             for range in symptomCheckDateRange
                                 option(value=`${range.start.format}:${range.end.format}`)= `${range.start.format} -> ${range.end.format}`
                 .border.rounded-2xl.overflow-hidden.font-Inter
-                    .calculateHistoryHeader.grid.grid-cols-3.justify-center.place-items-center(class='bg-[#D9D9D9]')
+                    .symptomCheckHistoryHeader.grid.grid-cols-3.justify-center.place-items-center(class='bg-[#D9D9D9]')
                         p.font-bold Date 
                         p.font-bold Symptoms 
                         p.font-bold
-                    .calculateHistoryBody.h-56.overflow-y-auto
+                    .symptomCheckHistoryBody.h-56.overflow-y-auto
                         each history in symptomsHistory
-                            .calculateHistoryBodyRow.grid.grid-cols-3.justify-center.place-items-center.py-2(data-time=history.createdAt)
+                            .symptomCheckHistoryItem.historyItem.grid.grid-cols-3.justify-center.place-items-center.py-2(data-time=history.createdAt)
                                 - const tmp = new Date(history.updatedAt); const calculateDate = `${tmp.getDate().toString().padStart(2,0)}/${(tmp.getMonth() + 1).toString().padStart(2,0)}/${tmp.getFullYear()}`
                                 
                                 p.calculateDate= calculateDate
