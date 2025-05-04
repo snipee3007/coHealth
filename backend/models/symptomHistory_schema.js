@@ -24,7 +24,7 @@ const symptonHistorySchema = new mongoose.Schema(
     },
     symptoms: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: 'sympton',
+      ref: 'symptom',
       validate: {
         validator: (v) => Array.isArray(v) && v.length > 0,
         message: 'Please provide result of this history!',

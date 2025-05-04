@@ -125,52 +125,88 @@ exports.getHealthHistoryTemplate = catchAsync(async (req, res) => {
   const calculateHistory = await CalculateHistory.find({}).sort(
     '-updatedAt -createdAt'
   );
+  const symptomsHistory = req.symptomsHistory;
   const calculateDateRange = [];
-
-  calculateHistory.forEach((history) => {
-    const takenDate = new Date(history.updatedAt);
-    let diff = (takenDate.getDay() == 0 ? 7 : takenDate.getDay()) - 1;
-    const startDayWeek = new Date(
-      takenDate.getTime() - 1000 * 60 * 60 * 24 * diff
-    );
-    const endDayWeek = new Date(
-      startDayWeek.getTime() + 1000 * 60 * 60 * 24 * 6
-    );
-    let existedRange = false;
-    for (let i = 0; i < calculateDateRange.length; ++i) {
-      const range = calculateDateRange[i];
-      if (
-        range.start.time.getTime() == startDayWeek.getTime() &&
-        range.end.time.getTime() == endDayWeek.getTime()
-      ) {
-        existedRange = true;
-        break;
+  const symptomCheckDateRange = [];
+  [symptomsHistory, calculateHistory].forEach((field, idx) => {
+    field.forEach((history) => {
+      const takenDate = new Date(history.updatedAt);
+      let diff = (takenDate.getDay() == 0 ? 7 : takenDate.getDay()) - 1;
+      const startDayWeek = new Date(
+        takenDate.getTime() - 1000 * 60 * 60 * 24 * diff
+      );
+      const endDayWeek = new Date(
+        startDayWeek.getTime() + 1000 * 60 * 60 * 24 * 6
+      );
+      let existedRange = false;
+      for (let i = 0; i < calculateDateRange.length; ++i) {
+        const range = calculateDateRange[i];
+        if (
+          range.start.time.getTime() == startDayWeek.getTime() &&
+          range.end.time.getTime() == endDayWeek.getTime()
+        ) {
+          existedRange = true;
+          break;
+        }
       }
-    }
-    if (!existedRange) {
-      const startDateFormat = `${startDayWeek
-        .getDate()
-        .toString()
-        .padStart(2, 0)}-${(startDayWeek.getMonth() + 1)
-        .toString()
-        .padStart(2, 0)}-${startDayWeek.getFullYear()}`;
-      const endDateFormat = `${endDayWeek
-        .getDate()
-        .toString()
-        .padStart(2, 0)}-${(endDayWeek.getMonth() + 1)
-        .toString()
-        .padStart(2, 0)}-${endDayWeek.getFullYear()}`;
-      calculateDateRange.push({
-        start: { format: startDateFormat, time: startDayWeek },
-        end: { format: endDateFormat, time: endDayWeek },
-      });
-    }
+      if (!existedRange) {
+        const startDateFormat = `${startDayWeek
+          .getDate()
+          .toString()
+          .padStart(2, 0)}-${(startDayWeek.getMonth() + 1)
+          .toString()
+          .padStart(2, 0)}-${startDayWeek.getFullYear()}`;
+        const endDateFormat = `${endDayWeek
+          .getDate()
+          .toString()
+          .padStart(2, 0)}-${(endDayWeek.getMonth() + 1)
+          .toString()
+          .padStart(2, 0)}-${endDayWeek.getFullYear()}`;
+        if (idx == 0) {
+          let found = false;
+          for (let i = 0; i < symptomCheckDateRange.length; ++i) {
+            const value = symptomCheckDateRange[i];
+            if (
+              value.start.format == startDateFormat &&
+              value.end.format == endDateFormat
+            ) {
+              found = true;
+              break;
+            }
+          }
+          if (!found)
+            symptomCheckDateRange.push({
+              start: { format: startDateFormat, time: startDayWeek },
+              end: { format: endDateFormat, time: endDayWeek },
+            });
+        } else if (idx == 1) {
+          let found = false;
+          for (let i = 0; i < calculateDateRange.length; ++i) {
+            const value = calculateDateRange[i];
+            if (
+              value.start.format == startDateFormat &&
+              value.end.format == endDateFormat
+            ) {
+              found = true;
+              break;
+            }
+          }
+          if (!found)
+            calculateDateRange.push({
+              start: { format: startDateFormat, time: startDayWeek },
+              end: { format: endDateFormat, time: endDayWeek },
+            });
+        }
+      }
+    });
   });
   res.status(200).render('healthHistory', {
     title: 'Health History',
     calculateHistory: calculateHistory,
     userProfileTitle: 'Health History',
-    calculateDateRange: calculateDateRange,
+    calculateDateRange,
+    symptomCheckDateRange,
+    symptomsHistory,
   });
 });
 
@@ -240,5 +276,6 @@ exports.getAppointmentDetailsTemplate = async (req, res) => {
 exports.getSymptomCheckerTemplate = async (req, res) => {
   res.status(200).render('symptomChecker', {
     title: 'Symptom Checker',
+    history: JSON.stringify(req.history),
   });
 };

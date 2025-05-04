@@ -89,6 +89,10 @@ block append header
         }
 block body
     .flex.flex-col.items-center.m-4
+        if user
+            input(type='hidden' name="user" value=user.id)
+        if history 
+            input(type='hidden' name='history' value=history)
         .pageTitle.linearText.font-ABeeZee.font-bold.text-6xl.my-6#title SYMPTOM CHECKER
         .flex.justify-around.font-Roboto.text-white
             .step.active.step1

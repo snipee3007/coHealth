@@ -31,8 +31,7 @@ block append body
                         each cal, idx in calculateHistory
                             .calculateHistoryBodyRow.grid.grid-cols-4.justify-center.place-items-center.py-2(data-time=cal.createdAt)
                                 - const tmp = new Date(cal.updatedAt); const calculateDate = `${tmp.getDate().toString().padStart(2,0)}/${(tmp.getMonth() + 1).toString().padStart(2,0)}/${tmp.getFullYear()}`
-                                - const diff = idx < calculateHistory.length - 1 ? (cal.result.bmi - calculateHistory[idx + 1].result.bmi ).toFixed(1) : 0; const bmiDiff = diff >= 0 ? `(+${diff})` : `(${diff})`
-                                - 
+                                - const diff = idx < calculateHistory.length - 1 ? (cal.result.bmi - calculateHistory[idx + 1].result.bmi ).toFixed(1) : 0; const bmiDiff = diff >= 0 ? `(+${diff})` : `(${diff})` 
                                 
                                 p.calculateDate= calculateDate
                                 if cal.result.bmiStatus.includes('Underweight')
@@ -46,5 +45,26 @@ block append body
                                 p.calculateTDEE= cal.result.tdee
                                 p.calculateRef
                                     a(href=`/result/${cal.id}` class='text-[#3EA2A6]') Details 
-            .symptonCheckHistory(class='w-9/10').mx-auto
+            .symptonCheckHistory(class='w-9/10').mx-auto.mt-8
+                .flex.flex-1.justify-between.items-center.mb-6
+                    .calculateHistoryLabel Calculate BMI/TDEE History
+                    .calculateHistoryOption
+                        select#calculateHistoryOption(name="calculateHistoryDate").py-1.px-2
+                            option(value='' selected)
+                            for range in symptomCheckDateRange
+                                option(value=`${range.start.format}:${range.end.format}`)= `${range.start.format} -> ${range.end.format}`
+                .border.rounded-2xl.overflow-hidden.font-Inter
+                    .calculateHistoryHeader.grid.grid-cols-3.justify-center.place-items-center(class='bg-[#D9D9D9]')
+                        p.font-bold Date 
+                        p.font-bold Symptoms 
+                        p.font-bold
+                    .calculateHistoryBody.h-56.overflow-y-auto
+                        each history in symptomsHistory
+                            .calculateHistoryBodyRow.grid.grid-cols-3.justify-center.place-items-center.py-2(data-time=history.createdAt)
+                                - const tmp = new Date(history.updatedAt); const calculateDate = `${tmp.getDate().toString().padStart(2,0)}/${(tmp.getMonth() + 1).toString().padStart(2,0)}/${tmp.getFullYear()}`
+                                
+                                p.calculateDate= calculateDate
+                                p.symptom.line-clamp-2.text-left.w-full= history.symptoms.map(symptom => symptom.symptom).join(', ')
+                                p.calculateRef
+                                    a(href=`/symptom?historyID=${history.id}` class='text-[#3EA2A6]') Details 
 
