@@ -2,7 +2,6 @@ const Disease = require('../models/disease_schema.js');
 const catchAsync = require('../utils/catchAsync.js');
 const AppError = require('../utils/appError.js');
 const fs = require('fs');
-
 const { spawn } = require('child_process');
 const path = require('path');
 

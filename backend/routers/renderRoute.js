@@ -8,6 +8,8 @@ const newsController = require('./../controllers/newsController.js');
 const commentController = require('./../controllers/commentController.js');
 const adultCompendiumController = require('./../controllers/adultCompendiumController.js');
 const resultController = require('./../controllers/resultController.js');
+const symptomHistoryController = require('./../controllers/symptomHistoryController.js');
+const SymptonHistory = require('../models/symptomHistory_schema.js');
 const router = express.Router();
 
 router.use(authController.isSignedIn);
@@ -63,6 +65,7 @@ router.get(
 router.get(
   '/healthHistory',
   authController.restrictTo(['user', 'doctor']),
+  symptomHistoryController.getAll,
   template.getHealthHistoryTemplate
 );
 
@@ -100,6 +103,10 @@ router.get(
   template.getAppointmentDetailsTemplate
 );
 
-router.get('/symptom', template.getSymptomCheckerTemplate);
+router.get(
+  '/symptom',
+  symptomHistoryController.getHistory,
+  template.getSymptomCheckerTemplate
+);
 
 module.exports = router;

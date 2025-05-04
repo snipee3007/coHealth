@@ -27,7 +27,7 @@ io.on('connection', async (socket) => {
     const cookies = cookie.parse(socket.handshake.headers.cookie || '');
     const token = cookies.jwt;
     if (!token) {
-      console.log('Không có JWT, từ chối kết nối.');
+      // console.log('Không có JWT, từ chối kết nối.');
       return;
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

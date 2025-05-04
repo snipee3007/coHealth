@@ -78,22 +78,42 @@ const renderNews = function (news, newsHTML = '', slug) {
       for (let j = 0; j < news.content[i].attrs.length; ++j) {
         if (news.content[i].attrs[j].level) {
           if (news.content[i].attrs[j].level == 1)
-            newsHTML += `<h1>${renderNews(news.content[i], '', slug)}</h1>`;
+            newsHTML += `<h1 class='w-3/5 mx-auto py-2'>${renderNews(
+              news.content[i],
+              '',
+              slug
+            )}</h1>`;
           else if (news.content[i].attrs[j].level == 2)
-            newsHTML += `<h2>${renderNews(news.content[i], '', slug)}</h2>`;
+            newsHTML += `<h2 class='w-3/5 mx-auto py-2'>${renderNews(
+              news.content[i],
+              '',
+              slug
+            )}</h2>`;
           else if (news.content[i].attrs[j].level == 3)
-            newsHTML += `<h3>${renderNews(news.content[i], '', slug)}</h3>`;
+            newsHTML += `<h3 class='w-3/5 mx-auto py-2'>${renderNews(
+              news.content[i],
+              '',
+              slug
+            )}</h3>`;
           break;
         }
       }
     } else if (news.content[i].type == 'bulletList') {
-      newsHTML += `<ul>${renderNews(news.content[i], '', slug)}</ul>`;
+      newsHTML += `<ul class='w-1/2 mx-auto py-2'>${renderNews(
+        news.content[i],
+        '',
+        slug
+      )}</ul>`;
     } else if (news.content[i].type == 'orderedList') {
-      newsHTML += `<ol>${renderNews(news.content[i], '', slug)}</ol>`;
+      newsHTML += `<ol class='w-1/2 mx-auto py-2'>${renderNews(
+        news.content[i],
+        '',
+        slug
+      )}</ol>`;
     } else if (news.content[i].type == 'listItem') {
       newsHTML += `<li>${renderNews(news.content[i], '', slug)}</li>`;
     } else if (news.content[i].type == 'blockquote') {
-      newsHTML += `<blockquote>${renderNews(
+      newsHTML += `<blockquote class='w-1/2 mx-auto py-2'>${renderNews(
         news.content[i],
         '',
         slug

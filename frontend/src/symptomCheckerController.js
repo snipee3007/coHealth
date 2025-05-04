@@ -1,3 +1,5 @@
+import { renderPopup } from './utils/popup.js';
+
 function capitalize(str) {
   if (!str) return str;
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -54,13 +56,26 @@ function formatDiseaseName(diseaseName) {
 class SymptomChecker {
   constructor() {
     // Danh sách triệu chứng mẫu - bạn có thể thay thế bằng dữ liệu từ API
-    this.allSymptoms = [];
-    this.selectedSymptoms = [];
+    const history = document.querySelector("input[name='history']");
+    if (history) {
+      const data = JSON.parse(history.value);
+      const dataArray = [];
+      data.result.forEach((result) => {
+        dataArray.push([
+          result.diseaseID.name,
+          `${(result.prediction * 100).toFixed(2)}%`,
+        ]);
+      });
+      this.#renderSecondStep(dataArray);
+    } else {
+      this.allSymptoms = [];
+      this.selectedSymptoms = [];
 
-    this.#renderSymptomsByTag();
-    this.#setupSearchBar();
-    this.#renderNextStep();
-    this.#renderPreviousStep();
+      this.#renderSymptomsByTag();
+      this.#setupSearchBar();
+      this.#renderNextStep();
+      this.#renderPreviousStep();
+    }
   }
 
   // Hàm để render triệu chứng bệnh theo tag
@@ -68,7 +83,6 @@ class SymptomChecker {
     const buttons = document.querySelectorAll('#tagSymptoms button');
     buttons.forEach((button) => {
       button.addEventListener('click', async (e) => {
-        console.log('vô đây');
         e.preventDefault();
         buttons.forEach((btn) => {
           btn.classList.remove('linearBackground', 'text-white');
@@ -89,7 +103,6 @@ class SymptomChecker {
                 : button.textContent.trim() == 'Nails'
                 ? 'nails'
                 : button.textContent.trim();
-            console.log(button.textContent.trim());
             const res = await axios({
               method: 'get',
               url: `/api/symptom/${tag}`,
@@ -301,7 +314,6 @@ class SymptomChecker {
         for (const element of symptomElements) {
           if (element.textContent.trim() === symptom) {
             element.classList.add('linearBackground', 'text-white');
-            console.log(element);
             break;
           }
         }
@@ -314,7 +326,11 @@ class SymptomChecker {
     nextButton.addEventListener('click', async (e) => {
       if (this.selectedSymptoms.length == 0) {
         // popup phai chon it nhat 1 trieu chung
-        alert('You must choose at least 1 symptom');
+        renderPopup(
+          400,
+          'Symptom checking',
+          'You must choose at least 1 symptom'
+        );
       } else {
         e.preventDefault();
         // tạo hiệu ứng loading screen
@@ -345,63 +361,19 @@ class SymptomChecker {
           });
           const data = res.data.data;
 
-          console.log(data.predictions);
           let dataArray = Object.entries(data.predictions);
-          console.log(dataArray);
-          const backgroundColor = [
-            'bg-violet-400',
-            'bg-indigo-400',
-            'bg-blue-400',
-          ];
-          // Update prediction buttons with data
-          for (let i = 0; i < dataArray.length; i++) {
-            if (dataArray[i][1] === '0.00%') continue;
-            else {
-              let html = `
-              <button class="border-b-2 mb-12 ${
-                backgroundColor[i]
-              } text-white rounded-xl predict${i} pointer-cursor">
-                  <p class="content-center text-3xl font-ABeeZee p-4 border-b-2">${formatDiseaseName(
-                    dataArray[i][0]
-                  )}</p>
-                  <p class="font-Roboto p-4 text-xl">Predictions: Predictions ${
-                    dataArray[i][1]
-                  }</p>
-                </button>`;
-              document
-                .querySelector('#top3Diseases')
-                .insertAdjacentHTML('beforeend', html);
-            }
+          const currentUser = document.querySelector("input[name='user']");
+          if (currentUser) {
+            const tmp = await axios({
+              method: 'post',
+              url: `/api/history/symptom`,
+              data: { diseases: dataArray, symptoms: this.selectedSymptoms },
+            });
           }
           // Remove loading spinner and show next button again
           loadingSpinner.remove();
           nextButton.classList.remove('hidden');
-
-          // Switch to step 2
-          document
-            .querySelector('.stepInformation .step1')
-            .classList.add('hidden');
-          document
-            .querySelector('.stepInformation .step2')
-            .classList.remove('hidden');
-          document.querySelector('.step2').classList.add('active');
-          document.querySelector('.step2').classList.remove('disactive');
-
-          // Add event listeners to prediction buttons
-          const predictButtons = document.querySelectorAll(
-            '#top3Diseases button'
-          );
-          predictButtons.forEach((button, index) => {
-            if (index < dataArray.length) {
-              button.addEventListener('click', () => {
-                // Handle clicking on a disease prediction
-                const diseaseName = dataArray[index][0];
-                // Update details section with the selected disease information
-                this.#showDiseaseDetails(diseaseName);
-              });
-            }
-          });
-          document.documentElement.scrollTop = 0;
+          this.#renderSecondStep(dataArray);
         } catch (error) {
           // Remove loading spinner and show next button on error
           loadingSpinner.remove();
@@ -412,6 +384,53 @@ class SymptomChecker {
       }
     });
   }
+
+  #renderSecondStep(dataArray) {
+    const backgroundColor = ['bg-violet-400', 'bg-indigo-400', 'bg-blue-400'];
+    // Update prediction buttons with data
+    for (let i = 0; i < dataArray.length; i++) {
+      if (dataArray[i][1] === '0.00%') continue;
+      else {
+        let html = `
+        <button class="border-b-2 mb-12 ${
+          backgroundColor[i]
+        } text-white rounded-xl predict${i} pointer-cursor">
+            <p class="content-center text-3xl font-ABeeZee p-4 border-b-2">${formatDiseaseName(
+              dataArray[i][0]
+            )}</p>
+            <p class="font-Roboto p-4 text-xl">Predictions: Predictions ${
+              dataArray[i][1]
+            }</p>
+          </button>`;
+        document
+          .querySelector('#top3Diseases')
+          .insertAdjacentHTML('beforeend', html);
+      }
+    }
+
+    // Switch to step 2
+    document.querySelector('.stepInformation .step1').classList.add('hidden');
+    document
+      .querySelector('.stepInformation .step2')
+      .classList.remove('hidden');
+    document.querySelector('.step2').classList.add('active');
+    document.querySelector('.step2').classList.remove('disactive');
+
+    // Add event listeners to prediction buttons
+    const predictButtons = document.querySelectorAll('#top3Diseases button');
+    predictButtons.forEach((button, index) => {
+      if (index < dataArray.length) {
+        button.addEventListener('click', () => {
+          // Handle clicking on a disease prediction
+          const diseaseName = dataArray[index][0];
+          // Update details section with the selected disease information
+          this.#showDiseaseDetails(diseaseName);
+        });
+      }
+    });
+    document.documentElement.scrollTop = 0;
+  }
+
   async #showDiseaseDetails(diseaseName) {
     const detailsSection = document.querySelector('#details');
     detailsSection.innerHTML = ''; // Clear any previous content
