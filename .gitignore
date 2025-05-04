@@ -3,3 +3,4 @@ config.env
 tailwind.css
 datas
 backend/utils/models
+jest.config.js
