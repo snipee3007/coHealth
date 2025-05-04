@@ -9,8 +9,13 @@ block body
         .newsDescription.font-AbhayaLibre.text-xl.text-center.font-bold.mx-auto(class='w-2/3').py-12= news.description
         .newsData(data-news=news.news data-slug=news.slug)
         .newsBox.font-Roboto.px-12.text-justify.mx-auto.pb-12
-        .mx-auto.text-right(class='w-2/3')
-            .newsTime.mx-auto.text-right= news.updatedAt
+        .mx-auto.text-right.font-ABeeZee(class='w-2/3 text-[#6F7CB2]')
+            - const time = new Date(news.updatedAt); 
+            - const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            - const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; 
+            - const formattedDate = time.getDate() == 1 ? `${time.getDate()}st` : time.getDate() == 2 ? `${time.getDate()}nd` : time.getDate() == 3 ? `${time.getDate()}rd` : `${time.getDate()}th`;
+            - const formattedTime = `${days[time.getDay()]}, ${months[time.getMonth()]} ${formattedDate}, ${time.getFullYear()}`;
+            .newsTime.mx-auto.text-right= formattedTime
             .newsUploader= news.userID.fullname
     hr.mx-16(class='border-[#1678F2] border-[1.5px]').my-12
     .recommendNewsContainer.px-20
