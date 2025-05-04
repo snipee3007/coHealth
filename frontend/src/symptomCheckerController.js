@@ -128,7 +128,11 @@ class SymptomChecker {
         });
         this.#renderSymptomsList(this.allSymptoms);
       } catch (err) {
-        alert(err.response.data.message);
+        renderPopup(
+          err.status,
+          'Render symptoms by tag',
+          err.response.data.message
+        );
       }
     } else {
       this.#renderSymptomsList(this.allSymptoms);
@@ -378,7 +382,7 @@ class SymptomChecker {
           // Remove loading spinner and show next button on error
           loadingSpinner.remove();
           nextButton.classList.remove('hidden');
-          alert('Cannot predict disease!');
+          renderPopup(400, 'Predict disease', error.response.data.message);
           console.error(error);
         }
       }

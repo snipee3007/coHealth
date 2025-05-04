@@ -138,7 +138,7 @@ exports.predictDisease = async (req, res) => {
 
   // Chuyển mảng triệu chứng thành JSON string để truyền vào Python
   const symptomsJson = JSON.stringify(symptoms);
-
+  console.log(symptomsJson);
   // Đường dẫn đến script Python
   const pythonScriptPath = path.join(
     __dirname,
@@ -207,7 +207,7 @@ exports.predictDisease = async (req, res) => {
         });
       }
 
-      return res.status(500).json({
+      return res.status(400).json({
         status: 'error',
         message: 'Lỗi khi dự đoán bệnh',
         error: error,
