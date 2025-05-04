@@ -2,5 +2,5 @@ node_modules
 config.env
 tailwind.css
 datas
-backend/utils/models
+# backend/utils/models
 jest.config.js
