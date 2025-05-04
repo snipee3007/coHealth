@@ -2,6 +2,8 @@ import { renderPopup } from './utils/popup.js';
 import Loader from './utils/loader.js';
 import Socket from './socketController.js';
 
+const socket = io();
+
 socket.on('receiveMessage', (message, roomCode) => {
   // trên đây để hiện chat cho đối phương
   const chatBoxId = document
