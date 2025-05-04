@@ -135,7 +135,7 @@ class Appointment {
         );
         // nếu thời điểm đang xét có ngày lớn hơn mình chọn (ví dụ ngày 14 > ngày 13) thì hiện thông báo rằng phải chọn ngày khác vì hết đặt được
         if (today > date) {
-          console.log(today - date);
+          // console.log(today - date);
           listTime.classList.add('hidden');
           document.querySelectorAll('.notice').forEach((e) => e.remove());
           document.querySelector('form .time').insertAdjacentHTML(

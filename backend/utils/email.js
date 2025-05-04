@@ -42,7 +42,7 @@ module.exports = class Email {
       subject: subject,
       html,
     };
-    console.log(this.to);
+    // console.log(this.to);
 
     // 3) Create a transport and send email
     await this.newTransport().sendMail(mailOptions);

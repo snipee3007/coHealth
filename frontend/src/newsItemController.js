@@ -66,7 +66,7 @@ const createComment = async function (data) {
     }
   } catch (err) {
     Loader.destroy();
-    console.log();
+    // console.log();
   }
 };
 // Handle render post section

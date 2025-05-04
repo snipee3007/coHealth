@@ -193,7 +193,7 @@ label {
   background: none;
   @apply w-7!;
   @apply h-7!;
-  @apply text-lg!;
+  @apply text-2xl!;
   @apply mx-3!;
   @apply rounded-lg!;
 }

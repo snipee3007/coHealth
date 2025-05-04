@@ -39,11 +39,10 @@ exports.getUploadTemplate = catchAsync(async (req, res, next) => {
 
 exports.getHomePageTemplate = catchAsync(async (req, res, next) => {
   const mostViewNews = await News.find()
-    .sort('-view')
-    .sort('createDate')
+    .sort('-view -updatedAt -createdAt')
     .limit(6);
 
-  const latestNews = await News.find().sort('createDate').limit(3);
+  const latestNews = await News.find().sort('-updatedAt -createdAt').limit(3);
   res.status(200).render('homepage', {
     title: 'Welcome',
     mostViewNews,
