@@ -1,7 +1,5 @@
 import { renderPopup } from './utils/popup.js';
 import Loader from './utils/loader.js';
-const socket = io('http://127.0.0.1:3000');
-
 const updateStatusAppointment = async function (appointmentCode, status) {
   try {
     Loader.create();

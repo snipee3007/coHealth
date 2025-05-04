@@ -1,7 +1,6 @@
 import { renderPopup } from './utils/popup.js';
 import Loader from './utils/loader.js';
 import Socket from './socketController.js';
-const socket = io('http://127.0.0.1:3000');
 
 socket.on('receiveMessage', (message, roomCode) => {
   // trên đây để hiện chat cho đối phương
