@@ -1,6 +1,6 @@
 import { resize } from './utils/overlaySizeHandle.js';
 import Loader from './utils/loader.js';
-
+import { SPOONACULAR_API_KEY } from './config.js';
 class Result {
   #bodyHeight;
   tdeeUpper = 4000;
@@ -368,7 +368,7 @@ const getFoodValue = async function (calories) {
       method: 'get',
       url: `https://api.spoonacular.com/mealplanner/generate?targetCalories=${calories}&timeFrame=week`,
       headers: {
-        'X-Api-Key': 'b52c1a0b52284c0eaa86faf51e1f01f7',
+        'X-Api-Key': SPOONACULAR_API_KEY,
       },
     });
     Loader.destroy();
