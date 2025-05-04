@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server.js -e js,pug",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
     "dev": "nodemon server.js -e js,pug",
     "tailwind:css": "npx @tailwindcss/cli -i ./frontend/css/tailwindConfig.css -o ./frontend/css/tailwind.css --watch",
     "build:tailwind": "npx @tailwindcss/cli -i ./frontend/css/tailwindConfig.css -o ./frontend/css/tailwind.css",
@@ -83,6 +83,7 @@
     "mocha": "^11.2.2",
     "sinon": "^20.0.0",
     "sinon-chai": "^4.0.0"
+  },
   "engines": {
     "node": ">=20.0.0"
   }
