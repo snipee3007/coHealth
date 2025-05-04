@@ -13,22 +13,20 @@ class HealthHistory {
         });
         const startingDate = new Date(start);
         const endingDate = new Date(end);
-        console.log(
-          e.target
-            .closest('.historyContainer')
-            .querySelectorAll('.historyItem')
-            .forEach((node) => {
-              node.classList.add('hidden');
-              const nodeTime = new Date(node.dataset['time']);
-              console.log(nodeTime.getTime(), startingDate.getTime());
-              if (
-                nodeTime.getTime() >= startingDate.getTime() &&
-                nodeTime.getTime() <= endingDate.getTime()
-              ) {
-                node.classList.remove('hidden');
-              }
-            })
-        );
+        e.target
+          .closest('.historyContainer')
+          .querySelectorAll('.historyItem')
+          .forEach((node) => {
+            node.classList.add('hidden');
+            const nodeTime = new Date(node.dataset['time']);
+            console.log(nodeTime.getTime(), startingDate.getTime());
+            if (
+              nodeTime.getTime() >= startingDate.getTime() &&
+              nodeTime.getTime() <= endingDate.getTime()
+            ) {
+              node.classList.remove('hidden');
+            }
+          });
       });
     });
   }

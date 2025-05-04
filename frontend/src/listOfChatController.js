@@ -19,7 +19,7 @@ socket.on('receiveMessage', (message, roomCode) => {
 
   // dưới đây để hiện nội dung chat ở trong cái button từng người
   let lastMessageElem = document.getElementById(`${roomCode}`);
-  console.log(lastMessageElem);
+  // console.log(lastMessageElem);
   lastMessageElem.querySelector(`.lastMessage`).textContent = message;
   // update chữ vừa mới nhắn tin xong lên
   lastMessageElem.querySelector('.lastMessageTime').textContent =
@@ -34,7 +34,7 @@ socket.on('receiveMessage', (message, roomCode) => {
 });
 
 const timeAgo = (timestamp) => {
-  console.log(timestamp);
+  // console.log(timestamp);
   const diff = Math.floor((Date.now() - new Date(timestamp)) / 1000);
   if (diff < 60) return `1 minute ago`;
   if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;

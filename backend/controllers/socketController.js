@@ -7,7 +7,7 @@ const User = require('./../models/users_schema.js');
 exports.notificationOnNewMessage = async (senderID, roomCode) => {
   // Find the relevant notification in 1 hours ago
   const room = await ChatRoom.findOne({ roomCode });
-  console.log(room);
+  // console.log(room);
   let receiverID;
   if (senderID == room.memberID[0].toString())
     receiverID = room.memberID[1].toString();

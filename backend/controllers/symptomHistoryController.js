@@ -24,7 +24,7 @@ exports.createHistory = catchAsync(async (req, res, next) => {
 
   const diseases = req.body.diseases;
   const symptoms = req.body.symptoms;
-  console.log(diseases, symptoms);
+  // console.log(diseases, symptoms);
   const result = diseases.map((array) => {
     return { name: array[0], predict: array[1] };
   });
@@ -44,7 +44,7 @@ exports.createHistory = catchAsync(async (req, res, next) => {
     const data = await Sympton.findOne({ symptom: symptoms[i] });
     symptomList.push(data.id);
   }
-  console.log(diseaseList, symptomList);
+  // console.log(diseaseList, symptomList);
   const data = await SymptomHistory.create({
     result: diseaseList,
     userID: req.user.id,

@@ -15,7 +15,7 @@ exports.getAllDiseases = catchAsync(async (req, res, next) => {
 
 exports.getDetailsDisease = catchAsync(async (req, res, next) => {
   const name = req.params.name;
-  console.log(name);
+  // console.log(name);
   const disease = await Disease.findOne({
     name: name,
   }).lean();
@@ -30,7 +30,7 @@ exports.createDisease = catchAsync(async (req, res, next) => {
   const allFiles = fs
     .readdirSync(folderPath)
     .filter((file) => file.endsWith('.json'));
-  console.log('tất cả các file', allFiles);
+  // console.log('tất cả các file', allFiles);
 
   let allDiseases = [];
 
@@ -42,7 +42,7 @@ exports.createDisease = catchAsync(async (req, res, next) => {
     // Kiểm tra xem diseases có phải là một mảng không
     if (!Array.isArray(diseases)) {
       // Nếu là một đối tượng, chuyển đổi thành mảng chứa một phần tử
-      console.log(`File ${file} chứa một đối tượng, không phải mảng`);
+      // console.log(`File ${file} chứa một đối tượng, không phải mảng`);
       diseases = [diseases];
     }
 
@@ -88,12 +88,12 @@ exports.createDisease = catchAsync(async (req, res, next) => {
   }
 
   // Log cấu trúc dữ liệu để kiểm tra
-  console.log(`Tổng số dữ liệu bệnh hợp lệ: ${allDiseases.length}`);
+  // console.log(`Tổng số dữ liệu bệnh hợp lệ: ${allDiseases.length}`);
   if (allDiseases.length > 0) {
-    console.log(
-      'Mẫu dữ liệu đầu tiên:',
-      JSON.stringify(allDiseases[0], null, 2)
-    );
+    // console.log(
+    //   'Mẫu dữ liệu đầu tiên:',
+    //   JSON.stringify(allDiseases[0], null, 2)
+    // );
   }
 
   try {
@@ -127,7 +127,7 @@ exports.createDisease = catchAsync(async (req, res, next) => {
 exports.predictDisease = async (req, res) => {
   // Lấy danh sách triệu chứng từ request
   const { symptoms } = req.body;
-  console.log(symptoms);
+  // console.log(symptoms);
 
   if (!symptoms || !Array.isArray(symptoms) || symptoms.length === 0) {
     return res.status(400).json({

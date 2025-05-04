@@ -20,7 +20,7 @@ class ForgotPassword {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       const email = document.querySelector('input[name="forgotEmail"]');
-      console.log(email);
+      // console.log(email);
       if (email.value) {
         forgotPassword({ email: email.value });
       }

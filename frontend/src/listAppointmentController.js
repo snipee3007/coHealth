@@ -35,8 +35,8 @@ class ListAppointment {
       }
       const appointments = res.data.data.appointments;
       const totalPages = res.data.data.totalPages;
-      console.log(res);
-      console.log(appointments);
+      // console.log(res);
+      // console.log(appointments);
       appointments.forEach((appointment) => {
         // cột đầu, nếu là doctor thì hiện tên người dùng, nếu là người dùng kia thì hiện tên bác sĩ
         let name =
@@ -125,12 +125,10 @@ class ListAppointment {
     // dùng debounce() để chặn spam nút
     const debouncedChangePage = _.debounce((direction) => {
       // nếu như giảm trang và nó không ở trang 1 hoặc tăng trang và không phải ở trang cuối, check totalPages để bỏ nút next trên dom luôn
-      console.log('nó vô debounced để xem');
-      console.log('currentPage', this.#currentPage);
+      // console.log('currentPage', this.#currentPage);
       if ((direction === -1 && this.#currentPage > 1) || direction === 1) {
-        console.log('nhảy điều kiện đúng chưa?');
         this.#currentPage += direction;
-        console.log(this.#currentPage);
+        // console.log(this.#currentPage);
         fadeInContent();
         showPage(this.#currentPage);
       }

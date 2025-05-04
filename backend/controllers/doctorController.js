@@ -21,7 +21,7 @@ exports.getDoctors = catchAsync(async (req, res, next) => {
       }
     }
   });
-  console.log(doctors);
+  // console.log(doctors);
   res.status(200).json({
     status: 'success',
     data: doctors,

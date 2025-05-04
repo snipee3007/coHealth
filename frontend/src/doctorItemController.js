@@ -7,9 +7,9 @@ class DoctorItem {
   }
   #createChat() {
     const button = document.querySelector('.chat');
-    console.log(button);
+    // console.log(button);
     if (button) {
-      console.log(button.id);
+      // console.log(button.id);
       button.addEventListener('click', async function () {
         try {
           Loader.create();

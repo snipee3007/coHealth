@@ -100,7 +100,7 @@ exports.createNews = catchAsync(async (req, res, next) => {
     );
   }
   const fixNews = JSON.parse(news);
-  console.log(fixNews);
+  // console.log(fixNews);
   let newNews = await News.create({
     title,
     category,

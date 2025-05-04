@@ -33,7 +33,7 @@ function calcRoute(curCoor, desCoor) {
   // console.log('nó vô đây');
   // console.log('Toa do hien tai la: ', curCoor);
   // console.log('Toa do dich den la: ', desCoor);
-  console.log(listInfoWindow);
+  // console.log(listInfoWindow);
   if (listInfoWindow) {
     listInfoWindow.forEach((infoWindow) => {
       infoWindow.close();
@@ -52,7 +52,7 @@ function calcRoute(curCoor, desCoor) {
   directionsService.route(request, function (result, status) {
     if (status == 'OK') {
       directionsRenderer.setDirections(result);
-      console.log(result);
+      // console.log(result);
       // hiển thị thời gian cho đường đi đó
       let time = result.routes[0].legs[0].duration.text;
       const steps = result.routes[0].legs[0].steps;
@@ -70,7 +70,7 @@ function calcRoute(curCoor, desCoor) {
         )
       );
       listInfoWindow.push(infoWindow);
-      console.log(listInfoWindow);
+      // console.log(listInfoWindow);
       infoWindow.open(map);
     }
   });
@@ -113,11 +113,10 @@ class FindHospital {
     const findRouteBtns = document.querySelectorAll(
       '#listOfNearestHospitals button'
     );
-    console.log(findRouteBtns[0].getAttribute('data-lat'));
+    // console.log(findRouteBtns[0].getAttribute('data-lat'));
 
     findRouteBtns.forEach((button) => {
       button.addEventListener('click', (e) => {
-        console.log('bấm rồi');
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
             const curr = {
@@ -141,7 +140,7 @@ class FindHospital {
       .querySelector('#findNearestHospital')
       .addEventListener('click', async (e) => {
         e.preventDefault;
-        console.log(document.querySelector('#findNearestHospital').textContent);
+        // console.log(document.querySelector('#findNearestHospital').textContent);
         if (
           document.querySelector('#findNearestHospital').textContent ===
           'Find Nearest Hospitals'
@@ -190,7 +189,6 @@ class FindHospital {
                   'Find All Hospitals';
                 this.#findRouteToHospital();
               } catch (err) {
-                console.log('nó vô đây');
                 alert(err.message);
               }
             });
