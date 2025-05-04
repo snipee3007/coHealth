@@ -4,6 +4,8 @@ html
     head 
         block header
             title coHealth ! #{title}
+            meta(charset="UTF-8")
+            meta(name="viewport", content="width=device-width, initial-scale=1.0")
             link(rel="stylesheet" href="/css/tailwind.css")
             script(defer, type='module' src="/socket.io/socket.io.js")
             script(defer type='module' src='/src/notificationController.js')
