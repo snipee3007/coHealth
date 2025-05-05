@@ -17,8 +17,8 @@ class Result {
     this.#valueCardRender();
 
     // Sử dụng thì bỏ comment hai dòng dưới là được!
-    // await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
-    // this.#weeksRender();
+    await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
+    this.#weeksRender();
 
     this.#dayHandler();
     this.#overlayHandler();
@@ -365,14 +365,12 @@ const getFoodValue = async function (calories) {
   try {
     Loader.create();
     const res = await axios({
-      method: 'get',
-      url: `https://api.spoonacular.com/mealplanner/generate?targetCalories=${calories}&timeFrame=week`,
-      headers: {
-        'X-Api-Key': 'b52c1a0b52284c0eaa86faf51e1f01f7',
-      },
+      method: 'post',
+      url: `/api/meal`,
+      data: { calories },
     });
     Loader.destroy();
-    return res.data.week;
+    return res.data.data;
   } catch (err) {
     Loader.destroy();
   }
