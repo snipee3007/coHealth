@@ -143,32 +143,58 @@ exports.predictDisease = async (req, res) => {
   const symptomsJson = JSON.stringify(symptoms);
   console.log('Symptoms JSON:', symptomsJson);
 
-  // Đường dẫn đến script Python
-  const pythonScriptPath = path.join(
-    __dirname,
-    '..',
-    'utils',
-    'models',
-    'predict_diseases.py'
-  );
-  console.log('Python script path:', pythonScriptPath);
-
-  // Kiểm tra xem file script Python có tồn tại không
-  if (!fs.existsSync(pythonScriptPath)) {
-    console.error('Python script does not exist at path:', pythonScriptPath);
-    return res.status(500).json({
-      status: 'error',
-      message: 'Không tìm thấy script dự đoán bệnh',
-    });
-  }
-
-  // Gọi script Python
   try {
+    // Thử các đường dẫn khác nhau để tìm script Python
+    const possiblePaths = [
+      // Đường dẫn tương đối dựa trên __dirname
+      path.join(__dirname, '..', 'utils', 'models', 'predict_diseases.py'),
+      // Đường dẫn tuyệt đối trên Render
+      path.join(
+        process.cwd(),
+        'backend',
+        'utils',
+        'models',
+        'predict_diseases.py'
+      ),
+      // Đường dẫn tuyệt đối dựa trên gốc dự án
+      path.join(process.cwd(), 'utils', 'models', 'predict_diseases.py'),
+      // Đường dẫn tương đối từ thư mục hiện tại
+      path.join('utils', 'models', 'predict_diseases.py'),
+    ];
+
+    let pythonScriptPath = null;
+    // Tìm đường dẫn hợp lệ đầu tiên
+    for (const testPath of possiblePaths) {
+      console.log('Testing path:', testPath);
+      if (fs.existsSync(testPath)) {
+        pythonScriptPath = testPath;
+        console.log('Found Python script at:', pythonScriptPath);
+        break;
+      }
+    }
+
+    if (!pythonScriptPath) {
+      console.error('Python script not found in any of the tested paths');
+      return res.status(500).json({
+        status: 'error',
+        message: 'Không tìm thấy script dự đoán bệnh',
+        tested_paths: possiblePaths,
+      });
+    }
+
+    // Gọi script Python
     console.log('Spawning Python process with args:', [
       pythonScriptPath,
       symptomsJson,
     ]);
-    const pythonProcess = spawn('python', [pythonScriptPath, symptomsJson]);
+
+    // Xác định lệnh Python phù hợp (python hoặc python3)
+    const pythonCommand =
+      process.env.NODE_ENV === 'production' ? 'python3' : 'python';
+    const pythonProcess = spawn(pythonCommand, [
+      pythonScriptPath,
+      symptomsJson,
+    ]);
 
     let data = '';
     let error = '';
