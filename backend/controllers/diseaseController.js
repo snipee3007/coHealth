@@ -170,6 +170,8 @@ exports.predictDisease = async (req, res) => {
         pythonScriptPath = testPath;
         console.log('Found Python script at:', pythonScriptPath);
         break;
+      } else {
+        console.log('Path at: ', pythonScriptPath, ' is wrong');
       }
     }
 
