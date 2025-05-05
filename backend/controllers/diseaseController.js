@@ -125,10 +125,12 @@ exports.createDisease = catchAsync(async (req, res, next) => {
     return next(error);
   }
 });
+
+// Chỉ phần predictDisease được cập nhật
 exports.predictDisease = async (req, res) => {
   // Lấy danh sách triệu chứng từ request
   const { symptoms } = req.body;
-  console.log(symptoms);
+  console.log('Input symptoms:', symptoms);
 
   if (!symptoms || !Array.isArray(symptoms) || symptoms.length === 0) {
     return res.status(400).json({
@@ -139,6 +141,7 @@ exports.predictDisease = async (req, res) => {
 
   // Chuyển mảng triệu chứng thành JSON string để truyền vào Python
   const symptomsJson = JSON.stringify(symptoms);
+  console.log('Symptoms JSON:', symptomsJson);
 
   // Đường dẫn đến script Python
   const pythonScriptPath = path.join(
@@ -148,107 +151,150 @@ exports.predictDisease = async (req, res) => {
     'models',
     'predict_diseases.py'
   );
+  console.log('Python script path:', pythonScriptPath);
+
+  // Kiểm tra xem file script Python có tồn tại không
+  if (!fs.existsSync(pythonScriptPath)) {
+    console.error('Python script does not exist at path:', pythonScriptPath);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Không tìm thấy script dự đoán bệnh',
+    });
+  }
 
   // Gọi script Python
-  const pythonProcess = spawn('python', [pythonScriptPath, symptomsJson]);
+  try {
+    console.log('Spawning Python process with args:', [
+      pythonScriptPath,
+      symptomsJson,
+    ]);
+    const pythonProcess = spawn('python', [pythonScriptPath, symptomsJson]);
 
-  let data = '';
-  let error = '';
+    let data = '';
+    let error = '';
 
-  // Xử lý dữ liệu từ Python script
-  pythonProcess.stdout.on('data', (chunk) => {
-    const chunkStr = chunk.toString();
-    console.log('Python stdout:', chunkStr);
-    data += chunkStr;
-  });
+    // Xử lý dữ liệu từ Python script
+    pythonProcess.stdout.on('data', (chunk) => {
+      const chunkStr = chunk.toString();
+      console.log('Python stdout:', chunkStr);
+      data += chunkStr;
+    });
 
-  // Xử lý lỗi từ Python script
-  pythonProcess.stderr.on('data', (chunk) => {
-    const chunkStr = chunk.toString();
-    console.error('Python stderr:', chunkStr);
-    error += chunkStr;
-  });
+    // Xử lý lỗi từ Python script
+    pythonProcess.stderr.on('data', (chunk) => {
+      const chunkStr = chunk.toString();
+      console.error('Python stderr:', chunkStr);
+      error += chunkStr;
+    });
 
-  // Khi Python script kết thúc
-  pythonProcess.on('close', (code) => {
-    console.log(`Python process exited with code ${code}`);
-    console.log('Python stdout data:', data);
-    console.log('Python stderr error:', error);
+    // Khi Python script kết thúc
+    pythonProcess.on('close', (code) => {
+      console.log(`Python process exited with code ${code}`);
+      console.log('Python stdout data:', data);
+      console.log('Python stderr error:', error);
 
-    if (code !== 0) {
-      console.error(`Lỗi khi chạy Python script (${code}): ${error}`);
+      if (code !== 0) {
+        console.error(`Lỗi khi chạy Python script (${code}): ${error}`);
 
-      // Thử phân tích lỗi JSON nếu có
-      try {
-        const errorJson = JSON.parse(data);
-        if (errorJson.error) {
-          return res.status(400).json({
-            status: 'fail',
-            message: errorJson.error,
+        // Thử phân tích lỗi JSON nếu có
+        try {
+          const errorJson = JSON.parse(data);
+          if (errorJson.error) {
+            return res.status(400).json({
+              status: 'fail',
+              message: errorJson.error,
+            });
+          }
+        } catch (e) {
+          // Không phải JSON, tiếp tục xử lý
+          console.error('Error parsing JSON error response:', e);
+        }
+
+        // Kiểm tra lỗi phổ biến
+        if (error.includes('FileNotFoundError')) {
+          return res.status(500).json({
+            status: 'error',
+            message: 'Không tìm thấy file model cần thiết',
+            details: error,
           });
         }
-      } catch (e) {
-        // Không phải JSON, tiếp tục xử lý
-      }
 
-      // Kiểm tra lỗi phổ biến
-      if (error.includes('FileNotFoundError')) {
+        if (
+          error.includes('ModuleNotFoundError') ||
+          error.includes('ImportError')
+        ) {
+          return res.status(500).json({
+            status: 'error',
+            message: 'Lỗi khi import module trong Python',
+            details: error,
+          });
+        }
+
+        if (error.includes('Symptom') && error.includes('are not in dataset')) {
+          return res.status(400).json({
+            status: 'fail',
+            message: 'Có triệu chứng không hợp lệ',
+            details: error,
+          });
+        }
+
         return res.status(500).json({
           status: 'error',
-          message: 'Không tìm thấy file model cần thiết',
-          details: error,
+          message: 'Lỗi khi dự đoán bệnh',
+          error: error,
         });
       }
 
-      if (error.includes('Symptom') && error.includes('are not in dataset')) {
-        return res.status(400).json({
-          status: 'fail',
-          message: 'Có triệu chứng không hợp lệ',
-          details: error,
+      try {
+        // Parse kết quả JSON từ Python
+        const trimmedData = data.trim();
+        console.log('Trying to parse JSON:', trimmedData);
+
+        // Tìm dòng JSON cuối cùng từ đầu ra
+        const jsonLines = trimmedData.split('\n');
+        const lastLine = jsonLines[jsonLines.length - 1];
+        console.log('Last line for JSON parsing:', lastLine);
+
+        const predictions = JSON.parse(lastLine);
+
+        if (predictions.error) {
+          return res.status(400).json({
+            status: 'fail',
+            message: predictions.error,
+          });
+        }
+
+        // Format kết quả để hiển thị phần trăm
+        const formattedPredictions = {};
+        for (const [disease, probability] of Object.entries(predictions)) {
+          formattedPredictions[disease] = `${(probability * 100).toFixed(2)}%`;
+        }
+
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            input_symptoms: symptoms,
+            predictions: formattedPredictions,
+            raw_predictions: predictions,
+          },
+        });
+      } catch (e) {
+        console.error('Lỗi khi xử lý kết quả từ Python:', e);
+        console.error('Raw data from Python:', data);
+        return res.status(500).json({
+          status: 'error',
+          message: 'Lỗi khi xử lý kết quả từ Python',
+          details: e.message,
+          rawData: data,
         });
       }
-
-      return res.status(500).json({
-        status: 'error',
-        message: 'Lỗi khi dự đoán bệnh',
-        error: error,
-      });
-    }
-
-    try {
-      // Parse kết quả JSON từ Python
-      const predictions = JSON.parse(data);
-
-      if (predictions.error) {
-        return res.status(400).json({
-          status: 'fail',
-          message: predictions.error,
-        });
-      }
-
-      // Format kết quả để hiển thị phần trăm
-      const formattedPredictions = {};
-      for (const [disease, probability] of Object.entries(predictions)) {
-        formattedPredictions[disease] = `${(probability * 100).toFixed(2)}%`;
-      }
-
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          input_symptoms: symptoms,
-          predictions: formattedPredictions,
-          raw_predictions: predictions,
-        },
-      });
-    } catch (e) {
-      console.error('Lỗi khi xử lý kết quả từ Python:', e);
-      console.error('Raw data from Python:', data);
-      return res.status(500).json({
-        status: 'error',
-        message: 'Lỗi khi xử lý kết quả từ Python',
-        details: e.message,
-        rawData: data,
-      });
-    }
-  });
+    });
+  } catch (e) {
+    console.error('Lỗi khi khởi chạy Python process:', e);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Lỗi khi khởi chạy script dự đoán bệnh',
+      details: e.message,
+    });
+  }
 };

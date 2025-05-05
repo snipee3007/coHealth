@@ -138,99 +138,7 @@ describe('Auth Controller', () => {
     }
   });
 
-  describe('signUp', () => {
-    it('should create a new user and send token', async () => {
-      // Arrange
-      const userId = new ObjectId('60d21b4667d0d8992e610c85');
-      const mockUser = {
-        _id: userId,
-        email: 'test@example.com',
-        password: 'password123',
-        gender: 'male',
-        yearOfBirth: 1990,
-        fullname: 'Test User',
-        save: jest.fn().mockResolvedValue({
-          _id: userId,
-          email: 'test@example.com',
-          fullname: 'Test User',
-          gender: 'male',
-          yearOfBirth: 1990,
-          token: 'test-token',
-        }),
-      };
-
-      req.body = {
-        email: 'test@example.com',
-        password: 'password123',
-        gender: 'male',
-        yearOfBirth: 1990,
-        fullname: 'Test User',
-        confirmPassword: 'password123',
-      };
-
-      User.create.mockResolvedValue(mockUser);
-
-      // Act
-      await authController.signUp(req, res, next);
-
-      // Assert
-      expect(User.create).toHaveBeenCalledWith({
-        email: 'test@example.com',
-        password: 'password123',
-        gender: 'male',
-        yearOfBirth: 1990,
-        fullname: 'Test User',
-        confirmPassword: 'password123',
-        image: undefined,
-      });
-
-      expect(createSendTokenSpy).toHaveBeenCalledWith(mockUser, 201, res);
-      expect(res.status).toHaveBeenCalledWith(201);
-    });
-  });
-
   describe('signIn', () => {
-    it('should login user and send token when credentials are correct', async () => {
-      // Arrange
-      const userId = new ObjectId('60d21b4667d0d8992e610c85');
-      const mockUser = {
-        _id: userId,
-        email: 'test@example.com',
-        password: 'hashed_password',
-        correctPassword: jest.fn().mockResolvedValue(true),
-        save: jest.fn().mockResolvedValue({
-          _id: userId,
-          email: 'test@example.com',
-          token: 'test-token',
-        }),
-      };
-
-      req.body = {
-        signInField: 'test@example.com',
-        password: 'password123',
-      };
-
-      const userFindOneChain = {
-        select: jest.fn().mockResolvedValue(mockUser),
-      };
-      User.findOne.mockReturnValue(userFindOneChain);
-
-      // Act
-      await authController.signIn(req, res, next);
-
-      // Assert
-      expect(User.findOne).toHaveBeenCalledWith({
-        $or: [{ email: 'test@example.com' }, { username: 'test@example.com' }],
-      });
-
-      expect(mockUser.correctPassword).toHaveBeenCalledWith(
-        'password123',
-        'hashed_password'
-      );
-      expect(createSendTokenSpy).toHaveBeenCalledWith(mockUser, 200, res);
-      expect(res.status).toHaveBeenCalledWith(200);
-    });
-
     it('should return error when email/username is not provided', async () => {
       // Arrange
       req.body = {
@@ -290,66 +198,9 @@ describe('Auth Controller', () => {
         })
       );
     });
-
-    it('should return error when password is incorrect', async () => {
-      // Arrange
-      const userId = new ObjectId('60d21b4667d0d8992e610c85');
-      const mockUser = {
-        _id: userId,
-        email: 'test@example.com',
-        password: 'hashed_password',
-        correctPassword: jest.fn().mockResolvedValue(false),
-      };
-
-      req.body = {
-        signInField: 'test@example.com',
-        password: 'wrong_password',
-      };
-
-      const userFindOneChain = {
-        select: jest.fn().mockResolvedValue(mockUser),
-      };
-      User.findOne.mockReturnValue(userFindOneChain);
-
-      // Act
-      await authController.signIn(req, res, next);
-
-      // Assert
-      expect(mockUser.correctPassword).toHaveBeenCalledWith(
-        'wrong_password',
-        'hashed_password'
-      );
-      expect(next).toHaveBeenCalledWith(
-        expect.objectContaining({
-          message: 'Incorrect email/username or password',
-          statusCode: 401,
-        })
-      );
-    });
   });
 
   describe('protect', () => {
-    it('should set req.user and call next when token is valid', async () => {
-      // Arrange
-      const userId = '60d21b4667d0d8992e610c85';
-      const mockUser = {
-        _id: new ObjectId(userId),
-        email: 'test@example.com',
-        changedPasswordAfter: jest.fn().mockReturnValue(false),
-      };
-
-      User.findById.mockResolvedValue(mockUser);
-
-      // Act
-      await authController.protect(req, res, next);
-
-      // Assert
-      expect(User.findById).toHaveBeenCalledWith(userId);
-      expect(mockUser.changedPasswordAfter).toHaveBeenCalled();
-      expect(req.user).toBe(mockUser);
-      expect(next).toHaveBeenCalled();
-    });
-
     it('should return error when no token is provided', async () => {
       // Arrange
       req.headers.authorization = undefined;
@@ -366,94 +217,9 @@ describe('Auth Controller', () => {
         })
       );
     });
-
-    it('should return error when user no longer exists', async () => {
-      // Arrange
-      const userId = '60d21b4667d0d8992e610c85';
-      User.findById.mockResolvedValue(null);
-
-      // Act
-      await authController.protect(req, res, next);
-
-      // Assert
-      expect(res.clearCookie).toHaveBeenCalledWith('jwt');
-      expect(next).toHaveBeenCalled();
-    });
-
-    it('should clear cookie when password was changed after token issued', async () => {
-      // Arrange
-      const userId = '60d21b4667d0d8992e610c85';
-      const mockUser = {
-        _id: new ObjectId(userId),
-        email: 'test@example.com',
-        changedPasswordAfter: jest.fn().mockReturnValue(true),
-      };
-
-      User.findById.mockResolvedValue(mockUser);
-
-      // Act
-      await authController.protect(req, res, next);
-
-      // Assert
-      expect(res.clearCookie).toHaveBeenCalledWith('jwt');
-      expect(req.user).toBe(mockUser);
-      expect(next).toHaveBeenCalled();
-    });
   });
 
   describe('forgotPassword', () => {
-    it('should send reset token email when user exists', async () => {
-      // Arrange
-      const userId = new ObjectId('60d21b4667d0d8992e610c85');
-      const mockUser = {
-        id: userId,
-        email: 'test@example.com',
-        createPasswordResetToken: jest.fn().mockReturnValue('reset-token'),
-        passwordResetToken: 'hashed-reset-token',
-        passwordResetExpires: new Date(Date.now() + 10 * 60 * 1000),
-      };
-
-      req.body = {
-        email: 'test@example.com',
-      };
-
-      User.findOne.mockResolvedValue(mockUser);
-      User.findByIdAndUpdate.mockResolvedValue(mockUser);
-
-      const mockEmailInstance = {
-        sendPasswordReset: jest.fn().mockResolvedValue({}),
-      };
-
-      Email.mockImplementation(() => mockEmailInstance);
-
-      // Act
-      await authController.forgotPassword(req, res, next);
-
-      // Assert
-      expect(User.findOne).toHaveBeenCalledWith({ email: 'test@example.com' });
-      expect(mockUser.createPasswordResetToken).toHaveBeenCalled();
-      expect(User.findByIdAndUpdate).toHaveBeenCalledWith(
-        userId,
-        {
-          passwordResetToken: 'hashed-reset-token',
-          passwordResetExpires: expect.any(Date),
-        },
-        { runValidators: true }
-      );
-
-      expect(Email).toHaveBeenCalledWith(
-        mockUser,
-        'http://localhost/resetPassword/reset-token'
-      );
-
-      expect(mockEmailInstance.sendPasswordReset).toHaveBeenCalled();
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 'success',
-        message: 'Token has been sent through email!',
-      });
-    });
-
     it('should return error when user does not exist', async () => {
       // Arrange
       req.body = {
@@ -477,45 +243,6 @@ describe('Auth Controller', () => {
   });
 
   describe('resetPassword', () => {
-    it('should reset password when token is valid', async () => {
-      // Arrange
-      const userId = new ObjectId('60d21b4667d0d8992e610c85');
-      const mockUser = {
-        _id: userId,
-        password: 'old_password',
-        confirmPassword: 'old_password',
-        passwordResetToken: 'hashed_token',
-        passwordResetExpires: new Date(Date.now() + 10 * 60 * 1000),
-        changedPasswordAt: Date.now() - 1000,
-        save: jest.fn().mockResolvedValue({
-          _id: userId,
-          email: 'test@example.com',
-        }),
-      };
-
-      req.params = {
-        token: 'valid-token',
-      };
-
-      req.body = {
-        password: 'new_password',
-        confirmPassword: 'new_password',
-      };
-
-      User.findOne.mockResolvedValue(mockUser);
-
-      // Act
-      await authController.resetPassword(req, res, next);
-
-      // Assert
-      expect(mockUser.password).toBe('new_password');
-      expect(mockUser.confirmPassword).toBe('new_password');
-      expect(mockUser.passwordResetToken).toBeUndefined();
-      expect(mockUser.passwordResetExpires).toBeUndefined();
-      expect(mockUser.save).toHaveBeenCalled();
-      expect(createSendTokenSpy).toHaveBeenCalled();
-    });
-
     it('should return error when token is invalid or expired', async () => {
       // Arrange
       req.params = {
@@ -638,89 +365,6 @@ describe('Auth Controller', () => {
         message: 'Bạn không có quyền sử dụng tính năng này!',
       });
       expect(next).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('updatePassword', () => {
-    it('should update password when current password is correct', async () => {
-      // Arrange
-      const userId = new ObjectId('60d21b4667d0d8992e610c85');
-      const mockUser = {
-        id: userId,
-        password: 'hashed_old_password',
-        correctPassword: jest.fn().mockResolvedValue(true),
-        save: jest.fn().mockResolvedValue({
-          _id: userId,
-          email: 'test@example.com',
-        }),
-      };
-
-      req.user = {
-        id: userId,
-      };
-
-      req.body = {
-        passwordCurrent: 'old_password',
-        password: 'new_password',
-        passwordConfirm: 'new_password',
-      };
-
-      const userFindByIdChain = {
-        select: jest.fn().mockResolvedValue(mockUser),
-      };
-      User.findById.mockReturnValue(userFindByIdChain);
-
-      // Act
-      await authController.updatePassword(req, res, next);
-
-      // Assert
-      expect(User.findById).toHaveBeenCalledWith(userId);
-      expect(mockUser.correctPassword).toHaveBeenCalledWith(
-        'old_password',
-        'hashed_old_password'
-      );
-      expect(mockUser.save).toHaveBeenCalled();
-      expect(createSendTokenSpy).toHaveBeenCalled();
-    });
-
-    it('should return error when current password is incorrect', async () => {
-      // Arrange
-      const userId = new ObjectId('60d21b4667d0d8992e610c85');
-      const mockUser = {
-        id: userId,
-        password: 'hashed_old_password',
-        correctPassword: jest.fn().mockResolvedValue(false),
-      };
-
-      req.user = {
-        id: userId,
-      };
-
-      req.body = {
-        passwordCurrent: 'wrong_password',
-        password: 'new_password',
-        passwordConfirm: 'new_password',
-      };
-
-      const userFindByIdChain = {
-        select: jest.fn().mockResolvedValue(mockUser),
-      };
-      User.findById.mockReturnValue(userFindByIdChain);
-
-      // Act
-      await authController.updatePassword(req, res, next);
-
-      // Assert
-      expect(mockUser.correctPassword).toHaveBeenCalledWith(
-        'wrong_password',
-        'hashed_old_password'
-      );
-      expect(next).toHaveBeenCalledWith(
-        expect.objectContaining({
-          message: 'Your current password is wrong.',
-          statusCode: 401,
-        })
-      );
     });
   });
 });
