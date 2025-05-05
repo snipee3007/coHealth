@@ -128,6 +128,55 @@ exports.createDisease = catchAsync(async (req, res, next) => {
 
 // Chỉ phần predictDisease được cập nhật
 exports.predictDisease = async (req, res) => {
+  console.log('Current working directory:', process.cwd());
+  const rootFolder = process.cwd();
+  // Liệt kê thư mục gốc
+  try {
+    const rootFiles = fs.readdirSync(rootFolder);
+    console.log('Files in root directory:', rootFiles);
+
+    // Kiểm tra xem có thư mục utils không
+    if (rootFiles.includes('utils')) {
+      const utilsFiles = fs.readdirSync(path.join(rootFolder, 'utils'));
+      console.log('Files in utils directory:', utilsFiles);
+
+      // Kiểm tra thư mục models
+      if (utilsFiles.includes('models')) {
+        const modelsFiles = fs.readdirSync(
+          path.join(rootFolder, 'utils', 'models')
+        );
+        console.log('Files in models directory:', modelsFiles);
+      }
+    }
+
+    // Kiểm tra xem có thư mục backend không
+    if (rootFiles.includes('backend')) {
+      const backendFiles = fs.readdirSync(path.join(rootFolder, 'backend'));
+      console.log('Files in backend directory:', backendFiles);
+
+      // Kiểm tra thư mục utils trong backend
+      if (backendFiles.includes('utils')) {
+        const backendUtilsFiles = fs.readdirSync(
+          path.join(rootFolder, 'backend', 'utils')
+        );
+        console.log('Files in backend/utils directory:', backendUtilsFiles);
+
+        // Kiểm tra thư mục models trong backend/utils
+        if (backendUtilsFiles.includes('models')) {
+          const backendModelsFiles = fs.readdirSync(
+            path.join(rootFolder, 'backend', 'utils', 'models')
+          );
+          console.log(
+            'Files in backend/utils/models directory:',
+            backendModelsFiles
+          );
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Error scanning directories:', err);
+  }
+
   // Lấy danh sách triệu chứng từ request
   const { symptoms } = req.body;
   console.log('Input symptoms:', symptoms);
