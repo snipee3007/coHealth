@@ -128,55 +128,6 @@ exports.createDisease = catchAsync(async (req, res, next) => {
 
 // Chỉ phần predictDisease được cập nhật
 exports.predictDisease = async (req, res) => {
-  console.log('Current working directory:', process.cwd());
-  const rootFolder = process.cwd();
-  // Liệt kê thư mục gốc
-  try {
-    const rootFiles = fs.readdirSync(rootFolder);
-    console.log('Files in root directory:', rootFiles);
-
-    // Kiểm tra xem có thư mục utils không
-    if (rootFiles.includes('utils')) {
-      const utilsFiles = fs.readdirSync(path.join(rootFolder, 'utils'));
-      console.log('Files in utils directory:', utilsFiles);
-
-      // Kiểm tra thư mục models
-      if (utilsFiles.includes('models')) {
-        const modelsFiles = fs.readdirSync(
-          path.join(rootFolder, 'utils', 'models')
-        );
-        console.log('Files in models directory:', modelsFiles);
-      }
-    }
-
-    // Kiểm tra xem có thư mục backend không
-    if (rootFiles.includes('backend')) {
-      const backendFiles = fs.readdirSync(path.join(rootFolder, 'backend'));
-      console.log('Files in backend directory:', backendFiles);
-
-      // Kiểm tra thư mục utils trong backend
-      if (backendFiles.includes('utils')) {
-        const backendUtilsFiles = fs.readdirSync(
-          path.join(rootFolder, 'backend', 'utils')
-        );
-        console.log('Files in backend/utils directory:', backendUtilsFiles);
-
-        // Kiểm tra thư mục models trong backend/utils
-        if (backendUtilsFiles.includes('models')) {
-          const backendModelsFiles = fs.readdirSync(
-            path.join(rootFolder, 'backend', 'utils', 'models')
-          );
-          console.log(
-            'Files in backend/utils/models directory:',
-            backendModelsFiles
-          );
-        }
-      }
-    }
-  } catch (err) {
-    console.error('Error scanning directories:', err);
-  }
-
   // Lấy danh sách triệu chứng từ request
   const { symptoms } = req.body;
   console.log('Input symptoms:', symptoms);
@@ -219,8 +170,6 @@ exports.predictDisease = async (req, res) => {
         pythonScriptPath = testPath;
         console.log('Found Python script at:', pythonScriptPath);
         break;
-      } else {
-        console.log('Path at: ', pythonScriptPath, ' is wrong');
       }
     }
 
@@ -242,10 +191,18 @@ exports.predictDisease = async (req, res) => {
     // Xác định lệnh Python phù hợp (python hoặc python3)
     const pythonCommand =
       process.env.NODE_ENV === 'production' ? 'python3' : 'python';
-    const pythonProcess = spawn(pythonCommand, [
-      pythonScriptPath,
-      symptomsJson,
-    ]);
+
+    // Thêm timeout để tránh quá trình treo vô hạn
+    const pythonOptions = {
+      timeout: 30000, // 30 giây timeout
+      maxBuffer: 1024 * 1024 * 10, // 10MB buffer size
+    };
+
+    const pythonProcess = spawn(
+      pythonCommand,
+      [pythonScriptPath, symptomsJson],
+      pythonOptions
+    );
 
     let data = '';
     let error = '';
@@ -264,6 +221,16 @@ exports.predictDisease = async (req, res) => {
       error += chunkStr;
     });
 
+    // Xử lý lỗi khi spawn process
+    pythonProcess.on('error', (err) => {
+      console.error('Failed to start Python process:', err);
+      return res.status(500).json({
+        status: 'error',
+        message: 'Không thể khởi động quá trình Python',
+        details: err.message,
+      });
+    });
+
     // Khi Python script kết thúc
     pythonProcess.on('close', (code) => {
       console.log(`Python process exited with code ${code}`);
@@ -273,52 +240,51 @@ exports.predictDisease = async (req, res) => {
       if (code !== 0) {
         console.error(`Lỗi khi chạy Python script (${code}): ${error}`);
 
+        // Chi tiết hơn về lỗi
+        let errorMessage = 'Lỗi khi dự đoán bệnh';
+
         // Thử phân tích lỗi JSON nếu có
         try {
-          const errorJson = JSON.parse(data);
-          if (errorJson.error) {
-            return res.status(400).json({
-              status: 'fail',
-              message: errorJson.error,
-            });
+          // Tìm chuỗi JSON trong output
+          const jsonMatch = data.match(/\{.*\}/);
+          if (jsonMatch) {
+            const errorJson = JSON.parse(jsonMatch[0]);
+            if (errorJson.error) {
+              return res.status(400).json({
+                status: 'fail',
+                message: errorJson.error,
+              });
+            }
           }
         } catch (e) {
           // Không phải JSON, tiếp tục xử lý
           console.error('Error parsing JSON error response:', e);
         }
 
-        // Kiểm tra lỗi phổ biến
+        // Phân tích stderr để tìm lỗi
         if (error.includes('FileNotFoundError')) {
-          return res.status(500).json({
-            status: 'error',
-            message: 'Không tìm thấy file model cần thiết',
-            details: error,
-          });
-        }
-
-        if (
+          errorMessage = 'Không tìm thấy file model cần thiết';
+        } else if (
           error.includes('ModuleNotFoundError') ||
           error.includes('ImportError')
         ) {
-          return res.status(500).json({
-            status: 'error',
-            message: 'Lỗi khi import module trong Python',
-            details: error,
-          });
-        }
-
-        if (error.includes('Symptom') && error.includes('are not in dataset')) {
-          return res.status(400).json({
-            status: 'fail',
-            message: 'Có triệu chứng không hợp lệ',
-            details: error,
-          });
+          errorMessage = 'Lỗi khi import module trong Python';
+        } else if (error.includes('Memory')) {
+          errorMessage = 'Python quá trình hết bộ nhớ';
+        } else if (error.includes('Killed')) {
+          errorMessage = 'Python quá trình bị kill bởi hệ thống';
+        } else if (error.includes('ERROR:')) {
+          // Trích xuất thông báo lỗi chi tiết
+          const errorMatch = error.match(/ERROR: (.*?)(\n|$)/);
+          if (errorMatch) {
+            errorMessage = errorMatch[1];
+          }
         }
 
         return res.status(500).json({
           status: 'error',
-          message: 'Lỗi khi dự đoán bệnh',
-          error: error,
+          message: errorMessage,
+          details: error,
         });
       }
 
@@ -327,12 +293,18 @@ exports.predictDisease = async (req, res) => {
         const trimmedData = data.trim();
         console.log('Trying to parse JSON:', trimmedData);
 
-        // Tìm dòng JSON cuối cùng từ đầu ra
-        const jsonLines = trimmedData.split('\n');
-        const lastLine = jsonLines[jsonLines.length - 1];
-        console.log('Last line for JSON parsing:', lastLine);
+        // Tìm và trích xuất JSON từ output
+        const jsonPattern = /\{.*\}/s; // s flag cho phép matching trên nhiều dòng
+        const match = trimmedData.match(jsonPattern);
 
-        const predictions = JSON.parse(lastLine);
+        if (!match) {
+          throw new Error('Không tìm thấy dữ liệu JSON trong kết quả');
+        }
+
+        const jsonStr = match[0];
+        console.log('Extracted JSON string:', jsonStr);
+
+        const predictions = JSON.parse(jsonStr);
 
         if (predictions.error) {
           return res.status(400).json({
