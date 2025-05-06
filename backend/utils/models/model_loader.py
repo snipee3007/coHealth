@@ -1,4 +1,3 @@
-
 import os
 import sys
 import json
@@ -6,6 +5,7 @@ import pandas as pd
 import joblib
 import numpy as np
 from sklearn import __version__ as sklearn_version
+import traceback  # Thêm traceback để in chi tiết lỗi
 
 print(f"Python version: {sys.version}", file=sys.stderr)
 print(f"pandas version: {pd.__version__}", file=sys.stderr)
@@ -24,7 +24,7 @@ try:
         print(f" - {file}", file=sys.stderr)
         
     # Kiểm tra kích thước các file
-    for file_name in ['decisionTreeNew.joblib', 'label_encoder.joblib', 'X_features.joblib']:
+    for file_name in ['optimized_GaussianNB.joblib', 'label_encoder.joblib', 'X_features.joblib']:
         file_path = os.path.join(current_dir, file_name)
         if os.path.exists(file_path):
             size_mb = os.path.getsize(file_path) / (1024 * 1024)
@@ -44,7 +44,7 @@ try:
         print("psutil not installed, skipping memory check", file=sys.stderr)
     
     # Paths to model files
-    model_path = os.path.join(current_dir, 'decisionTreeNew.joblib')
+    model_path = os.path.join(current_dir, 'optimized_GaussianNB.joblib')
     label_encoder_path = os.path.join(current_dir, 'label_encoder.joblib')
     features_path = os.path.join(current_dir, 'X_features.joblib')
     
@@ -54,28 +54,53 @@ try:
     print(f"Features path exists: {os.path.exists(features_path)}", file=sys.stderr)
     
     try:
-        print("Attempting to load model...")
+        print("Attempting to load model...", file=sys.stderr)
         model = joblib.load(model_path)
-        print("Model loaded successfully")
+        print(f"Model loaded successfully. Type: {type(model)}", file=sys.stderr)
+        
+        # Kiểm tra xem model có phải là None không
+        if model is None:
+            raise ValueError("Model loaded but is None!")
+        
+        # Kiểm tra xem model có method predict_proba không
+        if not hasattr(model, 'predict_proba'):
+            raise ValueError(f"Model does not have predict_proba method! Model type: {type(model)}")
+            
     except Exception as e:
         import traceback
-        print(f"Error loading model: {str(e)}")
-        print("Traceback:")
+        print(f"Error loading model: {str(e)}", file=sys.stderr)
+        print("Traceback:", file=sys.stderr)
         traceback.print_exc(file=sys.stderr)
+        # Signal error but continue to try loading other components
+        print(json.dumps({"status": "error", "message": f"Error loading model: {str(e)}"}))
+        sys.exit(1)
     
     print("Loading label encoder...", file=sys.stderr)
-    label_encoder = joblib.load(label_encoder_path)
-    print("Label encoder loaded successfully", file=sys.stderr)
+    try:
+        label_encoder = joblib.load(label_encoder_path)
+        print(f"Label encoder loaded successfully. Type: {type(label_encoder)}", file=sys.stderr)
+    except Exception as e:
+        print(f"Error loading label encoder: {str(e)}", file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)
+        print(json.dumps({"status": "error", "message": f"Error loading label encoder: {str(e)}"}))
+        sys.exit(1)
     
     print("Loading features...", file=sys.stderr)
-    feature_columns = joblib.load(features_path)
-    print("Features loaded successfully", file=sys.stderr)
+    try:
+        feature_columns = joblib.load(features_path)
+        print(f"Features loaded successfully. Type: {type(feature_columns)}", file=sys.stderr)
+        print(f"Feature columns length: {len(feature_columns)}", file=sys.stderr)
+    except Exception as e:
+        print(f"Error loading features: {str(e)}", file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)
+        print(json.dumps({"status": "error", "message": f"Error loading features: {str(e)}"}))
+        sys.exit(1)
     
     # Signal that model loading was successful
     print(json.dumps({"status": "success", "message": "Model loaded successfully"}))
     
 except Exception as e:
     print(f"Error loading model: {str(e)}", file=sys.stderr)
+    traceback.print_exc(file=sys.stderr)  # In chi tiết lỗi để debug
     print(json.dumps({"status": "error", "message": str(e)}))
     sys.exit(1)
-        

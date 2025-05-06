@@ -1,2 +1,2 @@
-backend/utils/models/decisionTreeNew.joblib filter=lfs diff=lfs merge=lfs -text
+backend/utils/models/optimized_GaussianNB.joblib filter=lfs diff=lfs merge=lfs -text
 backend/utils/models/decisionTreeNew(1).joblib filter=lfs diff=lfs merge=lfs -text
