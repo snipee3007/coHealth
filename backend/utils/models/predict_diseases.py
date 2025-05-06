@@ -14,7 +14,7 @@ try:
         print(f" - {file}", file=sys.stderr)
 
     # Đường dẫn đến các file model
-    model_path = os.path.join(current_dir, 'decisionTreeNew.joblib')
+    model_path = os.path.join(current_dir, 'optimized_GaussianNB.joblib')
     label_encoder_path = os.path.join(current_dir, 'label_encoder.joblib')
     features_path = os.path.join(current_dir, 'X_features.joblib')
 
