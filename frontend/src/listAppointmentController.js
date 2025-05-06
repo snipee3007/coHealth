@@ -1,4 +1,6 @@
 // 2 function dưới để thêm hiệu ứng khi chuyển trang
+import Loader from './utils/loader.js';
+
 function fadeOutContent() {
   document
     .querySelector('#appointment-container')

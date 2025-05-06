@@ -1,3 +1,5 @@
+import Loader from './utils/loader.js';
+
 class CalculateBMI {
   constructor() {
     this.error = false;

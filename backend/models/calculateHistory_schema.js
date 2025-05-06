@@ -57,7 +57,7 @@ const inputSchema = new mongoose.Schema({
     required: [true, 'Please provide the method for this calculation!'],
   },
   activities: {
-    type: activitySchema,
+    type: [activitySchema],
   },
   activityIntensity: {
     type: String,

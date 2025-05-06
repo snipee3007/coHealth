@@ -309,5 +309,5 @@ const mainCalculateFunction = async function ({
         ? 864 - 9.72 * age + pa * [14.2 * weight + 503 * (height / 100)]
         : 387 - 7.31 * age + pa * [10.9 * weight + 660.7 * (height / 100)];
   }
-  return { bmi, bmiStatus, tdee, tee };
+  return { bmi, bmiStatus, tdee: Math.ceil(tdee), tee: Math.ceil(tee) };
 };

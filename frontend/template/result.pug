@@ -118,7 +118,7 @@ block body
                             .weekAfterToAchieveTarget_status.font-bold(class='text-[#D3B185]') Your dream weight
             
             .font-AbhayaLibre.text-2xl PERSONALIZED MEAL & EXERCISE PLAN
-            .personalMealAndPlan.font-Alice
+            .personalMealAndPlan.font-Alice.mb-8
                 .timetable(class='w-4/5 border-[#B7B7B7]').mx-auto.border.mt-6
                     .weeks.swiper
                         .weeksContainer.swiper-wrapper
@@ -157,6 +157,18 @@ block body
                             .carbohydratesLabel Carbohydrates (g)
                             .carbohydratesValue
 
-            .exercise.font-Alice 
+            .font-AbhayaLibre.text-2xl PERSONALIZED MEAL & EXERCISE PLAN
+            .exercise.font-Alice.mb-8
                 .exceriseContainer
+                    .exerciseQuestionContainer.flex.flex-col.justify-center.items-center.gap-4.mt-4
+                        .exerciseQuestion.text-center.text-xl.italic Would you like us to suggest for you some exercises?
+                        button.exerciseQuestionButton.linearBackground.py-2.px-4.rounded-xl.text-white.cursor-pointer(class='w-1/4') Suggest now!
+                    form.exerciseForm
+                        .exerciseLevel
+                            label(for="level").exerciseLevelLabel.font-AbhayaLibre Level
+                            select#level.exerciseLevelLabel(name='level')
+                                option(value="beginner") Beginner
+                                option(value="intermediate") Intermediate
+                                option(value="expert") Expert
+
         
