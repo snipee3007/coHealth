@@ -5,7 +5,7 @@ const fs = require('fs');
 
 const { spawn } = require('child_process');
 const path = require('path');
-const modelLoader = require('../../modelLoader.js'); // Import the model loader
+const modelLoader = require('./modelLoader.js'); // Import the model loader
 
 exports.getAllDiseases = catchAsync(async (req, res, next) => {
   const Diseases = await Disease.find({}).lean();
