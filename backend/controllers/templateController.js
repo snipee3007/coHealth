@@ -121,9 +121,9 @@ exports.getProfileTemplate = async (req, res) => {
 };
 
 exports.getHealthHistoryTemplate = catchAsync(async (req, res) => {
-  const calculateHistory = await CalculateHistory.find({}).sort(
-    '-updatedAt -createdAt'
-  );
+  const calculateHistory = await CalculateHistory.find({
+    userID: req.user.id,
+  }).sort('-updatedAt -createdAt');
   const symptomsHistory = req.symptomsHistory;
   const calculateDateRange = [];
   const symptomCheckDateRange = [];

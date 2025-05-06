@@ -12,7 +12,7 @@ exports.getHistory = catchAsync(async (req, res, next) => {
 });
 
 exports.getAll = catchAsync(async (req, res, next) => {
-  const data = await SymptomHistory.find({})
+  const data = await SymptomHistory.find({ userID: req.user.id })
     .sort('-updatedAt -createdAt')
     .populate('symptoms');
   req.symptomsHistory = data;
