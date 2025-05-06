@@ -23,30 +23,25 @@ try:
     for file in os.listdir(current_dir):
         print(f" - {file}", file=sys.stderr)
         
-    # THÊM ĐOẠN MÃ KIỂM TRA QUYỀN FILE TẠI ĐÂY
-    print("Checking file permissions:", file=sys.stderr)
-    for file in ['decisionTreeNew.joblib', 'label_encoder.joblib', 'X_features.joblib']:
-        file_path = os.path.join(current_dir, file)
+    # Kiểm tra kích thước các file
+    for file_name in ['decisionTreeNew.joblib', 'label_encoder.joblib', 'X_features.joblib']:
+        file_path = os.path.join(current_dir, file_name)
         if os.path.exists(file_path):
-            # Hiển thị quyền ở dạng số (ví dụ: 644 = rw-r--r--)
-            file_perms = os.stat(file_path).st_mode & 0o777
-            print(f" - {file}: {oct(file_perms)[2:]} (user: {os.access(file_path, os.R_OK)}, process can read: {os.access(file_path, os.R_OK)})", file=sys.stderr)
-            
-            # Thử mở file để đọc trực tiếp (không dùng joblib)
-            try:
-                with open(file_path, 'rb') as f:
-                    # Chỉ đọc 100 byte đầu tiên để kiểm tra
-                    f.read(100)
-                print(f"   ✓ File can be opened and read", file=sys.stderr)
-            except Exception as e:
-                print(f"   ✗ Error opening file: {str(e)}", file=sys.stderr)
+            size_mb = os.path.getsize(file_path) / (1024 * 1024)
+            print(f"File {file_name} size: {size_mb:.2f} MB", file=sys.stderr)
         else:
-            print(f" - {file}: NOT FOUND", file=sys.stderr)
-    
-    # Kiểm tra user và group của process
-    import getpass
-    print(f"Process running as user: {getpass.getuser()}", file=sys.stderr)
-    print(f"Process UID: {os.getuid()}, GID: {os.getgid()}", file=sys.stderr)
+            print(f"File {file_name} not found", file=sys.stderr)
+
+    # Hiển thị thông tin bộ nhớ
+    try:
+        import psutil
+        print("Memory info:", file=sys.stderr)
+        print(f"Available: {psutil.virtual_memory().available / (1024 * 1024):.2f} MB", file=sys.stderr)
+        print(f"Used: {psutil.virtual_memory().used / (1024 * 1024):.2f} MB", file=sys.stderr)
+        print(f"Total: {psutil.virtual_memory().total / (1024 * 1024):.2f} MB", file=sys.stderr)
+        print(f"Percent used: {psutil.virtual_memory().percent}%", file=sys.stderr)
+    except ImportError:
+        print("psutil not installed, skipping memory check", file=sys.stderr)
     
     # Paths to model files
     model_path = os.path.join(current_dir, 'decisionTreeNew.joblib')
@@ -58,10 +53,15 @@ try:
     print(f"Label encoder path exists: {os.path.exists(label_encoder_path)}", file=sys.stderr)
     print(f"Features path exists: {os.path.exists(features_path)}", file=sys.stderr)
     
-    # Attempt to load the model
-    print("Loading model...", file=sys.stderr)
-    model = joblib.load(model_path)
-    print("Model loaded successfully", file=sys.stderr)
+    try:
+        print("Attempting to load model...")
+        model = joblib.load(model_path)
+        print("Model loaded successfully")
+    except Exception as e:
+        import traceback
+        print(f"Error loading model: {str(e)}")
+        print("Traceback:")
+        traceback.print_exc(file=sys.stderr)
     
     print("Loading label encoder...", file=sys.stderr)
     label_encoder = joblib.load(label_encoder_path)
