@@ -131,6 +131,7 @@ userSchema.post('save', function (error, doc, next) {
     console.log(error.message);
     next(new AppError('Duplicate key value in mongoDB', 11000));
   } else {
+    console.log(error);
     next(new AppError('Bad Request!!! 💥💥 ', 400));
   }
 });

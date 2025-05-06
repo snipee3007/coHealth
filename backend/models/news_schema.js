@@ -115,7 +115,7 @@ const newsSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    relativePost: {
+    relativeNews: {
       type: [relativeNewsSchema],
     },
     like: {

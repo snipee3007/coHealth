@@ -216,6 +216,7 @@ exports.predictDisease = async (req, res) => {
 
     try {
       // Parse kết quả JSON từ Python
+      console.log(data);
       const predictions = JSON.parse(data);
 
       if (predictions.error) {
