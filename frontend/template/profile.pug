@@ -51,7 +51,6 @@ block body
                         label(for='phoneNumber').mb-2 Phone Number
                         input(type="text" value=`${user.phoneNumber || ''}` name='phoneNumber' id='phoneNumber' maxLength=16 class='bg-[#EAF0F7]').mx-2.py-2.px-3.rounded-xl.formInput.numberOnly
                     if user.role == 'doctor'
-                        - console.log(user)
                         .major.flex.flex-col(class='w-2/3')
                             label(for='major').mb-2 Major
                             input(type="text" value=`${user.doctorInfo[0].major || ''}` name='major' id='major' maxLength=32 class='bg-[#EAF0F7]').mx-2.py-2.px-3.rounded-xl.formInput
