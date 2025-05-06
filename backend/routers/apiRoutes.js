@@ -52,6 +52,9 @@ router.use('/adultCompendium', adultCompendiumRoutes);
 // FOOD API
 router.use('/meal', mealRoutes);
 
+// EXERCISE API
+router.use('/exercise', mealRoutes);
+
 // SIGN IN API
 router.post('/signUp', authController.signUp);
 
