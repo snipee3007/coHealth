@@ -19,6 +19,7 @@ try:
     features_path = os.path.join(current_dir, 'X_features.joblib')
 
     # Kiểm tra sự tồn tại của các file
+    print(f"File List: {os.listdir(current_dir)}", file=sys.stderr)
     print(f"Model path exists: {os.path.exists(model_path)}", file=sys.stderr)
     print(f"Label encoder path exists: {os.path.exists(label_encoder_path)}", file=sys.stderr)
     print(f"Features path exists: {os.path.exists(features_path)}", file=sys.stderr)
