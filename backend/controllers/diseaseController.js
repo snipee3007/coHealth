@@ -5,6 +5,7 @@ const fs = require('fs');
 
 const { spawn } = require('child_process');
 const path = require('path');
+const modelLoader = require('../../modelLoader.js'); // Import the model loader
 
 exports.getAllDiseases = catchAsync(async (req, res, next) => {
   const Diseases = await Disease.find({}).lean();
@@ -127,7 +128,228 @@ exports.createDisease = catchAsync(async (req, res, next) => {
 });
 
 // Chỉ phần predictDisease được cập nhật
-exports.predictDisease = async (req, res) => {
+// exports.predictDisease = async (req, res) => {
+//   // Lấy danh sách triệu chứng từ request
+//   const { symptoms } = req.body;
+//   console.log('Input symptoms:', symptoms);
+
+//   if (!symptoms || !Array.isArray(symptoms) || symptoms.length === 0) {
+//     return res.status(400).json({
+//       status: 'fail',
+//       message: 'Vui lòng cung cấp danh sách triệu chứng',
+//     });
+//   }
+
+//   // Chuyển mảng triệu chứng thành JSON string để truyền vào Python
+//   const symptomsJson = JSON.stringify(symptoms);
+//   console.log('Symptoms JSON:', symptomsJson);
+
+//   try {
+//     // Thử các đường dẫn khác nhau để tìm script Python
+//     const possiblePaths = [
+//       // Đường dẫn tương đối dựa trên __dirname
+//       path.join(__dirname, '..', 'utils', 'models', 'predict_diseases.py'),
+//       // Đường dẫn tuyệt đối trên Render
+//       path.join(
+//         process.cwd(),
+//         'backend',
+//         'utils',
+//         'models',
+//         'predict_diseases.py'
+//       ),
+//       // Đường dẫn tuyệt đối dựa trên gốc dự án
+//       path.join(process.cwd(), 'utils', 'models', 'predict_diseases.py'),
+//       // Đường dẫn tương đối từ thư mục hiện tại
+//       path.join('utils', 'models', 'predict_diseases.py'),
+//     ];
+
+//     let pythonScriptPath = null;
+//     // Tìm đường dẫn hợp lệ đầu tiên
+//     for (const testPath of possiblePaths) {
+//       console.log('Testing path:', testPath);
+//       if (fs.existsSync(testPath)) {
+//         pythonScriptPath = testPath;
+//         console.log('Found Python script at:', pythonScriptPath);
+//         break;
+//       }
+//     }
+
+//     if (!pythonScriptPath) {
+//       console.error('Python script not found in any of the tested paths');
+//       return res.status(500).json({
+//         status: 'error',
+//         message: 'Không tìm thấy script dự đoán bệnh',
+//         tested_paths: possiblePaths,
+//       });
+//     }
+
+//     // Gọi script Python
+//     console.log('Spawning Python process with args:', [
+//       pythonScriptPath,
+//       symptomsJson,
+//     ]);
+
+//     // Xác định lệnh Python phù hợp (python hoặc python3)
+//     const pythonCommand =
+//       process.env.NODE_ENV === 'production' ? 'python3' : 'python';
+
+//     // Thêm timeout để tránh quá trình treo vô hạn
+//     const pythonOptions = {
+//       timeout: 30000, // 30 giây timeout
+//       maxBuffer: 1024 * 1024 * 10, // 10MB buffer size
+//     };
+
+//     const pythonProcess = spawn(
+//       pythonCommand,
+//       [pythonScriptPath, symptomsJson],
+//       pythonOptions
+//     );
+
+//     let data = '';
+//     let error = '';
+
+//     // Xử lý dữ liệu từ Python script
+//     pythonProcess.stdout.on('data', (chunk) => {
+//       const chunkStr = chunk.toString();
+//       console.log('Python stdout:', chunkStr);
+//       data += chunkStr;
+//     });
+
+//     // Xử lý lỗi từ Python script
+//     pythonProcess.stderr.on('data', (chunk) => {
+//       const chunkStr = chunk.toString();
+//       console.error('Python stderr:', chunkStr);
+//       error += chunkStr;
+//     });
+
+//     // Xử lý lỗi khi spawn process
+//     pythonProcess.on('error', (err) => {
+//       console.error('Failed to start Python process:', err);
+//       return res.status(500).json({
+//         status: 'error',
+//         message: 'Không thể khởi động quá trình Python',
+//         details: err.message,
+//       });
+//     });
+
+//     // Khi Python script kết thúc
+//     pythonProcess.on('close', (code) => {
+//       console.log(`Python process exited with code ${code}`);
+//       console.log('Python stdout data:', data);
+//       console.log('Python stderr error:', error);
+
+//       if (code !== 0) {
+//         console.error(`Lỗi khi chạy Python script (${code}): ${error}`);
+
+//         // Chi tiết hơn về lỗi
+//         let errorMessage = 'Lỗi khi dự đoán bệnh';
+
+//         // Thử phân tích lỗi JSON nếu có
+//         try {
+//           // Tìm chuỗi JSON trong output
+//           const jsonMatch = data.match(/\{.*\}/);
+//           if (jsonMatch) {
+//             const errorJson = JSON.parse(jsonMatch[0]);
+//             if (errorJson.error) {
+//               return res.status(400).json({
+//                 status: 'fail',
+//                 message: errorJson.error,
+//               });
+//             }
+//           }
+//         } catch (e) {
+//           // Không phải JSON, tiếp tục xử lý
+//           console.error('Error parsing JSON error response:', e);
+//         }
+
+//         // Phân tích stderr để tìm lỗi
+//         if (error.includes('FileNotFoundError')) {
+//           errorMessage = 'Không tìm thấy file model cần thiết';
+//         } else if (
+//           error.includes('ModuleNotFoundError') ||
+//           error.includes('ImportError')
+//         ) {
+//           errorMessage = 'Lỗi khi import module trong Python';
+//         } else if (error.includes('Memory')) {
+//           errorMessage = 'Python quá trình hết bộ nhớ';
+//         } else if (error.includes('Killed')) {
+//           errorMessage = 'Python quá trình bị kill bởi hệ thống';
+//         } else if (error.includes('ERROR:')) {
+//           // Trích xuất thông báo lỗi chi tiết
+//           const errorMatch = error.match(/ERROR: (.*?)(\n|$)/);
+//           if (errorMatch) {
+//             errorMessage = errorMatch[1];
+//           }
+//         }
+
+//         return res.status(500).json({
+//           status: 'error',
+//           message: errorMessage,
+//           details: error,
+//         });
+//       }
+
+//       try {
+//         // Parse kết quả JSON từ Python
+//         const trimmedData = data.trim();
+//         console.log('Trying to parse JSON:', trimmedData);
+
+//         // Tìm và trích xuất JSON từ output
+//         const jsonPattern = /\{.*\}/s; // s flag cho phép matching trên nhiều dòng
+//         const match = trimmedData.match(jsonPattern);
+
+//         if (!match) {
+//           throw new Error('Không tìm thấy dữ liệu JSON trong kết quả');
+//         }
+
+//         const jsonStr = match[0];
+//         console.log('Extracted JSON string:', jsonStr);
+
+//         const predictions = JSON.parse(jsonStr);
+
+//         if (predictions.error) {
+//           return res.status(400).json({
+//             status: 'fail',
+//             message: predictions.error,
+//           });
+//         }
+
+//         // Format kết quả để hiển thị phần trăm
+//         const formattedPredictions = {};
+//         for (const [disease, probability] of Object.entries(predictions)) {
+//           formattedPredictions[disease] = `${(probability * 100).toFixed(2)}%`;
+//         }
+
+//         return res.status(200).json({
+//           status: 'success',
+//           data: {
+//             input_symptoms: symptoms,
+//             predictions: formattedPredictions,
+//             raw_predictions: predictions,
+//           },
+//         });
+//       } catch (e) {
+//         console.error('Lỗi khi xử lý kết quả từ Python:', e);
+//         console.error('Raw data from Python:', data);
+//         return res.status(500).json({
+//           status: 'error',
+//           message: 'Lỗi khi xử lý kết quả từ Python',
+//           details: e.message,
+//           rawData: data,
+//         });
+//       }
+//     });
+//   } catch (e) {
+//     console.error('Lỗi khi khởi chạy Python process:', e);
+//     return res.status(500).json({
+//       status: 'error',
+//       message: 'Lỗi khi khởi chạy script dự đoán bệnh',
+//       details: e.message,
+//     });
+//   }
+// };
+
+exports.predictDisease = catchAsync(async (req, res, next) => {
   // Lấy danh sách triệu chứng từ request
   const { symptoms } = req.body;
   console.log('Input symptoms:', symptoms);
@@ -139,211 +361,30 @@ exports.predictDisease = async (req, res) => {
     });
   }
 
-  // Chuyển mảng triệu chứng thành JSON string để truyền vào Python
-  const symptomsJson = JSON.stringify(symptoms);
-  console.log('Symptoms JSON:', symptomsJson);
-
   try {
-    // Thử các đường dẫn khác nhau để tìm script Python
-    const possiblePaths = [
-      // Đường dẫn tương đối dựa trên __dirname
-      path.join(__dirname, '..', 'utils', 'models', 'predict_diseases.py'),
-      // Đường dẫn tuyệt đối trên Render
-      path.join(
-        process.cwd(),
-        'backend',
-        'utils',
-        'models',
-        'predict_diseases.py'
-      ),
-      // Đường dẫn tuyệt đối dựa trên gốc dự án
-      path.join(process.cwd(), 'utils', 'models', 'predict_diseases.py'),
-      // Đường dẫn tương đối từ thư mục hiện tại
-      path.join('utils', 'models', 'predict_diseases.py'),
-    ];
+    // Sử dụng modelLoader đã được khởi tạo trong server.js
+    const predictions = await modelLoader.predictDisease(symptoms);
 
-    let pythonScriptPath = null;
-    // Tìm đường dẫn hợp lệ đầu tiên
-    for (const testPath of possiblePaths) {
-      console.log('Testing path:', testPath);
-      if (fs.existsSync(testPath)) {
-        pythonScriptPath = testPath;
-        console.log('Found Python script at:', pythonScriptPath);
-        break;
-      }
+    // Format kết quả để hiển thị phần trăm
+    const formattedPredictions = {};
+    for (const [disease, probability] of Object.entries(predictions)) {
+      formattedPredictions[disease] = `${(probability * 100).toFixed(2)}%`;
     }
 
-    if (!pythonScriptPath) {
-      console.error('Python script not found in any of the tested paths');
-      return res.status(500).json({
-        status: 'error',
-        message: 'Không tìm thấy script dự đoán bệnh',
-        tested_paths: possiblePaths,
-      });
-    }
-
-    // Gọi script Python
-    console.log('Spawning Python process with args:', [
-      pythonScriptPath,
-      symptomsJson,
-    ]);
-
-    // Xác định lệnh Python phù hợp (python hoặc python3)
-    const pythonCommand =
-      process.env.NODE_ENV === 'production' ? 'python3' : 'python';
-
-    // Thêm timeout để tránh quá trình treo vô hạn
-    const pythonOptions = {
-      timeout: 30000, // 30 giây timeout
-      maxBuffer: 1024 * 1024 * 10, // 10MB buffer size
-    };
-
-    const pythonProcess = spawn(
-      pythonCommand,
-      [pythonScriptPath, symptomsJson],
-      pythonOptions
-    );
-
-    let data = '';
-    let error = '';
-
-    // Xử lý dữ liệu từ Python script
-    pythonProcess.stdout.on('data', (chunk) => {
-      const chunkStr = chunk.toString();
-      console.log('Python stdout:', chunkStr);
-      data += chunkStr;
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        input_symptoms: symptoms,
+        predictions: formattedPredictions,
+        raw_predictions: predictions,
+      },
     });
+  } catch (error) {
+    console.error('Lỗi khi dự đoán bệnh:', error);
 
-    // Xử lý lỗi từ Python script
-    pythonProcess.stderr.on('data', (chunk) => {
-      const chunkStr = chunk.toString();
-      console.error('Python stderr:', chunkStr);
-      error += chunkStr;
-    });
-
-    // Xử lý lỗi khi spawn process
-    pythonProcess.on('error', (err) => {
-      console.error('Failed to start Python process:', err);
-      return res.status(500).json({
-        status: 'error',
-        message: 'Không thể khởi động quá trình Python',
-        details: err.message,
-      });
-    });
-
-    // Khi Python script kết thúc
-    pythonProcess.on('close', (code) => {
-      console.log(`Python process exited with code ${code}`);
-      console.log('Python stdout data:', data);
-      console.log('Python stderr error:', error);
-
-      if (code !== 0) {
-        console.error(`Lỗi khi chạy Python script (${code}): ${error}`);
-
-        // Chi tiết hơn về lỗi
-        let errorMessage = 'Lỗi khi dự đoán bệnh';
-
-        // Thử phân tích lỗi JSON nếu có
-        try {
-          // Tìm chuỗi JSON trong output
-          const jsonMatch = data.match(/\{.*\}/);
-          if (jsonMatch) {
-            const errorJson = JSON.parse(jsonMatch[0]);
-            if (errorJson.error) {
-              return res.status(400).json({
-                status: 'fail',
-                message: errorJson.error,
-              });
-            }
-          }
-        } catch (e) {
-          // Không phải JSON, tiếp tục xử lý
-          console.error('Error parsing JSON error response:', e);
-        }
-
-        // Phân tích stderr để tìm lỗi
-        if (error.includes('FileNotFoundError')) {
-          errorMessage = 'Không tìm thấy file model cần thiết';
-        } else if (
-          error.includes('ModuleNotFoundError') ||
-          error.includes('ImportError')
-        ) {
-          errorMessage = 'Lỗi khi import module trong Python';
-        } else if (error.includes('Memory')) {
-          errorMessage = 'Python quá trình hết bộ nhớ';
-        } else if (error.includes('Killed')) {
-          errorMessage = 'Python quá trình bị kill bởi hệ thống';
-        } else if (error.includes('ERROR:')) {
-          // Trích xuất thông báo lỗi chi tiết
-          const errorMatch = error.match(/ERROR: (.*?)(\n|$)/);
-          if (errorMatch) {
-            errorMessage = errorMatch[1];
-          }
-        }
-
-        return res.status(500).json({
-          status: 'error',
-          message: errorMessage,
-          details: error,
-        });
-      }
-
-      try {
-        // Parse kết quả JSON từ Python
-        const trimmedData = data.trim();
-        console.log('Trying to parse JSON:', trimmedData);
-
-        // Tìm và trích xuất JSON từ output
-        const jsonPattern = /\{.*\}/s; // s flag cho phép matching trên nhiều dòng
-        const match = trimmedData.match(jsonPattern);
-
-        if (!match) {
-          throw new Error('Không tìm thấy dữ liệu JSON trong kết quả');
-        }
-
-        const jsonStr = match[0];
-        console.log('Extracted JSON string:', jsonStr);
-
-        const predictions = JSON.parse(jsonStr);
-
-        if (predictions.error) {
-          return res.status(400).json({
-            status: 'fail',
-            message: predictions.error,
-          });
-        }
-
-        // Format kết quả để hiển thị phần trăm
-        const formattedPredictions = {};
-        for (const [disease, probability] of Object.entries(predictions)) {
-          formattedPredictions[disease] = `${(probability * 100).toFixed(2)}%`;
-        }
-
-        return res.status(200).json({
-          status: 'success',
-          data: {
-            input_symptoms: symptoms,
-            predictions: formattedPredictions,
-            raw_predictions: predictions,
-          },
-        });
-      } catch (e) {
-        console.error('Lỗi khi xử lý kết quả từ Python:', e);
-        console.error('Raw data from Python:', data);
-        return res.status(500).json({
-          status: 'error',
-          message: 'Lỗi khi xử lý kết quả từ Python',
-          details: e.message,
-          rawData: data,
-        });
-      }
-    });
-  } catch (e) {
-    console.error('Lỗi khi khởi chạy Python process:', e);
-    return res.status(500).json({
-      status: 'error',
-      message: 'Lỗi khi khởi chạy script dự đoán bệnh',
-      details: e.message,
+    return res.status(400).json({
+      status: 'fail',
+      message: error.message,
     });
   }
-};
+});

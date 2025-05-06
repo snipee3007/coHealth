@@ -5,6 +5,10 @@
 # import joblib
 # import numpy as np
 # from sklearn import __version__ as sklearn_version  # Thêm import sklearn
+# # import tracemalloc
+# # tracemalloc.start()
+# # train your tree
+
 
 # print(f"Python version: {sys.version}", file=sys.stderr)
 # print(f"pandas version: {pd.__version__}", file=sys.stderr)
@@ -137,87 +141,75 @@
 import os
 import sys
 import json
-import traceback
 import pandas as pd
 import joblib
 import numpy as np
 from sklearn import __version__ as sklearn_version
 
-# Improved error handling decorator
-def with_error_handling(func):
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            error_traceback = traceback.format_exc()
-            print(f"ERROR: {str(e)}", file=sys.stderr)
-            print(f"TRACEBACK: {error_traceback}", file=sys.stderr)
-            print(json.dumps({"error": str(e)}))
-            sys.exit(1)
-    return wrapper
-
-# Print environment info
+# Print environment information
 print(f"Python version: {sys.version}", file=sys.stderr)
 print(f"pandas version: {pd.__version__}", file=sys.stderr)
 print(f"numpy version: {np.__version__}", file=sys.stderr)
 print(f"joblib version: {joblib.__version__}", file=sys.stderr)
 print(f"sklearn version: {sklearn_version}", file=sys.stderr)
 
-@with_error_handling
-def main():
-    # Get directory of this script
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    print(f"Current directory: {current_dir}", file=sys.stderr)
-    print("Files in directory:", file=sys.stderr)
-    for file in os.listdir(current_dir):
-        print(f" - {file}", file=sys.stderr)
+# Global variables for model components
+model = None
+label_encoder = None
+feature_columns = None
 
-    # Paths to model files
-    model_path = os.path.join(current_dir, 'decisionTreeNew.joblib')
-    label_encoder_path = os.path.join(current_dir, 'label_encoder.joblib')
-    features_path = os.path.join(current_dir, 'X_features.joblib')
-
-    # Check if files exist
-    print(f"Model path exists: {os.path.exists(model_path)}", file=sys.stderr)
-    print(f"Label encoder path exists: {os.path.exists(label_encoder_path)}", file=sys.stderr)
-    print(f"Features path exists: {os.path.exists(features_path)}", file=sys.stderr)
-
-    # Load model and components with detailed error handling
+def load_model():
+    """Load the model and associated components"""
+    global model, label_encoder, feature_columns
+    
     try:
+        # Get current directory
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        print(f"Current directory: {current_dir}", file=sys.stderr)
+        
+        # Define model file paths
+        model_path = os.path.join(current_dir, 'decisionTreeNew.joblib')
+        label_encoder_path = os.path.join(current_dir, 'label_encoder.joblib')
+        features_path = os.path.join(current_dir, 'X_features.joblib')
+        
+        # Check if files exist
+        print(f"Model path exists: {os.path.exists(model_path)}", file=sys.stderr)
+        print(f"Label encoder path exists: {os.path.exists(label_encoder_path)}", file=sys.stderr)
+        print(f"Features path exists: {os.path.exists(features_path)}", file=sys.stderr)
+        
+        # Load the model
         print("Loading model...", file=sys.stderr)
         model = joblib.load(model_path)
         print("Model loaded successfully", file=sys.stderr)
-        print(f"Model type: {type(model)}", file=sys.stderr)
-    except Exception as e:
-        print(f"Failed to load model: {str(e)}", file=sys.stderr)
-        raise
-
-    try:
+        
+        # Load label encoder
         print("Loading label encoder...", file=sys.stderr)
         label_encoder = joblib.load(label_encoder_path)
         print("Label encoder loaded successfully", file=sys.stderr)
-        print(f"Label encoder type: {type(label_encoder)}", file=sys.stderr)
-        print(f"Label encoder classes: {label_encoder.classes_ if hasattr(label_encoder, 'classes_') else 'No classes attribute'}", file=sys.stderr)
-    except Exception as e:
-        print(f"Failed to load label encoder: {str(e)}", file=sys.stderr)
-        raise
-
-    try:
+        
+        # Load features
         print("Loading features...", file=sys.stderr)
         feature_columns = joblib.load(features_path)
         print("Features loaded successfully", file=sys.stderr)
         print(f"Feature columns type: {type(feature_columns)}", file=sys.stderr)
         print(f"Feature columns length: {len(feature_columns)}", file=sys.stderr)
-        print(f"First few features: {feature_columns[:5] if isinstance(feature_columns, list) else 'Not a list'}", file=sys.stderr)
-    except Exception as e:
-        print(f"Failed to load features: {str(e)}", file=sys.stderr)
-        raise
-
-    # Function to predict disease probabilities
-    def predict_disease(symptoms):
-        print(f"Creating input dataframe with {len(feature_columns)} columns", file=sys.stderr)
         
-        # Create an empty DataFrame with the same columns as X
+        return True
+    except Exception as e:
+        print(f"Error loading model: {str(e)}", file=sys.stderr)
+        return False
+
+def predict_disease(symptoms):
+    """Predict disease based on symptoms"""
+    global model, label_encoder, feature_columns
+    
+    # Load model if not already loaded
+    if model is None or label_encoder is None or feature_columns is None:
+        if not load_model():
+            return {"error": "Failed to load model"}
+    
+    try:
+        # Create an empty DataFrame with the same columns as the training data
         input_data = pd.DataFrame(columns=feature_columns)
         
         # Initialize all values to 0
@@ -230,7 +222,6 @@ def main():
         for symptom in symptoms:
             if symptom in input_data.columns:
                 input_data.loc[0, symptom] = 1
-                print(f"Set symptom '{symptom}' to 1", file=sys.stderr)
             else:
                 invalid_symptoms.append(symptom)
         
@@ -246,70 +237,66 @@ def main():
         
         # Predict probabilities
         try:
-            print("Calling model.predict_proba...", file=sys.stderr)
             probabilities = model.predict_proba(input_data)[0]
             print(f"Prediction successful, probabilities shape: {probabilities.shape}", file=sys.stderr)
-            print(f"Probabilities: {probabilities}", file=sys.stderr)
         except Exception as e:
             print(f"Error during prediction: {str(e)}", file=sys.stderr)
-            print(f"Detailed traceback: {traceback.format_exc()}", file=sys.stderr)
             return {"error": f"Lỗi khi dự đoán: {str(e)}"}
         
         # Map probabilities to disease names
         try:
-            print("Mapping probabilities to disease names...", file=sys.stderr)
-            print(f"Label encoder classes: {label_encoder.classes_}", file=sys.stderr)
-            disease_probabilities = {}
-            for i, prob in enumerate(probabilities):
-                disease_name = label_encoder.inverse_transform([i])[0]
-                disease_probabilities[disease_name] = float(prob)
-                print(f"Disease {i}: {disease_name} = {prob}", file=sys.stderr)
+            disease_probabilities = {label_encoder.inverse_transform([i])[0]: float(prob) for i, prob in enumerate(probabilities)}
+            print(f"Mapped to {len(disease_probabilities)} diseases", file=sys.stderr)
         except Exception as e:
             print(f"Error during label transformation: {str(e)}", file=sys.stderr)
-            print(f"Detailed traceback: {traceback.format_exc()}", file=sys.stderr)
             return {"error": f"Lỗi khi chuyển đổi nhãn: {str(e)}"}
         
         # Get the top 3 diseases with the highest probabilities
         top_3_diseases = dict(sorted(disease_probabilities.items(), key=lambda item: item[1], reverse=True)[:3])
-        print(f"Top 3 diseases: {top_3_diseases}", file=sys.stderr)
         
         return top_3_diseases
-
-    # Parse input from command line argument
-    if len(sys.argv) > 1:
-        # Get the symptoms from command line argument
-        symptoms_json = sys.argv[1]
-        print(f"Received symptoms JSON: {symptoms_json}", file=sys.stderr)
-        
-        try:
-            symptoms = json.loads(symptoms_json)
-            print(f"Parsed symptoms: {symptoms}", file=sys.stderr)
-        except json.JSONDecodeError as e:
-            error_message = f"Invalid JSON format: {str(e)}"
-            print(error_message, file=sys.stderr)
-            print(json.dumps({"error": error_message}))
-            sys.exit(1)
-        
-        # Predict diseases
-        result = predict_disease(symptoms)
-        
-        # Check for errors
-        if "error" in result:
-            print(f"Error in prediction: {result['error']}", file=sys.stderr)
-            print(json.dumps({"error": result["error"]}))
-            sys.exit(1)
-        
-        # Ensure all values are JSON serializable
-        final_result = {}
-        for key, value in result.items():
-            final_result[key] = float(value)
-        
-        # Print final result
-        print(f"Final result: {final_result}", file=sys.stderr)
-        print(json.dumps(final_result))
-    else:
-        print(json.dumps({"error": "No symptoms provided"}))
-        sys.exit(1)
+    except Exception as e:
+        print(f"Error in predict_disease: {str(e)}", file=sys.stderr)
+        return {"error": f"Lỗi không xác định: {str(e)}"}
 
 if __name__ == "__main__":
-    main()
+    try:
+        if len(sys.argv) > 1:
+            # Get the symptoms from command line argument
+            symptoms_json = sys.argv[1]
+            print(f"Received symptoms JSON: {symptoms_json}", file=sys.stderr)
+            
+            try:
+                symptoms = json.loads(symptoms_json)
+                print(f"Parsed symptoms: {symptoms}", file=sys.stderr)
+            except json.JSONDecodeError as e:
+                error_message = f"Invalid JSON format: {str(e)}"
+                print(error_message, file=sys.stderr)
+                print(json.dumps({"error": error_message}))
+                sys.exit(1)
+            
+            # Predict diseases
+            result = predict_disease(symptoms)
+            
+            # Kiểm tra nếu có lỗi
+            if "error" in result:
+                print(f"Error in prediction: {result['error']}", file=sys.stderr)
+                print(json.dumps({"error": result["error"]}))
+                sys.exit(1)
+            
+            # Convert numpy types to Python native types for JSON serialization
+            final_result = {}
+            for key, value in result.items():
+                final_result[key] = float(value)
+            
+            # Print result as JSON (will be captured by Node.js)
+            print(f"Final result: {final_result}", file=sys.stderr)
+            print(json.dumps(final_result))
+        else:
+            print(json.dumps({"error": "No symptoms provided"}))
+            sys.exit(1)
+    except Exception as e:
+        error_message = f"Error in Python script: {str(e)}"
+        print(error_message, file=sys.stderr)
+        print(json.dumps({"error": error_message}))
+        sys.exit(1)
