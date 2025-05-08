@@ -5,6 +5,8 @@ const catchAsync = require('./../utils/catchAsync.js');
 const CalculateHistory = require('./../models/calculateHistory_schema.js');
 const Doctor = require('./../models/doctors_schema.js');
 const Comment = require('./../models/commentsSchema.js');
+const Exercise = require('./../models/exerciseSchema.js');
+
 // const AdultCompendium = require('../models/adultCompendium_schema.js');
 
 //////////////////////////// EXPORT TEMPLATES /////////////////////////////////
@@ -63,8 +65,19 @@ exports.getCalculateTemplate = async (req, res) => {
 };
 
 exports.getResultBMITemplate = async (req, res) => {
+  const exerciseMechanic = await Exercise.find().distinct('mechanic');
+  const exerciseEquipment = await Exercise.find().distinct('equipment');
+  const exercisePrimaryMuscles = await Exercise.find().distinct(
+    'primaryMuscles'
+  );
+  const exerciseCategory = await Exercise.find().distinct('category');
+
   res.status(200).render('result', {
     title: 'Result',
+    exercisePrimaryMuscles,
+    exerciseMechanic,
+    exerciseEquipment,
+    exerciseCategory,
   });
 };
 

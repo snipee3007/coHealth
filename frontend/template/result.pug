@@ -39,31 +39,75 @@ block append header
             color: #001AFF;
             font-weight: bold;
         }
+        .mealInfoTable td:first-child{
+            width: 40%;
+        }
+        .exerciseInfoTable td:first-child{
+            width: 25%;
+        }
+        tr td{
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
 
 block body
     .min-h-screen
         .mealPopup.overlay.w-full.min-h-full.absolute.z-30(class='bg-black/50').hidden
-            .mealPopupContainer(class='w-1/2 bg-[#D9D9D9] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2').flex.flex-1.absolute.rounded-xl.opacity-0.pointer-events-none.duration-200
+            .mealPopupContainer.popupContainer(class='w-1/2 bg-[#D9D9D9] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2').flex.flex-1.absolute.rounded-xl.opacity-0.pointer-events-none.duration-200
                 svg.absolute.z-30.h-6.w-6.top-4.left-6.cursor-pointer.closeButton
                     use(href='/images/png/icons.svg#closeButton')
                 .px-12.py-8.flex.flex-col.justify-center.items-center.gap-8.w-full
-                    img(src="https://img.spoonacular.com/recipes/632854-556x370.jpg", alt="breakfast").rounded-xl.popupMealImage
+                    img(src="", alt="").rounded-xl.popupMealImage
                     .popUpMealInformation.flex.flex-col.font-AbhayaLibre.font-extrabold.w-full
-                        .mealType.text-center.text-3xl Breakfast 
+                        .mealType.text-center.text-3xl 
                         table.font-medium.text-xl.mt-6.mealInfoTable
                             tr
                                 td.px-4 Name: 
-                                td.name Salad with chicken breast
+                                td.name 
                             tr
                                 td.px-4 Ready in: 
-                                td.cooking_time 45 minutes
+                                td.cooking_time 
                             tr 
                                 td.px-4 Serving: 
-                                td.serving 1
+                                td.serving 
                             tr 
                                 td.px-4 For more Information:
                                 td 
-                                    a.moreInfoLink.font-bold.text-blue-600(target="_blank" href="https://spoonacular.com/recipes/peanut-butter-and-chocolate-oatmeal-655219") Click Here!
+                                    a.moreInfoLink.font-bold.text-blue-600(target="_blank" href="") Click Here!
+
+        .exercisePopup.overlay.w-full.min-h-full.absolute.z-30(class='bg-black/50').hidden
+            .exercisePopupContainer.popupContainer(class='w-2/3 bg-[#D9D9D9] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2').flex.flex-1.absolute.rounded-xl.opacity-0.pointer-events-none.duration-200
+                svg.absolute.z-30.h-6.w-6.top-4.left-6.cursor-pointer.closeButton
+                    use(href='/images/png/icons.svg#closeButton')
+                .px-12.py-8.flex.flex-col.justify-center.items-center.gap-8.w-full
+                    .exerciseImages.flex.flex-1.justify-evenly.gap-12.w-full
+                    .exercisePopupInformation.flex.flex-col.font-AbhayaLibre.font-extrabold.w-full
+                        .exerciseName.text-center.text-3xl 
+                        table.font-medium.text-xl.mt-6.exerciseInfoTable
+                            tr
+                                td.px-4.align-top Force: 
+                                td.force
+                            tr
+                                td.px-4.align-top Level: 
+                                td.level
+                            tr 
+                                td.px-4.align-top Mechanic: 
+                                td.mechanic
+                            tr 
+                                td.px-4.align-top Equipment: 
+                                td.equipment
+                            tr 
+                                td.px-4.align-top Primary Muscles: 
+                                td.primaryMuscles
+                            tr 
+                                td.px-4.align-top Secondary Muscles: 
+                                td.secondaryMuscles
+                            tr 
+                                td.px-4.align-top Instructions: 
+                                td.instructions
+                            tr 
+                                td.px-4.align-top Category: 
+                                td.category
 
         .px-10.pt-6.pb-12
             .font-AbhayaLibre.text-2xl.label YOUR PERSONAL SUMMARY
@@ -117,7 +161,7 @@ block body
                             .weekAfterToArchiveTarget_label To achieve: 
                             .weekAfterToAchieveTarget_status.font-bold(class='text-[#D3B185]') Your dream weight
             
-            .font-AbhayaLibre.text-2xl PERSONALIZED MEAL & EXERCISE PLAN
+            .font-AbhayaLibre.text-2xl Meal Suggestion Based On Your Calories
             .personalMealAndPlan.font-Alice.mb-8
                 .timetable(class='w-4/5 border-[#B7B7B7]').mx-auto.border.mt-6
                     .weeks.swiper
@@ -157,18 +201,89 @@ block body
                             .carbohydratesLabel Carbohydrates (g)
                             .carbohydratesValue
 
-            .font-AbhayaLibre.text-2xl PERSONALIZED MEAL & EXERCISE PLAN
-            .exercise.font-Alice.mb-8
+            .font-AbhayaLibre.text-2xl Exercise Suggestion
+            .exercise.font-Alice
                 .exceriseContainer
                     .exerciseQuestionContainer.flex.flex-col.justify-center.items-center.gap-4.mt-4
                         .exerciseQuestion.text-center.text-xl.italic Would you like us to suggest for you some exercises?
                         button.exerciseQuestionButton.linearBackground.py-2.px-4.rounded-xl.text-white.cursor-pointer(class='w-1/4') Suggest now!
-                    form.exerciseForm
-                        .exerciseLevel
-                            label(for="level").exerciseLevelLabel.font-AbhayaLibre Level
-                            select#level.exerciseLevelLabel(name='level')
-                                option(value="beginner") Beginner
-                                option(value="intermediate") Intermediate
-                                option(value="expert") Expert
+                    form.exerciseForm.hidden.flex.flex-col.items-center
+                        .exerciseListLabel.text-center.my-10.text-3xl.font-AbhayaLibre.font-bold Exercise List
+                        .grid.grid-cols-5.gap-12
+                            .exerciseLevel.font-AbhayaLibre.flex.flex-col.justify-between.items-center
+                                .exerciseLevelLabel Level:
+                                .exerciseLevelSelect.relative
+                                    .exerciseLevelSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
+                                        input.bg-transparent.select-none.outline-none.cursor-pointer(type='text' name='exerciseLevel' placeholder='Level...' onkeydown="return false" autocomplete='off' value='' style='caret-color: transparent')
+                                        img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
+                                    .absolute.exerciseLevelOptions.z-40.w-full.hidden.max-h-48.overflow-y-auto
+                                        .exerciseLevelOption(class='bg-[#EAF0F7]' data-value='').py-2.px-2.rounded-t-xl.border-b.cursor-pointer Level...
+                                        .exerciseLevelOption(class='bg-[#EAF0F7]' data-value='Beginner').py-2.px-2.border-b.cursor-pointer Beginner
+                                        .exerciseLevelOption(class='bg-[#EAF0F7]' data-value='Intermediate').py-2.px-2.border-b.cursor-pointer Intermediate
+                                        .exerciseLevelOption(class='bg-[#EAF0F7]' data-value='Expert').py-2.px-2.rounded-b-xl.cursor-pointer Expert
+                            
+                            .exerciseMechanic.font-AbhayaLibre.flex.flex-col.justify-between.items-center
+                                .exerciseMechanicLabel Mechanic:
+                                .exerciseMechanicSelect.relative
+                                    .exerciseMechanicSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
+                                        input.bg-transparent.select-none.outline-none.cursor-pointer(type='text' name='exerciseMechanic' placeholder='Mechanic...' onkeydown="return false" autocomplete='off' value='' style='caret-color: transparent')
+                                        img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
+                                    .absolute.exerciseMechanicOptions.z-40.w-full.hidden.max-h-48.overflow-y-auto
+                                        .exerciseMechanicOption(class='bg-[#EAF0F7]' data-value='').py-2.px-2.rounded-t-xl.border-b.cursor-pointer Mechanic...
+                                        - exerciseMechanic = exerciseMechanic.map(mechanic => `${mechanic[0].toUpperCase()}${mechanic.slice(1)}`)
+                                        each mechanic, idx in exerciseMechanic
+                                            if idx != exerciseMechanic.length - 1
+                                                .exerciseMechanicOption(class='bg-[#EAF0F7]' data-value=mechanic).py-2.px-2.border-b.cursor-pointer= mechanic
+                                            else
+                                                .exerciseMechanicOption(class='bg-[#EAF0F7]' data-value=mechanic).py-2.px-2.rounded-b-xl.cursor-pointer= mechanic
+                            
+                            .exerciseEquipment.font-AbhayaLibre.flex.flex-col.justify-between.items-center
+                                .exerciseEquipmentLabel Equipment:
+                                .exerciseEquipmentSelect.relative
+                                    .exerciseEquipmentSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
+                                        input.bg-transparent.select-none.outline-none.cursor-pointer(type='text' name='exerciseEquipment' placeholder='Equipment...' onkeydown="return false" autocomplete='off' value='' style='caret-color: transparent')
+                                        img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
+                                    .absolute.exerciseEquipmentOptions.z-40.w-full.hidden.max-h-48.overflow-y-auto
+                                        .exerciseEquipmentOption(class='bg-[#EAF0F7]' data-value='').py-2.px-2.rounded-t-xl.border-b.cursor-pointer Equipment...
+                                        - exerciseEquipment = exerciseEquipment.map(equipment => `${equipment[0].toUpperCase()}${equipment.slice(1)}`)
+                                        each equipment, idx in exerciseEquipment
+                                            if idx != exerciseEquipment.length - 1
+                                                .exerciseEquipmentOption(class='bg-[#EAF0F7]' data-value=equipment).py-2.px-2.border-b.cursor-pointer= equipment
+                                            else
+                                                .exerciseEquipmentOption(class='bg-[#EAF0F7]' data-value=equipment).py-2.px-2.rounded-b-xl.cursor-pointer= equipment
+                            
+                            .exercisePrimaryMuscles.font-AbhayaLibre.flex.flex-col.justify-between.items-center
+                                .exercisePrimaryMusclesLabel Primary Muscles:
+                                .exercisePrimaryMusclesSelect.relative
+                                    .exercisePrimaryMusclesSelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
+                                        input.bg-transparent.select-none.outline-none.cursor-pointer(type='text' name='exercisePrimaryMuscles' placeholder='Primary Muscles...' onkeydown="return false" autocomplete='off' value='' style='caret-color: transparent')
+                                        img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
+                                    .absolute.exercisePrimaryMusclesOptions.z-40.w-full.hidden.max-h-48.overflow-y-auto
+                                        .exercisePrimaryMusclesOption(class='bg-[#EAF0F7]' data-value='').py-2.px-2.rounded-t-xl.border-b.cursor-pointer Primary Muscles...
+                                        - exercisePrimaryMuscles = exercisePrimaryMuscles.map(primaryMuscles => `${primaryMuscles[0].toUpperCase()}${primaryMuscles.slice(1)}`)
+                                        each primaryMuscles, idx in exercisePrimaryMuscles
+                                            if idx != exercisePrimaryMuscles.length - 1
+                                                .exercisePrimaryMusclesOption(class='bg-[#EAF0F7]' data-value=primaryMuscles).py-2.px-2.border-b.cursor-pointer= primaryMuscles
+                                            else
+                                                .exercisePrimaryMusclesOption(class='bg-[#EAF0F7]' data-value=primaryMuscles).py-2.px-2.rounded-b-xl.cursor-pointer= primaryMuscles
+                            
+                            .exerciseCategory.font-AbhayaLibre.flex.flex-col.justify-between.items-center
+                                .exerciseCategoryLabel Category:
+                                .exerciseCategorySelect.relative
+                                    .exerciseCategorySelected.select-none.cursor-pointer.flex.flex-1.items-center.justify-between.py-2(class='bg-[#EAF0F7]').px-3.rounded-xl
+                                        input.bg-transparent.select-none.outline-none.cursor-pointer(type='text' name='exerciseCategory' placeholder='Category...' onkeydown="return false" autocomplete='off' value='' style='caret-color: transparent')
+                                        img(src='./../images/png/down-arrow-circle-svgrepo-com.png').w-4.h-4
+                                    .absolute.exerciseCategoryOptions.z-40.w-full.hidden.max-h-48.overflow-y-auto
+                                        .exerciseCategoryOption(class='bg-[#EAF0F7]' data-value='').py-2.px-2.rounded-t-xl.border-b.cursor-pointer Category...
+                                        - exerciseCategory = exerciseCategory.map(category => `${category[0].toUpperCase()}${category.slice(1)}`)
+                                        each category, idx in exerciseCategory
+                                            if idx != exerciseCategory.length - 1
+                                                .exerciseCategoryOption(class='bg-[#EAF0F7]' data-value=category).py-2.px-2.border-b.cursor-pointer= category
+                                            else
+                                                .exerciseCategoryOption(class='bg-[#EAF0F7]' data-value=category).py-2.px-2.rounded-b-xl.cursor-pointer= category
+                            
+                        button.exerciseQueryButton.linearBackground.text-white.text-Alice.mt-10.py-2.rounded-xl.cursor-pointer(class='w-1/5') Find Now!
 
-        
+                    .resultNumber.text-Alice.text-center
+                    .exerciseItemsContainer.gap-8.max-h-100.overflow-y-auto.items-center.justify-center.hidden.mt-12(class='w-2/3 mx-auto')
+                        

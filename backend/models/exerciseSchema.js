@@ -14,7 +14,7 @@ const exerciseSchema = new mongoose.Schema({
   force: {
     type: String,
     enum: {
-      values: [null, 'static', 'pull', 'push'],
+      values: ['none', 'static', 'pull', 'push'],
       message: 'The value of force field is invalid! Please try again!',
     },
   },
@@ -30,16 +30,17 @@ const exerciseSchema = new mongoose.Schema({
   mechanic: {
     type: String,
     enum: {
-      values: ['isolation', 'compound', null],
+      values: ['isolation', 'compound', 'none'],
       message:
         'The mechanic for this exercise is invalid! Please try different mechanic!',
     },
+    required: [true, 'Please provide mechanic for this exercise!'],
   },
   equipment: {
     type: String,
     enum: {
       values: [
-        null,
+        'none',
         'medicine ball',
         'dumbbell',
         'body only',
@@ -56,6 +57,7 @@ const exerciseSchema = new mongoose.Schema({
       message:
         'The equipment for this exercise is invalid! Please try different equipment!',
     },
+    required: [true, 'Please provide equipment for this exercise!'],
   },
   primaryMuscles: {
     type: [String],

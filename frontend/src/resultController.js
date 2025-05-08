@@ -12,13 +12,16 @@ class Result {
 
   #calculateData;
   #foodData;
+  #exercises;
   async init() {
     await this.#getRecentCalculate();
     this.#valueCardRender();
-
+    this.#selectField();
+    this.#suggestExerciseButton();
+    this.#exerciseFormSubmit();
     // Sử dụng thì bỏ comment hai dòng dưới là được!
-    // await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
-    // this.#weeksRender();
+    await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
+    this.#weeksRender();
 
     this.#dayHandler();
     this.#overlayHandler();
@@ -36,29 +39,126 @@ class Result {
     this.#mealRender('monday');
   }
 
-  #overlayHandler() {
-    document.querySelector('.overlay').addEventListener(
-      'click',
-      function (e) {
-        if (e.target == document.querySelector('.overlay')) {
-          document.querySelector('.overlay').classList.add('hidden');
-          document
-            .querySelector('.mealPopupContainer')
-            .classList.add('opacity-0', 'pointer-events-none');
-          document.querySelector('.body').style.height = '';
+  #selectField() {
+    [
+      'exerciseLevel',
+      'exerciseMechanic',
+      'exerciseEquipment',
+      'exercisePrimaryMuscles',
+      'exerciseCategory',
+    ].forEach((field) => {
+      const fieldButton = document.querySelector(`.${field}Selected`);
+      const fieldOptionList = document.querySelectorAll(`.${field}Option`);
+
+      fieldButton.addEventListener('click', function (e) {
+        if (e.target.closest(`.${field}Selected`)) {
+          document.querySelector(`.${field}Options`).classList.toggle('hidden');
         }
+      });
+      document.addEventListener('click', function (e) {
+        if (
+          !e.target.closest(`.${field}Selected`) &&
+          !e.target.closest(`.${field}Options`)
+        ) {
+          const fieldOptions = document.querySelector(`.${field}Options`);
+          if (!fieldOptions.classList.contains('hidden')) {
+            fieldOptions.classList.toggle('hidden');
+          }
+        }
+      });
+
+      fieldOptionList.forEach((fieldOption) => {
+        fieldOption.addEventListener('click', function (e) {
+          if (e.target.closest(`.${field}Option`)) {
+            document
+              .querySelector(`.${field}Options`)
+              .classList.toggle('hidden');
+            const fieldInput = document.querySelector(`input[name='${field}']`);
+            fieldInput.value = e.target.dataset['value'];
+          }
+        });
+      });
+    });
+  }
+
+  #suggestExerciseButton() {
+    document
+      .querySelector('.exerciseQuestionContainer')
+      .addEventListener('click', function (e) {
+        if (e.target.closest('.exerciseQuestionContainer')) {
+          e.target
+            .closest('.exerciseQuestionContainer')
+            .classList.add('hidden');
+          document.querySelector('.exerciseForm').classList.remove('hidden');
+        }
+      });
+  }
+
+  #exerciseFormSubmit() {
+    document.querySelector('.exerciseForm').addEventListener(
+      'submit',
+      async function (e) {
+        e.preventDefault();
+        const level = document.querySelector(
+          'input[name="exerciseLevel"]'
+        )?.value;
+        const mechanic = document.querySelector(
+          'input[name="exerciseMechanic"]'
+        )?.value;
+        const equipment = document.querySelector(
+          'input[name="exerciseEquipment"]'
+        )?.value;
+        const primaryMuscles = document.querySelector(
+          'input[name="exercisePrimaryMuscles"]'
+        )?.value;
+        const category = document.querySelector(
+          'input[name="exerciseCategory"]'
+        )?.value;
+        const exercises = await exerciseQuery({
+          level,
+          mechanic,
+          equipment,
+          primaryMuscles,
+          category,
+        });
+        document.querySelector(
+          '.resultNumber'
+        ).textContent = `Result(s): ${exercises.length}`;
+        this.renderExercises(exercises);
       }.bind(this)
     );
+  }
 
-    document.querySelector('.closeButton').addEventListener(
-      'click',
-      function (e) {
-        document.querySelector('.overlay').classList.add('hidden');
-        document.querySelector('.body').style.height = '';
-        document
-          .querySelector('.mealPopupContainer')
-          .classList.add('opacity-0', 'pointer-events-none');
-      }.bind(this)
+  #overlayHandler() {
+    document.querySelectorAll('.overlay').forEach((overlay) =>
+      overlay.addEventListener(
+        'click',
+        function (e) {
+          if (e.target == e.target.closest('.overlay')) {
+            e.target.closest('.overlay').classList.add('hidden');
+            e.target
+              .closest('.overlay')
+              .querySelector('.popupContainer')
+              .classList.add('opacity-0', 'pointer-events-none');
+            document.querySelector('.body').style.height = '';
+          }
+        }.bind(this)
+      )
+    );
+
+    document.querySelectorAll('.closeButton').forEach((button) =>
+      button.addEventListener(
+        'click',
+        function (e) {
+          if (e.target.closest('.closeButton')) {
+            e.target.closest('.overlay').classList.add('hidden');
+            document.querySelector('.body').style.height = '';
+            e.target
+              .closest('.popupContainer')
+              .classList.add('opacity-0', 'pointer-events-none');
+          }
+        }.bind(this)
+      )
     );
   }
 
@@ -284,6 +384,117 @@ class Result {
       mealNutrients.carbohydrates;
     mealItemContainer.classList.remove('translate-y-10');
   }
+
+  renderExercises(exercises) {
+    document
+      .querySelector('.exerciseItemsContainer')
+      .classList.remove('hidden');
+    document.querySelector('.exerciseItemsContainer').innerHTML = '';
+    let elementList = [];
+    exercises.forEach((exercise) => {
+      const exerciseItem = document.createElement('div');
+      exerciseItem.classList.add(
+        'exerciseItem',
+        'flex',
+        'flex-1',
+        'items-center',
+        'justify-evenly',
+        'gap-12',
+        'shadow-xl',
+        'rounded-xl',
+        'py-4',
+        'px-8',
+        'mb-12',
+        'cursor-pointer',
+        'w-full',
+        'h-60',
+        'border',
+        'border-groove'
+      );
+      let html = ` 
+        <img src="/images/exercises/${exercise.images[0]}" alt="${exercise.name} Image" class="w-1/3 h-full object-contain"/>
+        <div class='exerciseInfo flex flex-col gap-1 w-2/3'>
+          <div class="exerciseNameContent text-2xl font-ABeeZee">${exercise.name}</div>
+          <div class="exerciseLevel flex flex-1 gap-12">
+            <div class="exerciseLevelLabel w-32">Level: </div>
+            <div class="exerciseLevelContent">${exercise.level}</div>
+          </div>
+          <div class="exerciseMechanic flex flex-1 gap-12">
+            <div class="exerciseMechanicLabel w-32">Mechanic: </div>
+            <div class="exerciseMechanicContent">${exercise.mechanic}</div>
+          </div>
+          <div class="exerciseEquipment flex flex-1 gap-12">
+            <div class="exerciseEquipmentLabel w-32">Equipment: </div>
+            <div class="exerciseEquipmentContent">${exercise.equipment}</div>
+          </div>
+          <div class="exercisePrimaryMuscles flex flex-1 gap-12">
+            <div class="exercisePrimaryMusclesLabel w-32">Primary Muscles: </div>
+            <div class="exercisePrimaryMusclesContent">${exercise.primaryMuscles}</div>
+          </div>
+          <div class="exerciseCategory flex flex-1 gap-12">
+            <div class="exerciseCategoryLabel w-32">Category: </div>
+            <div class="exerciseCategoryContent">${exercise.category}</div>
+          </div>
+        </div>
+      `;
+      exerciseItem.insertAdjacentHTML('afterbegin', html);
+      exerciseItem.addEventListener(
+        'click',
+        function (e) {
+          if (e.target.closest('.exerciseItem')) {
+            for (const [key, value] of Object.entries(exercise)) {
+              if (key == 'instructions') {
+                const info = document.querySelector(
+                  `.exerciseInfoTable .${key}`
+                );
+                let listItem = document.createElement('ul');
+                listItem.classList.add('overflow-y-auto');
+                exercise.instructions.forEach((value) => {
+                  const item = document.createElement('li');
+                  item.classList.add('list-disc', 'list-inside', 'max-h-96');
+                  item.textContent = value;
+                  listItem.append(item);
+                });
+                info.innerHTML = '';
+                info.append(listItem);
+              } else if (key == 'images') {
+                let html = '';
+                for (let i = 0; i < 2; ++i) {
+                  if (exercise.images[i]) {
+                    html += `<img src="/images/exercises/${exercise.images[i]}" alt="${exercise.name} ${i}" class="rounded-xl exercisePopupImage w-2/5"/>`;
+                  }
+                }
+                document.querySelector('.exerciseImages').innerHTML = '';
+                document
+                  .querySelector('.exerciseImages')
+                  .insertAdjacentHTML('beforeend', html);
+              } else {
+                const info = document.querySelector(
+                  `.exerciseInfoTable .${key}`
+                );
+                if (info)
+                  info.textContent = Array.isArray(value)
+                    ? value.join(', ')
+                    : value;
+              }
+            }
+            document.querySelector('.exercisePopup').classList.remove('hidden');
+
+            document.querySelector('.exerciseName').textContent = exercise.name;
+            resize();
+          }
+
+          setTimeout(function () {
+            document
+              .querySelector('.exercisePopupContainer')
+              .classList.remove('opacity-0', 'pointer-events-none');
+          }, 200);
+        }.bind(this)
+      );
+      elementList.push(exerciseItem);
+    });
+    document.querySelector('.exerciseItemsContainer').append(...elementList);
+  }
 }
 
 const getRecentCalculate = async function () {
@@ -375,4 +586,28 @@ const getFoodValue = async function (calories) {
     Loader.destroy();
   }
 };
+
+const exerciseQuery = async function (data) {
+  try {
+    Loader.create();
+    let queryString = [];
+    if (data.level) queryString.push(`level=${data.level}`);
+    if (data.mechanic) queryString.push(`mechanic=${data.mechanic}`);
+    if (data.equipment) queryString.push(`equipment=${data.equipment}`);
+    if (data.primaryMuscles)
+      queryString.push(`primaryMuscles=${data.primaryMuscles}`);
+    if (data.category) queryString.push(`category=${data.category}`);
+    queryString = queryString.join('&');
+    const res = await axios({
+      method: 'get',
+      url: `/api/exercise?${queryString}`,
+    });
+
+    Loader.destroy();
+    return res.data.data;
+  } catch (err) {
+    Loader.destroy();
+  }
+};
+
 new Result().init();

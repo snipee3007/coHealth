@@ -6,6 +6,7 @@ const calculateRoutes = require('./api/calculateBMIRoutes.js');
 const resultRoutes = require('./api/resultRoutes.js');
 const adultCompendiumRoutes = require('./api/adultCompendiumRoutes.js');
 const mealRoutes = require('./api/mealRoutes.js');
+const exerciseRoutes = require('./api/exerciseRoutes.js');
 const userRoutes = require('./api/userRoutes.js');
 const roomRoutes = require('./api/roomRoutes.js');
 const commentRoutes = require('./api/commentRoute.js');
@@ -53,7 +54,7 @@ router.use('/adultCompendium', adultCompendiumRoutes);
 router.use('/meal', mealRoutes);
 
 // EXERCISE API
-router.use('/exercise', mealRoutes);
+router.use('/exercise', exerciseRoutes);
 
 // SIGN IN API
 router.post('/signUp', authController.signUp);
