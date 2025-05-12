@@ -26,7 +26,8 @@ const sendAppointment = async function (data) {
     renderPopup(
       err.response.status,
       'Creating appointment',
-      err.response.data.message
+      // err.response.data.message
+      'This appointment time is already taken by another person!'
     );
     Loader.destroy();
   }
@@ -85,6 +86,42 @@ class Appointment {
     this.#time = '';
     this.#listBooked = [];
     this.#getListBooked();
+    this.#numberOnlyField();
+  }
+  #numberOnlyField() {
+    const numberOnlyFields = document.querySelectorAll('.numberOnly');
+    numberOnlyFields.forEach((field) => {
+      field.addEventListener('input', function (e) {
+        if (e.data !== null) {
+          const numberRegex = /^[\+\-]?\d+?$/;
+          if (!e.target.value.match(numberRegex)) {
+            e.target.value = e.target.value.slice(0, -1);
+          }
+        }
+      });
+
+      ['input', 'focusout'].forEach((event) => {
+        field.addEventListener(event, function (e) {
+          if (
+            e.target.value.length !== 0 &&
+            isNaN(parseFloat(e.target.value))
+          ) {
+            e.target.setCustomValidity(
+              'Wrong number input format! Please input again!'
+            );
+          } else if (
+            e.target.closest('.phoneNumber') &&
+            e.target.value.length > 16
+          ) {
+            e.target.setCustomValidity(
+              'The input digits must between 0 and 16 digits! Please input again!'
+            );
+          } else {
+            e.target.setCustomValidity('');
+          }
+        });
+      });
+    });
   }
 
   async #getListBooked() {

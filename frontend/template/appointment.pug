@@ -49,16 +49,16 @@ block body
                     label.text-2xl.font-semibold.my-4(for="email") Email 
                     input.border-1.p-2.bg-gray-200.rounded-xl(type='email', name="email", placeholder='Tell your email here', required)
                     label.text-2xl.font-semibold.my-4(for="phoneNumber") Phone number
-                    input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', required)
+                    input.border-1.p-2.bg-gray-200.rounded-xl.numberOnly(name="phoneNumber", placeholder='Tell your phone number here', required)
                 else 
                     input.border-1.p-2.bg-gray-200.rounded-xl(name="fullname", placeholder='Tell your fullname here', value = `${user.fullname}`, required)
                     label.text-2xl.font-semibold.my-4(for="email") Email 
                     input.border-1.p-2.bg-gray-200.rounded-xl(name="email", placeholder='Tell your email here', value = `${user.email}`, required)
                     label.text-2xl.font-semibold.my-4(for="phoneNumber") Phone number
                     if user.phoneNumber
-                        input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', value =`${user.phoneNumber}`, required)
+                        input.border-1.p-2.bg-gray-200.rounded-xl.numberOnly(name="phoneNumber", placeholder='Tell your phone number here', value =`${user.phoneNumber}`, required)
                     else 
-                        input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', required)
+                        input.border-1.p-2.bg-gray-200.rounded-xl.numberOnly(name="phoneNumber", placeholder='Tell your phone number here', required)
             button.linearBackground.font-DM-Sans.text-white.py-2.w-full.rounded-xl.mt-8.font-bold(type="submit").cursor-pointer Make Appointment
 
         .dayTime.p-2.font-ABeeZee(class='w-1/3')
