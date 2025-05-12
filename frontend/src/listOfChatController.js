@@ -89,15 +89,16 @@ class ListOfChat {
 
         // xóa hết toán bộ đoạn chat khi chuyển người
         const parentElement = document.querySelector('.listOfChat');
-        while (parentElement.firstChild) {
-          parentElement.removeChild(parentElement.firstChild);
-        }
-        const parentElementChatBoxInfo = document.querySelector('.chatBoxInfo');
-        while (parentElementChatBoxInfo.firstChild) {
-          parentElementChatBoxInfo.removeChild(
-            parentElementChatBoxInfo.firstChild
-          );
-        }
+        // while (parentElement.firstChild) {
+        //   parentElement.removeChild(parentElement.firstChild);
+        // }
+        // const parentElementChatBoxInfo = document.querySelector('.chatBoxInfo');
+        // while (parentElementChatBoxInfo.firstChild) {
+        //   parentElementChatBoxInfo.removeChild(
+        //     parentElementChatBoxInfo.firstChild
+        //   );
+        // }
+        parentElement.innerHTML = '';
         buttons.forEach((insideButton) => {
           insideButton.classList.remove('chatItemActive');
         });
@@ -154,7 +155,7 @@ class ListOfChat {
           `
                     <div class='relative' data-room = '${button.id}'>
                         <img src='./../images/users/profile/${userDataImage}'  class='h-16 rounded-full' alt='${userDataImage}-profile'>
-                        <div class='${userDataStatusCircle} absolute right-0 bottom-0'></div>
+                        <div class=' absolute right-0 bottom-0 ${userDataStatusCircle}'></div>
                     </div>
                     
                     <div class='font-ABeeZee content-center space-x-4 px-4'>
@@ -239,6 +240,23 @@ class ListOfChat {
           userStatus.classList.remove(`${lastClassOfUserDiv}`);
           userStatus.classList.add(`${activeUser.status}`);
           // console.log(activeUser.status);
+        }
+        const parentElement = document.querySelector('.chatBoxInfo');
+        if (parentElement.hasChildNodes()) {
+          let userStatus =
+            parentElement.querySelector('.online') ||
+            parentElement.querySelector('.offline') ||
+            '';
+          let lastClassOfUserDiv =
+            userStatus.classList[userStatus.classList.length - 1];
+          userStatus.classList.remove(`${lastClassOfUserDiv}`);
+          userStatus.classList.add(`${activeUser.status}`);
+          if (activeUser.status == 'offline') {
+            parentElement.lastChild.lastChild.textContent =
+              'Offline ' + timeAgo(activeUser.lastSeen);
+          } else {
+            parentElement.lastChild.lastChild.textContent = 'Online';
+          }
         }
         // update thời gian tin nhắn cuối cùng
         // if(document.querySelector(".listChat .lastMessageTime")){
