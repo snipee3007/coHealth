@@ -1,8 +1,9 @@
 const userAppointmentController = require('../controllers/userAppointmentController');
 const Appointment = require('../models/appointments_schema');
+const mongoose = require('mongoose');
 const User = require('../models/users_schema');
 const catchAsync = require('../utils/catchAsync');
-const { ObjectId } = require('mongodb');
+const { ObjectId } = mongoose.Types;
 const nodemailer = require('nodemailer');
 
 // Mock dependencies

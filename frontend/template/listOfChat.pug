@@ -13,7 +13,7 @@ block body
                 - const timeAgo = (timestamp) => {
                 -   const diff = Math.floor((Date.now() - new Date(timestamp)) / 1000);
                 -   if (diff < 60) return `1 minute ago`;
-                -   if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
+                -   else if (diff < 3600) return `${Math.floor(diff / 60)} minutes ago`;
                 -   else if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
                 -   else if (diff < 2592000) return `${Math.floor(diff / 86400)} days ago`;
                 -   else return `Over 30 days ago`;
@@ -28,7 +28,7 @@ block body
                                 .font-ABeeZee(class='w-1/2').truncate.text-left.content-center
                                     p.font-bold #{room.memberID[1].fullname}
                                     p.font-light.lastMessage #{room.message[room.message.length - 1].message}
-                                p.font-ABeeZee.content-center.truncate.lastMessageTime= timeAgo(room.message[room.message.length - 1].date)
+                                p.font-ABeeZee.content-center.truncate.lastMessageTime= timeAgo(room.message[room.message.length - 1].createdAt)
                             else 
                                 .font-ABeeZee(class='w-1/2').truncate.text-left.content-center
                                     p.font-bold #{room.memberID[1].fullname}
@@ -43,7 +43,7 @@ block body
                                 .font-ABeeZee(class='w-1/2').truncate.text-left.content-center
                                     p.font-bold #{room.memberID[0].fullname}
                                     p.font-light.lastMessage #{room.message[room.message.length - 1].message}
-                                p.font-ABeeZee.content-center.truncate.lastMessageTime= timeAgo(room.message[room.message.length - 1].date)
+                                p.font-ABeeZee.content-center.truncate.lastMessageTime= timeAgo(room.message[room.message.length - 1].createdAt)
                             else 
                                 .font-ABeeZee(class='w-1/2').truncate.text-left.content-center
                                     p.font-bold #{room.memberID[0].fullname}
