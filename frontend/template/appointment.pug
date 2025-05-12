@@ -49,7 +49,7 @@ block body
                     label.text-2xl.font-semibold.my-4(for="email") Email 
                     input.border-1.p-2.bg-gray-200.rounded-xl(type='email', name="email", placeholder='Tell your email here', required)
                     label.text-2xl.font-semibold.my-4(for="phoneNumber") Phone number
-                    input.border-1.p-2.bg-gray-200.rounded-xl(name="phoneNumber", placeholder='Tell your phone number here', required)
+                    input.border-1.p-2.bg-gray-200.rounded-xl.numberOnly(name="phoneNumber", placeholder='Tell your phone number here', required)
                 else 
                     input.border-1.p-2.bg-gray-200.rounded-xl(name="fullname", placeholder='Tell your fullname here', value = `${user.fullname}`, required)
                     label.text-2xl.font-semibold.my-4(for="email") Email 

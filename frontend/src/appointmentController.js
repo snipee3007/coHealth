@@ -26,7 +26,8 @@ const sendAppointment = async function (data) {
     renderPopup(
       err.response.status,
       'Creating appointment',
-      err.response.data.message
+      // err.response.data.message
+      'This appointment time is already taken by another person!'
     );
     Loader.destroy();
   }
@@ -89,7 +90,6 @@ class Appointment {
   }
   #numberOnlyField() {
     const numberOnlyFields = document.querySelectorAll('.numberOnly');
-
     numberOnlyFields.forEach((field) => {
       field.addEventListener('input', function (e) {
         if (e.data !== null) {
