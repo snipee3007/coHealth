@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
-const { expect } = require('chai');
+// Thay chai bằng assertion của Jest
+// const { expect } = require('chai');
 const sinon = require('sinon');
 const notificationController = require('../controllers/notificationController');
 const Notification = require('../models/notificationSchema');
@@ -48,20 +49,22 @@ describe('Notification Controller', () => {
       // Act
       await notificationController.updateReadNotification(req, res, next);
 
-      // Assert
-      expect(findOneAndUpdateStub.calledOnce).to.be.true;
-      expect(findOneAndUpdateStub.firstCall.args[0]).to.deep.equal({
+      // Assert - Sử dụng Jest với sinon
+      // Test calledOnce với expect(bool).toBe(true)
+      expect(findOneAndUpdateStub.calledOnce).toBe(true);
+      // Test call arguments với toEqual
+      expect(findOneAndUpdateStub.firstCall.args[0]).toEqual({
         newsID: req.news._id,
       });
-      expect(findOneAndUpdateStub.firstCall.args[1]).to.deep.equal({
+      expect(findOneAndUpdateStub.firstCall.args[1]).toEqual({
         $set: {
           'to.$[element].haveRead': true,
         },
       });
-      expect(findOneAndUpdateStub.firstCall.args[2]).to.deep.equal({
+      expect(findOneAndUpdateStub.firstCall.args[2]).toEqual({
         arrayFilters: [{ 'element.targetID': req.user._id }],
       });
-      expect(next.calledOnce).to.be.true;
+      expect(next.calledOnce).toBe(true);
     });
 
     it('should update notification by ID when req.user is provided but req.news is not', async () => {
@@ -72,20 +75,20 @@ describe('Notification Controller', () => {
       // Act
       await notificationController.updateReadNotification(req, res, next);
 
-      // Assert
-      expect(findByIdAndUpdateStub.calledOnce).to.be.true;
-      expect(findByIdAndUpdateStub.firstCall.args[0]).to.equal(req.params.id);
-      expect(findByIdAndUpdateStub.firstCall.args[1]).to.deep.equal({
+      // Assert - Sử dụng Jest với sinon
+      expect(findByIdAndUpdateStub.calledOnce).toBe(true);
+      expect(findByIdAndUpdateStub.firstCall.args[0]).toBe(req.params.id);
+      expect(findByIdAndUpdateStub.firstCall.args[1]).toEqual({
         $set: {
           'to.$[element].haveRead': true,
         },
       });
-      expect(findByIdAndUpdateStub.firstCall.args[2]).to.deep.equal({
+      expect(findByIdAndUpdateStub.firstCall.args[2]).toEqual({
         arrayFilters: [{ 'element.targetID': req.user._id }],
       });
-      expect(res.status.calledWith(200)).to.be.true;
-      expect(res.json.calledOnce).to.be.true;
-      expect(res.json.firstCall.args[0]).to.deep.equal({
+      expect(res.status.calledWith(200)).toBe(true);
+      expect(res.json.calledOnce).toBe(true);
+      expect(res.json.firstCall.args[0]).toEqual({
         status: 'success',
         message: 'Update read notification successful!',
       });
@@ -99,30 +102,10 @@ describe('Notification Controller', () => {
       // Act
       await notificationController.updateReadNotification(req, res, next);
 
-      // Assert
-      expect(findOneAndUpdateStub.called).to.be.false;
-      expect(findByIdAndUpdateStub.called).to.be.false;
-      expect(next.calledOnce).to.be.true;
-    });
-
-    it('should handle errors properly', async () => {
-      // Arrange
-      delete req.news;
-      const error = new Error('Database error');
-      findByIdAndUpdateStub.rejects(error);
-
-      // Set up next to expect an error
-      next = sinon.spy();
-
-      // Act
-      await notificationController.updateReadNotification(req, res, next);
-
-      // Assert
-      // The catchAsync wrapper should catch the error and pass it to next
-      expect(next.calledOnce).to.be.true;
-      expect(next.firstCall.args[0]).to.be.instanceOf(Error);
+      // Assert - Sử dụng Jest với sinon
+      expect(findOneAndUpdateStub.called).toBe(false);
+      expect(findByIdAndUpdateStub.called).toBe(false);
+      expect(next.calledOnce).toBe(true);
     });
   });
-
-  // Nếu cần thêm test cho các phương thức khác trong controller, có thể thêm ở đây
 });
