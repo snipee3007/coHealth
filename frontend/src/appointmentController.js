@@ -26,8 +26,7 @@ const sendAppointment = async function (data) {
     renderPopup(
       err.response.status,
       'Creating appointment',
-      // err.response.data.message
-      'This appointment time is already taken by another person!'
+      err.response.data.message
     );
     Loader.destroy();
   }

@@ -42,16 +42,6 @@ exports.createAppointment = catchAsync(async (req, res, next) => {
       status: 'success',
       data: appointment,
     });
-    if (
-      error.code === 11000 &&
-      error.keyPattern &&
-      (error.keyPattern.doctorID || error.keyPattern.time)
-    ) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'This appointment time is already taken by another person!',
-      });
-    }
   }
 });
 

@@ -46,10 +46,22 @@ const sendErrorProd = (err, res) => {
   } else {
     // 1) Log error
     console.error('ERROR 💥', err);
-    if (err.code == '11000')
-      err.message = `This ${
-        Object.keys(err.keyValue)[0]
-      } has already taken! Please use another ${Object.keys(err.keyValue)[0]}!`;
+    if (err.code == '11000') {
+      const errKeys = Object.keys(err.keyPattern);
+      if (
+        errKeys.length == 2 &&
+        errKeys.includes('doctorID') &&
+        errKeys.includes('time')
+      ) {
+        err.message = `This time has already taken by someone else! Please try different time`;
+      } else {
+        err.message = `This ${
+          Object.keys(err.keyValue)[0]
+        } has already taken! Please use another ${
+          Object.keys(err.keyValue)[0]
+        }!`;
+      }
+    }
     // 2) Send generic message
     res.status(500).json({
       status: 'error',
