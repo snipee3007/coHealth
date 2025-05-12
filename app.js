@@ -7,7 +7,7 @@ const renderRouter = require('./backend/routers/renderRoute.js');
 
 const globalErrorHandler = require('./backend/controllers/errorController.js');
 const authController = require('./backend/controllers/authController.js');
-
+const templateController = require('./backend/controllers/templateController.js');
 const app = express();
 
 const bodyParser = require('body-parser');
@@ -25,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/', renderRouter);
 app.use('/api', apiRouter);
+app.use('*', templateController.getNotFoundTemplate);
 
 app.use(globalErrorHandler);
 

@@ -1,0 +1,9 @@
+extend base
+
+block body 
+    .notFoundContainer.w-full.h-screen.flex.justify-center.items-center.gap.gap-4
+        img(class="w-96" src="/images/png/sad-doctor.jpg", alt="404 not found doctor images")
+        .flex.flex-col.justify-center.items-center(class="w-1/3")
+            p.linearText.font-Roca.text-5xl 404 Not Found
+            p(class='text-[#007aff]').text-center.text-2xl.font-Alice Oops... Page not found! <br> Please try again later or contact the admin through #[a(href='mailto:cohealth2025@gmail.com').underline cohealth2025@gmail.com] for more information!
+            a(href="/").linearBackground.text-white.py-2.px-4.rounded-xl.font-Inter.text-bold Go back to homepage 

@@ -238,19 +238,22 @@ exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
     slug: req.originalUrl.split('/')[2],
     role: 'doctor',
   }).populate({ path: 'doctorInfo' });
-  const recommendDoctors = await User.find({
-    role: 'doctor',
-    _id: { $ne: doctor._id },
-  }).populate({
-    path: 'doctorInfo',
-    match: { major: { $eq: doctor.doctorInfo[0].major } },
-  });
-
-  res.status(200).render('doctorItem', {
-    title: 'Doctors',
-    doctor,
-    recommendDoctors,
-  });
+  if (doctor) {
+    const recommendDoctors = await User.find({
+      role: 'doctor',
+      _id: { $ne: doctor._id },
+    }).populate({
+      path: 'doctorInfo',
+      match: { major: { $eq: doctor.doctorInfo[0].major } },
+    });
+    res.status(200).render('doctorItem', {
+      title: 'Doctors',
+      doctor,
+      recommendDoctors,
+    });
+  } else {
+    notFoundPage(res);
+  }
 });
 
 exports.getListOfChatTemplate = async (req, res) => {
@@ -289,5 +292,15 @@ exports.getSymptomCheckerTemplate = async (req, res) => {
   res.status(200).render('symptomChecker', {
     title: 'Symptom Checker',
     history: JSON.stringify(req.history),
+  });
+};
+
+exports.getNotFoundTemplate = (req, res) => {
+  notFoundPage(res);
+};
+
+const notFoundPage = function (res) {
+  res.status(404).render('notFound', {
+    title: 'Page Not Found',
   });
 };
