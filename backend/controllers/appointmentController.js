@@ -24,7 +24,7 @@ exports.createAppointment = catchAsync(async (req, res, next) => {
   if (!matchDoctor) {
     res.status(400).json({
       status: 'fail',
-      message: 'Can not find this doctor do sai chuyên môn',
+      message: 'Can not find this doctor because wrong major!',
     });
   } else {
     const userID = req.user ? req.user._id : null;

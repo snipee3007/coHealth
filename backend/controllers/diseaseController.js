@@ -132,7 +132,7 @@ exports.predictDisease = async (req, res) => {
   if (!symptoms || !Array.isArray(symptoms) || symptoms.length === 0) {
     return res.status(400).json({
       status: 'fail',
-      message: 'Vui lòng cung cấp danh sách triệu chứng',
+      message: 'Please provide the symptoms!',
     });
   }
 
@@ -194,7 +194,7 @@ exports.predictDisease = async (req, res) => {
       if (error.includes('FileNotFoundError')) {
         return res.status(500).json({
           status: 'error',
-          message: 'Không tìm thấy file model cần thiết',
+          message: 'Can not find the neccessary model!',
           details: error,
         });
       }
@@ -202,14 +202,15 @@ exports.predictDisease = async (req, res) => {
       if (error.includes('Symptom') && error.includes('are not in dataset')) {
         return res.status(400).json({
           status: 'fail',
-          message: 'Có triệu chứng không hợp lệ',
+          message: 'Invalid Symptom!',
           details: error,
         });
       }
 
       return res.status(400).json({
         status: 'error',
-        message: 'Lỗi khi dự đoán bệnh',
+        message:
+          'There is some error in predict process! Please try again later!',
         error: error,
       });
     }

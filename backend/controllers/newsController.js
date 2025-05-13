@@ -29,6 +29,19 @@ exports.uploadImages = upload.fields([
 ]);
 
 exports.resizeImages = catchAsync(async (req, res, next) => {
+  // Check if exist title
+  const allTitle = await News.distinct('title');
+  if (allTitle.includes(req.body.title)) {
+    // If existed, do not do the later process
+    return next(
+      new AppError(
+        'This title has already taken! Please use different title!',
+        400
+      )
+    );
+  }
+
+  // If not, do all the later process
   if (
     (!req.files?.images || req.files?.images.length == 0) &&
     (!req.files?.coverImage || req.files?.coverImage.length == 0)
@@ -90,15 +103,6 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
 
 exports.createNews = catchAsync(async (req, res, next) => {
   const { title, description, category, news, images, coverImage } = req.body;
-  const allTitle = await News.distinct('title');
-  if (allTitle.includes(title)) {
-    return next(
-      new AppError(
-        'This title has already taken! Please use different title!',
-        400
-      )
-    );
-  }
   const fixNews = JSON.parse(news);
   // console.log(fixNews);
   let newNews = await News.create({

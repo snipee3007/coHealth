@@ -114,7 +114,7 @@ userSchema.pre('save', function (next) {
 
   const now = new Date(Date.now());
   this.age = now.getFullYear() - parseInt(this.yearOfBirth);
-  this.slug = slugify(this.fullname.toLowerCase());
+  this.slug = slugify(this.fullname.toLowerCase() + `-${now.getTime()}`);
   next();
 });
 

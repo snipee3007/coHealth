@@ -467,6 +467,7 @@ const upload = async function (data) {
       );
     }
   } catch (err) {
+    console.log(err);
     renderPopup(err.response.status, 'Upload news', err.response.data.message);
     Loader.destroy();
   }

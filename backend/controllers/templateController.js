@@ -234,8 +234,9 @@ exports.getDoctorsTemplate = catchAsync(async (req, res, next) => {
 });
 
 exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
+  const slug = req.params.name;
   const doctor = await User.findOne({
-    slug: req.originalUrl.split('/')[2],
+    slug,
     role: 'doctor',
   }).populate({ path: 'doctorInfo' });
   if (doctor) {

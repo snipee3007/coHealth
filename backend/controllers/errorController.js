@@ -45,7 +45,6 @@ const sendErrorProd = (err, res) => {
     // Programming or other unknown error: don't leak error details
   } else {
     // 1) Log error
-    console.error('ERROR 💥', err);
     if (err.code == '11000') {
       const errKeys = Object.keys(err.keyPattern);
       if (
@@ -80,7 +79,10 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
-
+    error.message = err.message;
+    error.name = err.name;
+    error.data = req.body;
+    error.statusCode = err.statusCode;
     if (error.name === 'CastError') error = handleCastErrorDB(err);
     if (error.statusCode === 11000) {
       error = handleDuplicateFieldsDB(error);

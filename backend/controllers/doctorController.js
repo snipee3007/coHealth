@@ -29,6 +29,7 @@ exports.getDoctors = catchAsync(async (req, res, next) => {
 });
 
 exports.getDoctor = catchAsync(async (req, res, next) => {
+  console.log('Hello');
   const doctor = await User.findOne({
     slug: req.originalUrl.split('/')[3],
     role: 'doctor',
@@ -41,7 +42,6 @@ exports.getDoctor = catchAsync(async (req, res, next) => {
   } else
     res.status(200).json({
       status: 'success',
-      length: doctor.length,
       data: doctor,
     });
 });
