@@ -28,44 +28,22 @@ exports.uploadImage = upload.fields([{ name: 'userProfile', maxCount: 1 }]);
 exports.updateImagePath = catchAsync(async (req, res, next) => {
   // console.log(req.files);
   if (!req.files.userProfile) return next();
-  const userID = req.user['_id'];
 
-  if (req.files.userProfile) {
-    const filename = `${userID}.png`;
+  const filename = `${req.user.slug}.png`;
 
-    if (
-      req.body.prevUserProfile !== 'menAnonymous.jpg' &&
-      req.body.prevUserProfile !== 'womanAnonymous.jpg'
-    )
-      rimraf.manual(
-        `frontend/images/users/profile/${req.body.prevuserProfile}`
-      );
+  if (
+    req.body.prevUserProfile !== 'menAnonymous.jpg' &&
+    req.body.prevUserProfile !== 'womanAnonymous.jpg'
+  )
+    rimraf.manual(`frontend/images/users/profile/${req.body.prevuserProfile}`);
 
-    await sharp(req.files.userProfile[0].buffer)
-      .resize({ width: 600, height: 600, fit: sharp.fit.cover })
-      .toFormat('png')
-      .png({ quality: 100 })
-      .toFile(`frontend/images/users/profile/${filename}`);
+  await sharp(req.files.userProfile[0].buffer)
+    .resize({ width: 600, height: 600, fit: sharp.fit.cover })
+    .toFormat('png')
+    .png({ quality: 100 })
+    .toFile(`frontend/images/users/profile/${filename}`);
 
-    req.userProfile = filename;
-  }
-
-  if (req.files.coverImage) {
-    const filename = `${slug}-cover-image.png`;
-
-    if (req.body.prevCoverImage !== 'defaultCoverImage.png')
-      rimraf.manual(
-        `frontend/images/Users/teacherCoverImage/${req.body.prevCoverImage}`
-      );
-
-    await sharp(req.files.coverImage[0].buffer)
-      .resize({ width: 600, height: 800, fit: sharp.fit.cover })
-      .toFormat('png')
-      .png({ quality: 100 })
-      .toFile(`frontend/images/Users/teacherCoverImage/${filename}`);
-
-    req.coverImage = filename;
-  }
+  req.userProfile = filename;
 
   next();
 });
