@@ -5,5 +5,6 @@ const authController = require('./../../controllers/authController.js');
 const router = express.Router();
 
 router.get('/', authController.isSignedIn, doctorController.getDoctors);
+router.post('/', doctorController.getDoctors);
 
 module.exports = router;
