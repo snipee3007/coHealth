@@ -5,10 +5,10 @@ block append header
 
 
 block body 
-    .newsContainer 
-        .newsTitle.flex.flex-1.justify-center.text-6xl.font-Roca.linearText.my-8 I'm doctor #{doctor.fullname}
-        .newsBox.py-6.px-20
-            .newsFirstParagraph.flex.flex-1.items-center.gap-12.justify-between
+    .doctorsContainer 
+        .doctorsTitle.flex.flex-1.justify-center.text-6xl.font-Roca.linearText.my-8 I'm doctor #{doctor.fullname}
+        .doctorsBox.py-6.px-20
+            .doctorsFirstParagraph.flex.flex-1.items-center.gap-12.justify-between
                 img(src=`./../images/users/profile/${doctor.image}` class='w-1/3 mx-auto')
                 .text-xl.text-justify.font-Roboto(class='w-1/2 text-[#6F7CB2]')
                     .firstParagraph My major is #{doctor.doctorInfo[0].major}
@@ -19,14 +19,13 @@ block body
                     else 
                         .linearText.mt-8.font-AbhayaLibre.text-xl Please #[a(href='/signIn' class='hover:underline font-bold').italic.underline sign in] to chat with doctor
 
+    if recommendDoctors.length > 0
+        hr.mx-16(class='border-[#1678F2] border-[1.5px]').my-12
+        .recommenddoctorContainer.px-20.mb-16
+            .recommenddoctor_title.linearText.font-ABeeZee.text-4xl.font-ABeeZee.mb-4.font-bold RECOMMEND
 
-    hr.mx-16(class='border-[#1678F2] border-[1.5px]').my-12
-    .recommenddoctorContainer.px-20.mb-16
-        .recommenddoctor_title.linearText.font-ABeeZee.text-4xl.font-ABeeZee.mb-4.font-bold RECOMMEND
-
-        .recommenddoctorBox.grid.grid-cols-3.w-full.gap-24
-            each recommendDoctor in recommendDoctors 
-                if recommendDoctor.doctorInfo[0] 
+            .recommenddoctorBox.grid.grid-cols-3.w-full.gap-24
+                each recommendDoctor in recommendDoctors 
                     a(href=`/doctor/${recommendDoctor.slug}`).shadow-xl.doctorItem
                             img(src=`./../images/users/profile/${recommendDoctor.image}` class='h-56').w-full.object-cover
                             .py-4.px-3

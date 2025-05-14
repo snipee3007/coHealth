@@ -21,12 +21,10 @@ exports.getNewsTemplate = catchAsync(async (req, res, next) => {
 });
 
 exports.getNewsItemTemplate = catchAsync(async (req, res, next) => {
-  const recommendNews = await News.find().sort('-view').limit(3);
-
+  console.log(req.news);
   res.status(200).render('newsItem', {
     title: 'News',
     news: req.news,
-    recommendNews,
     comments: req.comments,
     user: req.user,
   });
@@ -240,6 +238,17 @@ exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
     slug,
     role: 'doctor',
   }).populate({ path: 'doctorInfo' });
+  if (!doctor) {
+    res.writeHead(
+      302,
+      "Can't find any doctor with given slug! Please try again later!",
+      {
+        location: '/notFound',
+      }
+    );
+    return res.end();
+  }
+
   const recommendDoctors = await User.find({
     role: 'doctor',
     _id: { $ne: doctor._id },
@@ -247,10 +256,11 @@ exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
     path: 'doctorInfo',
     match: { major: { $eq: doctor.doctorInfo[0].major } },
   });
+
   res.status(200).render('doctorItem', {
     title: 'Doctors',
     doctor,
-    recommendDoctors,
+    recommendDoctors: recommendDoctors.filter((doctor) => doctor.doctorInfo[0]),
   });
 });
 
@@ -294,10 +304,6 @@ exports.getSymptomCheckerTemplate = async (req, res) => {
 };
 
 exports.getNotFoundTemplate = (req, res) => {
-  notFoundPage(req, res);
-};
-
-const notFoundPage = function (req, res) {
   logger.error({
     ip: req.clientIp,
     method: req.method,

@@ -22,12 +22,12 @@ block body
         .recommendNews_title.linearText.font-ABeeZee.text-4xl.font-ABeeZee.mb-4.font-bold RECOMMEND
 
         .recommendNewsBox.grid.grid-cols-3.w-full.gap-24
-            each news in recommendNews 
-                a(href=`/news/${news.slug}`).shadow-xl.newsItem
-                        img(src=`./../images/news/${news.slug}/${news.coverImage}` class='h-56').w-full.object-cover
+            each relativeNews in news.relativeNews 
+                a(href=`/news/${relativeNews.slug}`).shadow-xl.newsItem
+                        img(src=`./../images/news/${relativeNews.slug}/${relativeNews.coverImage}` class='h-56').w-full.object-cover
                         .py-4.px-3
-                            .title.font-Roca.text-xl #{news.title}
-                            .description.truncate-3.text-justify.font-Roboto(class='text-[#6F7CB2]') #{news.description}
+                            .title.font-Roca.text-xl.line-clamp-2= relativeNews.title
+                            .description.truncate-3.text-justify.font-Roboto.line-clamp-3(class='text-[#6F7CB2]')= relativeNews.description
 
     hr.mx-16(class='border-[#1678F2] border-[1.5px]').my-12
     #comment.commentsContainer.px-20.pb-20
