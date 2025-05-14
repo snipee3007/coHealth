@@ -21,21 +21,9 @@ exports.createChatRoom = catchAsync(async (req, res, next) => {
   // })
 
   if (!firstUser || !secondUser) {
-    return returnData(
-      req,
-      res,
-      400,
-      {},
-      'Can not found user with provided slug!'
-    );
+    return next(new AppError('Can not found user with provided slug!', 400));
   } else if (secondUser.role !== 'doctor') {
-    return returnData(
-      req,
-      res,
-      400,
-      {},
-      'The room must have at most 1 doctor!'
-    );
+    return next(new AppError('The room must have at most 1 doctor!', 400));
   } else {
     const room = await ChatRoom.findOne({
       memberID: { $all: [firstUser._id, secondUser._id] },
@@ -160,12 +148,11 @@ exports.getMessageInRoom = catchAsync(async (req, res, next) => {
     );
     returnData(req, res, 200, room);
   } else {
-    returnData(
-      req,
-      res,
-      400,
-      {},
-      'The provided room has not been created! Please try again!'
+    return next(
+      new AppError(
+        'The provided room has not been created! Please try again!',
+        400
+      )
     );
   }
 });
@@ -180,12 +167,8 @@ exports.createMessage = catchAsync(async (req, res, next) => {
     roomCode: roomCode,
   });
   if (!room) {
-    returnData(
-      req,
-      res,
-      400,
-      {},
-      'Can not find chat room with provided room code!'
+    return next(
+      new AppError('Can not find chat room with provided room code!', 400)
     );
   } else {
     const newMessage = await ChatLog.create({

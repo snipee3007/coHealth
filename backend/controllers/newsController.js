@@ -100,7 +100,6 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
       })
     );
   }
-  console.log('hello');
   next();
 });
 
@@ -118,7 +117,7 @@ exports.createNews = catchAsync(async (req, res, next) => {
     slug: req.slug,
     coverImage,
   });
-  returnData(res, 201, newNews, '');
+  returnData(req, res, 201, newNews);
 });
 
 exports.get6NearsestNews = catchAsync(async (req, res, next) => {

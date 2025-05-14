@@ -37,6 +37,17 @@ exports.updateReadNotification = catchAsync(async (req, res, next) => {
   }
 });
 
+exports.deleteNotification = catchAsync(async (req, res, next) => {
+  const notification = await Notification.findById(req.params.id);
+  returnData(
+    req,
+    res,
+    204,
+    { type: notification.type, userID: req.user.id },
+    'Delete notification successful!'
+  );
+});
+
 // exports.deletePast3MonthsNotification = async (req, res, next) => {
 //   const user = req.user;
 //   const notifications = await Notification.find({

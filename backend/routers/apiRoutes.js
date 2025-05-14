@@ -34,7 +34,11 @@ router
 router
   .route('/news/:name')
   .get(newsController.getNewsItem)
-  .delete(authController.restrictToAPI(['admin']), newsController.deleteNews);
+  .delete(
+    authController.protect,
+    authController.restrictToAPI(['admin']),
+    newsController.deleteNews
+  );
 
 // COMMENT API
 router.use('/comment', commentRoutes);

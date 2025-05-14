@@ -5,6 +5,13 @@ const router = express.Router();
 
 router
   .route('/:id')
-  .post(authController.protect, notificationController.updateReadNotification);
+  .post(authController.protect, notificationController.updateReadNotification)
+  .delete(
+    authController.protect,
+    authController.restrictToAPI(
+      ['admin'],
+      notificationController.deleteNotifition
+    )
+  );
 
 module.exports = router;

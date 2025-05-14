@@ -19,12 +19,11 @@ exports.createAppointment = catchAsync(async (req, res, next) => {
       doctor.doctorInfo[0] && doctor.doctorInfo[0].major === req.body.specialty
   );
   if (!matchDoctor) {
-    returnData(
-      req,
-      res,
-      400,
-      {},
-      'Can not find this doctor because the provide major is different!'
+    return next(
+      new AppError(
+        'Can not find this doctor because the provide major is different!',
+        400
+      )
     );
   } else {
     const userID = req.user ? req.user._id : null;

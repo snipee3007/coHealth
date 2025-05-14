@@ -13,14 +13,19 @@ exports.deleteComment = catchAsync(async (req, res, next) => {
   const data = await Comment.findById(req.params.id);
   if (data) {
     await Comment.deleteOne(data._id);
-    returnData(req, res, 204, {}, 'Delete comment successful');
-  } else {
     returnData(
       req,
       res,
-      400,
-      {},
-      'This comment is no longer exist! Please try different comments!'
+      204,
+      { comment: data.message, userID: req.user.id },
+      'Delete comment successful'
+    );
+  } else {
+    return next(
+      new AppError(
+        'This comment is no longer exist! Please try different comments!',
+        400
+      )
     );
   }
 });
