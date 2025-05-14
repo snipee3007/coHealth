@@ -1,4 +1,6 @@
 const News = require('./../models/news_schema.js');
+const Comment = require('./../models/commentsSchema.js');
+const Notification = require('./../models/notificationSchema.js');
 const AppError = require('../utils/appError.js');
 const catchAsync = require('../utils/catchAsync.js');
 const returnData = require('../utils/returnData.js');
@@ -7,6 +9,7 @@ const sharp = require('sharp');
 const slugify = require('slugify');
 const { mkdirp } = require('mkdirp');
 const removeAscent = require('../utils/removeAscent.js');
+const rimraf = require('rimraf');
 
 const multerStorage = multer.memoryStorage();
 
@@ -97,7 +100,7 @@ exports.resizeImages = catchAsync(async (req, res, next) => {
       })
     );
   }
-
+  console.log('hello');
   next();
 });
 
@@ -117,6 +120,46 @@ exports.createNews = catchAsync(async (req, res, next) => {
   });
   returnData(res, 201, newNews, '');
 });
+
+exports.get6NearsestNews = catchAsync(async (req, res, next) => {
+  const newsFound = await News.find().sort('_id').limit(6);
+  returnData(req, res, 200, { results: newsFound.length, news: newsFound });
+});
+
+exports.getAllNews = catchAsync(async (req, res, next) => {
+  const newsFound = await News.find().sort('-createdAt');
+  returnData(req, res, 200, { results: newsFound.length, news: newsFound });
+});
+
+exports.getNewsItem = catchAsync(async (req, res) => {
+  let newsFound = await News.find({ slug: req.params.name });
+  if (!newsFound) {
+    throw new Error("Can not find the request's news");
+  }
+  returnData(req, res, 200, newsFound);
+});
+
+exports.deleteNews = catchAsync(async (req, res, next) => {
+  const news = await News.findOne({ slug: req.params.name });
+  if (news) {
+    rimraf.manual(`frontend/images/news/${req.params.name}`);
+    await Comment.deleteMany({ newsID: news._id });
+    await News.findByIdAndDelete(news._id);
+    await Notification.deleteMany({ newsID: news._id });
+    returnData(
+      req,
+      res,
+      204,
+      { slug: req.params.name, userID: req.user.id },
+      'Delete news successful'
+    );
+  } else
+    return next(new AppError('The news trying to delete is not existed!', 400));
+});
+
+/////////////////////////
+// FOR TEMPLATE RENDER //
+/////////////////////////
 
 exports.getNews = catchAsync(async (req, res, next) => {
   // Query

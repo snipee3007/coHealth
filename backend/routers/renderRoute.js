@@ -34,8 +34,7 @@ router.get('/upload', template.getUploadTemplate);
 router.get('/calculate', template.getCalculateTemplate);
 
 // Result after calculating BMI or TDEE
-router.get('/result', template.getResultBMITemplate);
-router.get('/result/:id', template.getResultBMITemplate);
+router.route(['/result', '/result/:id']).get(template.getResultBMITemplate);
 
 // Hospital
 router.get('/hospital', template.getHospitalTemplate);

@@ -240,22 +240,18 @@ exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
     slug,
     role: 'doctor',
   }).populate({ path: 'doctorInfo' });
-  if (doctor) {
-    const recommendDoctors = await User.find({
-      role: 'doctor',
-      _id: { $ne: doctor._id },
-    }).populate({
-      path: 'doctorInfo',
-      match: { major: { $eq: doctor.doctorInfo[0].major } },
-    });
-    res.status(200).render('doctorItem', {
-      title: 'Doctors',
-      doctor,
-      recommendDoctors,
-    });
-  } else {
-    notFoundPage(req, res);
-  }
+  const recommendDoctors = await User.find({
+    role: 'doctor',
+    _id: { $ne: doctor._id },
+  }).populate({
+    path: 'doctorInfo',
+    match: { major: { $eq: doctor.doctorInfo[0].major } },
+  });
+  res.status(200).render('doctorItem', {
+    title: 'Doctors',
+    doctor,
+    recommendDoctors,
+  });
 });
 
 exports.getListOfChatTemplate = async (req, res) => {

@@ -1,5 +1,4 @@
 const express = require('express');
-const newsGetController = require('../controllers/newsGetController.js');
 const newsController = require('../controllers/newsController.js');
 const hospitalsController = require('../controllers/hospitalsController');
 const calculateRoutes = require('./api/calculateBMIRoutes.js');
@@ -21,10 +20,8 @@ const authController = require('./../controllers/authController.js');
 const router = express.Router();
 
 // NEWS API
-router.route('/get-6-nearest-news').get(newsGetController.get6NearsestNews);
-router.route('/getAllNews').get(newsGetController.getAllNews);
-
-// NEWS API
+router.route('/get-6-nearest-news').get(newsController.get6NearsestNews);
+router.route('/getAllNews').get(newsController.getAllNews);
 router
   .route('/news')
   .post(
@@ -34,7 +31,10 @@ router
     newsController.resizeImages,
     newsController.createNews
   );
-router.route('/news/:name').get(newsGetController.getNewsItem);
+router
+  .route('/news/:name')
+  .get(newsController.getNewsItem)
+  .delete(authController.restrictToAPI(['admin']), newsController.deleteNews);
 
 // COMMENT API
 router.use('/comment', commentRoutes);
