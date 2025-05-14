@@ -52,3 +52,25 @@ exports.getAllAppointment = catchAsync(async (req, res, next) => {
   });
   returnData(req, res, 200, appointments);
 });
+
+exports.deleteAppointment = catchAsync(async (req, res, next) => {
+  const appointment = await Appointment.findById(req.params.id);
+  if (appointment) {
+    await Appointment.findByIdAndDelete(req.params.id);
+    returnData(
+      req,
+      res,
+      204,
+      {
+        patient: appointment.userID,
+        doctor: appointment.doctorID,
+        reason: appointment.reason,
+        userID: req.user._id,
+      },
+      'Delete appointment successful'
+    );
+  } else
+    return next(
+      new AppError('Can not find appointment with provided id!', 400)
+    );
+});

@@ -7,7 +7,7 @@ block body
     include userTemplate
         block append user
             .grid.grid-cols-2.items-center.font-Inter.gap-8
-                if user.role === 'user'
+                if user.role === 'user' || user.role === 'admin'
                     .fullname.flex.flex-col(class='w-2/3')
                         label(for='fullname').mb-2 Doctor name 
                         p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= appointment.doctorID.fullname
@@ -38,7 +38,7 @@ block body
                         else
                             p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]') Unchecked
 
-                else 
+                else if user.role === 'doctor'
                     .fullname.flex.flex-col(class='w-2/3')
                         label(for='fullname').mb-2 User name 
                         p.mx-2.py-2.px-3.rounded-xl(class='bg-[#EAF0F7]')= appointment.fullname
@@ -76,8 +76,8 @@ block body
                     h2.text-xl.font-bold.mb-4 Change confirm
                     p.text-gray-700.mb-4 Are you sure to change this status?
                     .flex.justify-evenly
-                        button#cancelBtn.bg-red-100.text-red-500.px-4.py-2.rounded-lg.mr-2 Cancel
-                        button#confirmBtn(class='bg-[#EAF0F7] text-[#4461F2]').px-4.py-2.rounded-lg Confirm
+                        button#cancelBtn.bg-red-100.text-red-500.px-4.py-2.rounded-lg.mr-2.cursor-pointer Cancel
+                        button#confirmBtn(class='bg-[#EAF0F7] text-[#4461F2]').px-4.py-2.rounded-lg.cursor-pointer Confirm
                 
 
 

@@ -10,6 +10,13 @@ router.post(
   usersController.updateImagePath,
   usersController.editProfile
 );
+router
+  .route('/:slug')
+  .delete(
+    authController.protect,
+    authController.restrictToAPI(['admin']),
+    usersController.deleteUser
+  );
 router.route('/forgotPassword').post(authController.forgotPassword);
 router.route('/resetPassword/:token').post(authController.resetPassword);
 

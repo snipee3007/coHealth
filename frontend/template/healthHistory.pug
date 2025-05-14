@@ -18,11 +18,12 @@ block append body
             .calculateHistory(class='w-9/10').mx-auto.historyContainer
                 .flex.flex-1.justify-between.items-center.mb-6
                     .calculateHistoryLabel Calculate BMI/TDEE History
-                    .calculateHistoryOption
-                        select#calculateHistoryOption(name="calculateHistoryDate").py-1.px-2
-                            option(value='' selected)
-                            for range in calculateDateRange
-                                option(value=`${range.start.format}:${range.end.format}`)= `${range.start.format} -> ${range.end.format}`
+                    if calculateRange && calculateRange.length > 0
+                        .calculateHistoryOption
+                            select#calculateHistoryOption(name="calculateHistoryDate").py-1.px-2
+                                option(value='' selected)
+                                for range in calculateDateRange
+                                    option(value=`${range.start.format}:${range.end.format}`)= `${range.start.format} -> ${range.end.format}`
                 .border.rounded-2xl.overflow-hidden.font-Inter
                     .calculateHistoryHeader.grid.grid-cols-4.justify-center.place-items-center(class='bg-[#D9D9D9]')
                         p.font-bold Date 
@@ -30,45 +31,52 @@ block append body
                         p.font-bold TDEE 
                         p.font-bold
                     .calculateHistoryBody.h-56.overflow-y-auto
-                        each cal, idx in calculateHistory
-                            .calculateHistoryItem.historyItem.grid.grid-cols-4.justify-center.place-items-center.py-2(data-time=cal.createdAt)
-                                - const tmp = new Date(cal.updatedAt); const calculateDate = `${tmp.getDate().toString().padStart(2,0)}/${(tmp.getMonth() + 1).toString().padStart(2,0)}/${tmp.getFullYear()}`
-                                - const diff = idx < calculateHistory.length - 1 ? (cal.result.bmi - calculateHistory[idx + 1].result.bmi ).toFixed(1) : 0; const bmiDiff = diff >= 0 ? `(+${diff})` : `(${diff})` 
-                                
-                                p.calculateDate= calculateDate
-                                if cal.result.bmiStatus.includes('Underweight')
-                                    p.calculateBMI(class='text-[#2A9FF3]') #{cal.result.bmi} #{bmiDiff}
-                                else if cal.result.bmiStatus.includes('Normal')
-                                    p.calculateBMI(class='text-[#28D74E]') #{cal.result.bmi} #{bmiDiff}
-                                else if cal.result.bmiStatus.includes('Overweight')    
-                                    p.calculateBMI.text-red-400 #{cal.result.bmi} #{bmiDiff}
-                                else if cal.result.bmiStatus.includes('Obese')
-                                    p.calculateBMI.text-red-700.font-bold #{cal.result.bmi} #{bmiDiff}
-                                p.calculateTDEE= cal.result.tdee
-                                p.calculateRef
-                                    a(href=`/result/${cal.id}` class='text-[#3EA2A6]') Details 
+                        if calculateHistory && calculateHistory.length > 0
+                            each cal, idx in calculateHistory
+                                .calculateHistoryItem.historyItem.grid.grid-cols-4.justify-center.place-items-center.py-2(data-time=cal.createdAt)
+                                    - const tmp = new Date(cal.updatedAt); const calculateDate = `${tmp.getDate().toString().padStart(2,0)}/${(tmp.getMonth() + 1).toString().padStart(2,0)}/${tmp.getFullYear()}`
+                                    - const diff = idx < calculateHistory.length - 1 ? (cal.result.bmi - calculateHistory[idx + 1].result.bmi ).toFixed(1) : 0; const bmiDiff = diff >= 0 ? `(+${diff})` : `(${diff})` 
+                                    
+                                    p.calculateDate= calculateDate
+                                    if cal.result.bmiStatus.includes('Underweight')
+                                        p.calculateBMI(class='text-[#2A9FF3]') #{cal.result.bmi} #{bmiDiff}
+                                    else if cal.result.bmiStatus.includes('Normal')
+                                        p.calculateBMI(class='text-[#28D74E]') #{cal.result.bmi} #{bmiDiff}
+                                    else if cal.result.bmiStatus.includes('Overweight')    
+                                        p.calculateBMI.text-red-400 #{cal.result.bmi} #{bmiDiff}
+                                    else if cal.result.bmiStatus.includes('Obese')
+                                        p.calculateBMI.text-red-700.font-bold #{cal.result.bmi} #{bmiDiff}
+                                    p.calculateTDEE= cal.result.tdee
+                                    p.calculateRef
+                                        a(href=`/result/${cal.id}` class='text-[#3EA2A6]') Details 
+                        else 
+                            p.text-center No Calculate History Yet!
 
             //- SYMPTON CHECK
             .symptonCheckHistory(class='w-9/10').mx-auto.mt-8.historyContainer
                 .flex.flex-1.justify-between.items-center.mb-6
                     .symptomCheckHistoryLabel History Symptom check
-                    .symptomCheckHistoryOption
-                        select#symptomCheckHistoryOption(name="symptomCheckHistoryDate").py-1.px-2
-                            option(value='' selected)
-                            for range in symptomCheckDateRange
-                                option(value=`${range.start.format}:${range.end.format}`)= `${range.start.format} -> ${range.end.format}`
+                    if symptomCheckDateRange && symptomCheckDateRange.length > 0
+                        .symptomCheckHistoryOption
+                            select#symptomCheckHistoryOption(name="symptomCheckHistoryDate").py-1.px-2
+                                option(value='' selected)
+                                for range in symptomCheckDateRange
+                                    option(value=`${range.start.format}:${range.end.format}`)= `${range.start.format} -> ${range.end.format}`
                 .border.rounded-2xl.overflow-hidden.font-Inter
                     .symptomCheckHistoryHeader.grid.grid-cols-3.justify-center.place-items-center(class='bg-[#D9D9D9]')
                         p.font-bold Date 
                         p.font-bold Symptoms 
                         p.font-bold
                     .symptomCheckHistoryBody.h-56.overflow-y-auto
-                        each history in symptomsHistory
-                            .symptomCheckHistoryItem.historyItem.grid.grid-cols-3.justify-center.place-items-center.py-2(data-time=history.createdAt)
-                                - const tmp = new Date(history.updatedAt); const calculateDate = `${tmp.getDate().toString().padStart(2,0)}/${(tmp.getMonth() + 1).toString().padStart(2,0)}/${tmp.getFullYear()}`
-                                
-                                p.calculateDate= calculateDate
-                                p.symptom.line-clamp-2.text-left.w-full= history.symptoms.map(symptom => symptom.symptom).join(', ')
-                                p.calculateRef
-                                    a(href=`/symptom?historyID=${history.id}` class='text-[#3EA2A6]') Details 
+                        if symptomsHistory && symptomsHistory.length > 0
+                            each history in symptomsHistory
+                                .symptomCheckHistoryItem.historyItem.grid.grid-cols-3.justify-center.place-items-center.py-2(data-time=history.createdAt)
+                                    - const tmp = new Date(history.updatedAt); const calculateDate = `${tmp.getDate().toString().padStart(2,0)}/${(tmp.getMonth() + 1).toString().padStart(2,0)}/${tmp.getFullYear()}`
+                                    
+                                    p.calculateDate= calculateDate
+                                    p.symptom.line-clamp-2.text-left.w-full= history.symptoms.map(symptom => symptom.symptom).join(', ')
+                                    p.calculateRef
+                                        a(href=`/symptom?historyID=${history.id}` class='text-[#3EA2A6]') Details 
+                        else
+                            p.text-center No Symptom Check History Yet!
 

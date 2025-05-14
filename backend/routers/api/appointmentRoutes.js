@@ -2,6 +2,7 @@ const express = require('express');
 const authController = require('../../controllers/authController.js');
 const appointmentController = require('./../../controllers/appointmentController.js');
 const userAppointmentController = require('./../../controllers/userAppointmentController.js');
+const appointment = require('../../models/appointments_schema.js');
 
 const router = express.Router();
 
@@ -40,4 +41,11 @@ router.post(
   userAppointmentController.sendEmail
 );
 
+router
+  .route('/:id')
+  .delete(
+    authController.protect,
+    authController.restrictToAPI(['admin']),
+    appointmentController.deleteAppointment
+  );
 module.exports = router;

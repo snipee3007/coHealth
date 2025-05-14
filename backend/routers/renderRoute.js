@@ -9,7 +9,6 @@ const commentController = require('./../controllers/commentController.js');
 const adultCompendiumController = require('./../controllers/adultCompendiumController.js');
 const resultController = require('./../controllers/resultController.js');
 const symptomHistoryController = require('./../controllers/symptomHistoryController.js');
-const SymptonHistory = require('../models/symptomHistory_schema.js');
 const router = express.Router();
 
 router.use(authController.isSignedIn);

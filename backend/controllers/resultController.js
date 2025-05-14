@@ -6,7 +6,7 @@ const returnData = require('../utils/returnData.js');
 
 exports.calculateBMI = catchAsync(async (req, res, next) => {
   // Extract user input from request body
-  const {
+  let {
     gender,
     age,
     height,
@@ -18,6 +18,7 @@ exports.calculateBMI = catchAsync(async (req, res, next) => {
     activities,
     method,
   } = req.body;
+  if (speed == '') speed = undefined;
   const { bmi, bmiStatus, tdee, tee } = await mainCalculateFunction({
     gender,
     age,

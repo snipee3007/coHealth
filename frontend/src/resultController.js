@@ -20,7 +20,10 @@ class Result {
     this.#suggestExerciseButton();
     this.#exerciseFormSubmit();
     // Sử dụng thì bỏ comment hai dòng dưới là được!
-    await this.#getFoodData(this.#calculateData.result.caloriesIntakeList[0]);
+    await this.#getFoodData(
+      this.#calculateData.result.caloriesIntakeList[0] ||
+        this.#calculateData.result.targetCalories
+    );
     this.#weeksRender();
 
     this.#dayHandler();
@@ -167,7 +170,7 @@ class Result {
     ['bmi', 'tdee', 'weekAfterToAchieveTarget'].forEach(
       ((field) => {
         // Field Circular Progress Bar
-        const fieldValue = this.#calculateData.result[field];
+        const fieldValue = this.#calculateData.result[field] || 0;
         const upperValue = this[`${field}Upper`];
         const lowerValue = this[`${field}Lower`];
         if (fieldValue < lowerValue) {
@@ -186,19 +189,25 @@ class Result {
         // Field Number
         const fieldNumber = document.querySelector(`.${field}_number`);
         let fieldStart = 0;
-        const fieldResult = this.#calculateData.result[field];
+        const fieldResult = this.#calculateData.result[field] || 0;
 
         const fieldStep = fieldResult / (1000 / 50);
         for (let i = 0; i < 1000; ++i) {}
         const fieldInterval = setInterval(
           function () {
             if (field == 'bmi') {
-              if (fieldStart.toFixed(1) == this.#calculateData.result[field]) {
+              if (
+                fieldStart.toFixed(1) == this.#calculateData.result[field] ||
+                0
+              ) {
                 clearInterval(fieldInterval);
               }
               fieldNumber.textContent = fieldStart.toFixed(1);
             } else {
-              if (Math.round(fieldStart) == this.#calculateData.result[field]) {
+              if (
+                Math.round(fieldStart) == this.#calculateData.result[field] ||
+                0
+              ) {
                 clearInterval(fieldInterval);
               }
               fieldNumber.textContent = Math.round(fieldStart);
@@ -586,6 +595,7 @@ const getFoodValue = async function (calories) {
     Loader.destroy();
     return res.data.data;
   } catch (err) {
+    console.log(err);
     Loader.destroy();
   }
 };

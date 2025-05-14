@@ -13,20 +13,9 @@ const updateStatusAppointment = async function (appointmentCode, status) {
     });
     if (res.data.status == 'success') {
       Loader.destroy();
-      renderPopup(
-        res.status,
-        'Update appointment',
-        'The appointment has been updated!',
-        'reload'
-      );
     }
   } catch (err) {
     Loader.destroy();
-    renderPopup(
-      err.response.status,
-      'Update appointment',
-      err.response.data.message
-    );
   }
 };
 

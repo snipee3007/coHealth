@@ -3,6 +3,15 @@ const catchAsync = require('../utils/catchAsync.js');
 const AppError = require('../utils/appError.js');
 const Doctor = require('../models/doctors_schema.js');
 const returnData = require('../utils/returnData.js');
+const Appointment = require('../models/appointments_schema.js');
+const CalculateHistory = require('../models/calculateHistory_schema.js');
+const ChatRoom = require('../models/chatRoom_schema.js');
+const ChatLog = require('../models/chatLog_schema.js');
+const Comment = require('../models/commentsSchema.js');
+const News = require('../models/news_schema.js');
+const Notification = require('../models/notificationSchema.js');
+const rimraf = require('rimraf');
+const SymptomHistory = require('../models/symptomHistory_schema.js');
 
 exports.getDoctors = catchAsync(async (req, res, next) => {
   const doctorsList = await User.find({
@@ -40,8 +49,10 @@ exports.getDoctor = catchAsync(async (req, res, next) => {
 
 exports.createDoctor = catchAsync(async (req, res, next) => {
   const doctor = req.body;
-  // console.log(req.body);
   if (doctor.role.includes('doctor')) {
+    if (doctor.gender == 'male') doctor.image = 'menAnonymous.png';
+    else if (doctor.gender == 'female') doctor.image = 'womanAnonymous.png';
+
     const newDoctor = await User.create({
       email: doctor.email,
       password: doctor.password,
@@ -70,4 +81,64 @@ exports.createDoctor = catchAsync(async (req, res, next) => {
       )
     );
   }
+});
+
+exports.deleteDoctor = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ slug: req.params.slug });
+  if (!user)
+    return next(
+      new AppError(
+        'Can not find doctor with provided slug. Please try different name!',
+        400
+      )
+    );
+  if (!user.role.includes('doctor')) {
+    return next(
+      new AppError(
+        'Target user is not a doctor! Please try different user!',
+        400
+      )
+    );
+  }
+
+  // Delete all appointment of this doctor
+  await Appointment.deleteMany({ doctorID: user._id });
+
+  // Delete all calculate history of this doctor
+  await CalculateHistory.deleteMany({ userID: user._id });
+
+  // Delete all chat room
+  await ChatRoom.deleteMany({ memberID: user._id });
+
+  // Delete all chat log
+  await ChatLog.deleteMany({ senderID: user._id });
+
+  // Delete all comment
+  await Comment.deleteMany({ userID: user._id });
+
+  // Delete all news from this doctor
+  await News.deleteMany({ userID: user._id });
+
+  // Delete all Notification from this doctor
+  await Notification.deleteMany({
+    $or: [{ 'to.targetID': user._id }, { from: user._id }],
+  });
+
+  // Delete all symptoms checker history
+  await SymptomHistory.deleteMany({ userID: user._id });
+
+  // Delete doctor info
+  await Doctor.findOneAndDelete({ userID: user._id });
+
+  // Delete user
+  rimraf.manual(`frontend/images/users/profile/${req.params.slug}.png`);
+  await User.findOneAndDelete({ slug: req.params.slug });
+
+  returnData(
+    req,
+    res,
+    204,
+    { doctor: user.fullname, slug: user.slug, userID: req.user.id },
+    'Delete doctor successful!'
+  );
 });

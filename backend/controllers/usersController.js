@@ -104,3 +104,57 @@ exports.editProfile = catchAsync(async (req, res, next) => {
   );
   returnData(req, res, 201, {}, 'Update user profile successful!');
 });
+
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ slug: req.params.slug });
+  if (!user)
+    return next(
+      new AppError(
+        'Can not find doctor with provided slug. Please try different name!',
+        400
+      )
+    );
+  if (!user.role.includes('doctor')) {
+    return next(
+      new AppError(
+        'Target user is not a doctor! Please try different user!',
+        400
+      )
+    );
+  }
+
+  // Delete all appointment of this doctor
+  await Appointment.deleteMany({ userID: user._id });
+
+  // Delete all calculate history of this doctor
+  await CalculateHistory.deleteMany({ userID: user._id });
+
+  // Delete all chat room
+  await ChatRoom.deleteMany({ memberID: user._id });
+
+  // Delete all chat log
+  await ChatLog.deleteMany({ senderID: user._id });
+
+  // Delete all comment
+  await Comment.deleteMany({ userID: user._id });
+
+  // Delete all Notification from this doctor
+  await Notification.deleteMany({
+    $or: [{ 'to.targetID': user._id }, { from: user._id }],
+  });
+
+  // Delete all symptoms checker history
+  await SymptomHistory.deleteMany({ userID: user._id });
+
+  // Delete user
+  rimraf.manual(`frontend/images/users/profile/${req.params.slug}.png`);
+  await User.findOneAndDelete({ slug: req.params.slug });
+
+  returnData(
+    req,
+    res,
+    204,
+    { user: user.fullname, slug: user.slug, userID: req.user.id },
+    'Delete user successful!'
+  );
+});

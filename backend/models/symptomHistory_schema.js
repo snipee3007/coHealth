@@ -13,7 +13,7 @@ const resultSchema = new mongoose.Schema({
   },
 });
 
-const symptonHistorySchema = new mongoose.Schema(
+const symptomHistorySchema = new mongoose.Schema(
   {
     result: {
       type: [resultSchema],
@@ -33,7 +33,7 @@ const symptonHistorySchema = new mongoose.Schema(
     userID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'user',
-      required: [true, 'Please provide userID for this sympton history!'],
+      required: [true, 'Please provide userID for this symptom history!'],
     },
   },
   {
@@ -43,6 +43,6 @@ const symptonHistorySchema = new mongoose.Schema(
   }
 );
 
-const SymptonHistory = mongoose.model('symptonhistory', symptonHistorySchema);
+const SymptomHistory = mongoose.model('symptomhistory', symptomHistorySchema);
 
-module.exports = SymptonHistory;
+module.exports = SymptomHistory;

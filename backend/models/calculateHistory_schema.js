@@ -88,6 +88,7 @@ const inputSchema = new mongoose.Schema({
     },
     validate: {
       validator: function (v) {
+        console.log(v);
         if (this.target !== 'maintain') {
           return !!v;
         }
