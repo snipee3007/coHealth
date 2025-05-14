@@ -50,8 +50,7 @@
     "speakeasy": "^2.0.0",
     "swiper": "^11.2.1",
     "tailwindcss": "^4.0.8",
-    "validator": "^13.11.0",
-    "xlsx": "^0.18.5"
+    "validator": "^13.11.0"
   },
   "eslintConfig": {
     "extends": [
