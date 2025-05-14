@@ -1,5 +1,5 @@
 const catchAsync = require('../utils/catchAsync.js');
-const Meal = require('./../models/mealSchema.js');
+const returnData = require('../utils/returnData.js');
 const axios = require('axios');
 
 exports.getMeal = catchAsync(async (req, res, next) => {
@@ -12,14 +12,14 @@ exports.getMeal = catchAsync(async (req, res, next) => {
     },
   });
   if (response.status.toString().startsWith('2')) {
-    res.status(response.status).json({
-      status: 'success',
-      data: response.data.week,
-    });
+    returnData(req, res, response.status, response.data.week);
   } else if (response.status.toString().startsWith('4')) {
-    res.status(response.status).json({
-      status: 'failed',
-      message: 'ERROR',
-    });
+    console.error(response);
+    return next(
+      new AppError(
+        'Something wrong with Spoonacular API! Please try again later',
+        response.status
+      )
+    );
   }
 });

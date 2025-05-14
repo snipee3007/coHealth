@@ -1,4 +1,5 @@
 const AppError = require('../utils/appError.js');
+const logger = require('../utils/logger.js');
 
 const handleCastErrorDB = (err) => {
   const message = `Invalid ${err.path}: ${err.value}.`;
@@ -91,6 +92,16 @@ module.exports = (err, req, res, next) => {
       error = handleValidationErrorDB(error);
     if (error.name === 'JsonWebTokenError') error = handleJWTError();
     if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
+
+    logger.error({
+      ip: req.clientIp,
+      method: req.method,
+      url: req.originalUrl,
+      message: error.message,
+      params: Object.keys(req.params).length > 0 ? req.params : undefined,
+      query: Object.keys(req.query).length > 0 ? req.query : undefined,
+      data: Object.keys(req.body).length > 0 ? req.body : undefined,
+    });
     sendErrorProd(error, res);
   }
 };

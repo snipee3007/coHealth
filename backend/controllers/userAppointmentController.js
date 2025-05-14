@@ -4,15 +4,16 @@ const User = require('../models/users_schema.js');
 const nodemailer = require('nodemailer');
 
 const dotenv = require('dotenv');
+const returnData = require('../utils/returnData.js');
 dotenv.config({ path: '../../config.env' });
 
 // từ khúc dưới này là quản lí appointment cho trang user
 exports.updateAppointment = catchAsync(async (req, res, next) => {
   const user = req.user;
   if (user.role !== 'doctor') {
-    res.status(403).json({
-      message: 'You do not have permission to perform this action',
-    });
+    return next(
+      new AppError('You do not have permission to perform this action', 403)
+    );
   } else {
     const status = req.body.status;
     const appointmentCode = req.body.appointmentCode;
@@ -23,10 +24,7 @@ exports.updateAppointment = catchAsync(async (req, res, next) => {
       { new: true, upsert: true }
     );
     // console.log(appointment);
-    res.status(200).json({
-      message: 'success',
-      data: appointment,
-    });
+    returnData(req, res, 200, appointment);
   }
 });
 
@@ -138,12 +136,9 @@ exports.getAppointmentEachPage = catchAsync(async (req, res, next) => {
       userID: user._id,
     });
     const totalPages = Math.ceil(totalAppointments / limit);
-    res.status(200).json({
-      message: 'success',
-      data: {
-        appointments: appointments,
-        totalPages: totalPages,
-      },
+    returnData(req, res, 200, {
+      appointments: appointments,
+      totalPages: totalPages,
     });
   } else {
     const allAppointments = await Appointment.find({
@@ -179,12 +174,9 @@ exports.getAppointmentEachPage = catchAsync(async (req, res, next) => {
       userID: user._id,
     });
     const totalPages = Math.ceil(totalAppointments / limit);
-    res.status(200).json({
-      message: 'success',
-      data: {
-        appointments: appointments,
-        totalPages: totalPages,
-      },
+    returnData(req, res, 200, {
+      appointments: appointments,
+      totalPages: totalPages,
     });
   }
 });
@@ -259,8 +251,6 @@ exports.sendEmail = catchAsync(async (req, res, next) => {
     subject: subject,
     html: htmlContent,
   });
-  res.status(200).json({
-    status: 'success',
-    data: info,
-  });
+
+  returnData(req, res, 200, info);
 });

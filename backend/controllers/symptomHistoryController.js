@@ -2,6 +2,7 @@ const catchAsync = require('../utils/catchAsync.js');
 const SymptomHistory = require('../models/symptomHistory_schema.js');
 const Disease = require('../models/disease_schema.js');
 const Sympton = require('../models/symptom_schema.js');
+const returnData = require('../utils/returnData.js');
 exports.getHistory = catchAsync(async (req, res, next) => {
   const historyID = req.query.historyID;
   const data = await SymptomHistory.findById(historyID).populate(
@@ -20,7 +21,7 @@ exports.getAll = catchAsync(async (req, res, next) => {
 });
 
 exports.createHistory = catchAsync(async (req, res, next) => {
-  if (!req.user) return res.status(204).json({});
+  if (!req.user) return returnData(req, res, 204, {});
 
   const diseases = req.body.diseases;
   const symptoms = req.body.symptoms;
@@ -50,5 +51,5 @@ exports.createHistory = catchAsync(async (req, res, next) => {
     userID: req.user.id,
     symptoms: symptomList,
   });
-  res.status(200).json({ status: 'success', data });
+  returnData(req, res, 200, data);
 });

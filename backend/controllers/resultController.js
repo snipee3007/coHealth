@@ -2,6 +2,7 @@ const AppError = require('./../utils/appError.js');
 const catchAsync = require('./../utils/catchAsync.js');
 const AdultCompendium = require('./../models/adultCompendium_schema.js');
 const CalculateHistory = require('./../models/calculateHistory_schema.js');
+const returnData = require('../utils/returnData.js');
 
 exports.calculateBMI = catchAsync(async (req, res, next) => {
   // Extract user input from request body
@@ -116,16 +117,13 @@ exports.calculateBMI = catchAsync(async (req, res, next) => {
     });
     // console.log('Success create new calculate history!');
   }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tdee: tdee || tee,
-      bmi,
-      targetCalories,
-      weekAfterToAchieveTarget,
-      bmiStatus,
-      caloriesIntakeList,
-    },
+  returnData(req, res, 200, {
+    tdee: tdee || tee,
+    bmi,
+    targetCalories,
+    weekAfterToAchieveTarget,
+    bmiStatus,
+    caloriesIntakeList,
   });
 });
 
@@ -137,21 +135,17 @@ exports.getRecentCalculate = catchAsync(async (req, res, next) => {
       .sort('-createdAt -updatedAt')
       .limit(1);
 
-    if (recentCalculate.length > 0)
-      res.status(200).json({
-        status: 'success',
-        data: recentCalculate,
-      });
+    if (recentCalculate.length > 0) returnData(req, res, 200, recentCalculate);
     else {
-      res.status(400).json({
-        status: 'failed',
-        message:
+      return next(
+        new AppError(
           'No calculation before! Please use /calculate to make your calculation',
-        data: [],
-      });
+          400
+        )
+      );
     }
   } else {
-    res.status(204).json();
+    returnData(req, res, 204, {});
   }
 });
 
@@ -159,19 +153,17 @@ exports.getCalculate = catchAsync(async (req, res, next) => {
   if (req.user) {
     const calculate = await CalculateHistory.findById(req.params.id);
     if (calculate) {
-      res.status(200).json({
-        status: 'success',
-        data: calculate,
-      });
+      returnData(req, res, 200, calculate);
     } else {
-      res.status(400).json({
-        status: 'failed',
-        message: 'No calculation with give ID! Please use different ID!',
-        data: [],
-      });
+      return next(
+        new AppError(
+          'No calculation with give ID! Please use different ID!',
+          400
+        )
+      );
     }
   } else {
-    res.status(204).json();
+    returnData(req, res, 204, {});
   }
 });
 

@@ -1,3 +1,4 @@
+const returnData = require('../utils/returnData.js');
 const Exercise = require('./../models/exerciseSchema.js');
 const catchAsync = require('./../utils/catchAsync.js');
 
@@ -16,8 +17,5 @@ exports.getExercise = catchAsync(async (req, res, next) => {
   if (category != null && category) findObj.category = category;
 
   const exercises = await Exercise.find(findObj);
-  res.status(200).json({
-    status: 'success',
-    data: exercises,
-  });
+  returnData(req, res, 200, exercises);
 });

@@ -7,6 +7,7 @@ const User = require('./../models/users_schema.js');
 const Doctor = require('./../models/doctors_schema.js');
 const catchAsync = require('./../utils/catchAsync.js');
 const AppError = require('./../utils/appError.js');
+const returnData = require('../utils/returnData.js');
 
 const multerStorage = multer.memoryStorage();
 
@@ -101,9 +102,5 @@ exports.editProfile = catchAsync(async (req, res, next) => {
     },
     { runValidator: true }
   );
-
-  res.status(201).json({
-    status: 'success',
-    message: 'Update User Profile successful!',
-  });
+  returnData(req, res, 201, {}, 'Update user profile successful!');
 });

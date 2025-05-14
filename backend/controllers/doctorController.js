@@ -2,6 +2,7 @@ const User = require('../models/users_schema.js');
 const catchAsync = require('../utils/catchAsync.js');
 const AppError = require('../utils/appError.js');
 const Doctor = require('../models/doctors_schema.js');
+const returnData = require('../utils/returnData.js');
 
 exports.getDoctors = catchAsync(async (req, res, next) => {
   const doctorsList = await User.find({
@@ -22,28 +23,19 @@ exports.getDoctors = catchAsync(async (req, res, next) => {
     }
   });
   // console.log(doctors);
-  res.status(200).json({
-    status: 'success',
-    data: doctors,
-  });
+  returnData(req, res, 200, doctors);
 });
 
 exports.getDoctor = catchAsync(async (req, res, next) => {
-  console.log('Hello');
   const doctor = await User.findOne({
     slug: req.originalUrl.split('/')[3],
     role: 'doctor',
   }).populate({ path: 'doctorInfo' });
   if (!doctor) {
-    res.status(404).json({
-      status: 'failed',
-      message: 'Can not found the doctor that request',
-    });
-  } else
-    res.status(200).json({
-      status: 'success',
-      data: doctor,
-    });
+    return next(
+      new AppError('Can not found the doctor with provided slug', 400)
+    );
+  } else returnData(req, res, 200, doctor);
 });
 
 exports.createDoctor = catchAsync(async (req, res, next) => {
@@ -61,7 +53,7 @@ exports.createDoctor = catchAsync(async (req, res, next) => {
       role: doctor.role,
     });
     // console.log(newDoctor);
-    const docterExtend = await Doctor.create({
+    const doctorExtend = await Doctor.create({
       major: doctor.major,
       workAt: doctor.workAt,
       rating: doctor.rating,
@@ -69,41 +61,13 @@ exports.createDoctor = catchAsync(async (req, res, next) => {
       userID: newDoctor._id,
     });
     // console.log(docterExtend);
-
-    res.status(200).json({
-      status: 'success',
-      data: { newDoctor, docterExtend },
-    });
+    returnData(req, res, 200, { newDoctor, doctorExtend });
   } else {
-    res.status(401).json({
-      status: 'failed',
-      message: 'You are not a doctor! Please try again!',
-    });
-    res.end();
+    return next(
+      new AppError(
+        'This is a create doctor route, please create new user with role doctor!',
+        400
+      )
+    );
   }
-});
-
-exports.getRecommendDoctor = catchAsync(async (req, res, next) => {
-  const doctor = await User.findOne({
-    slug: req.originalUrl.split('/')[3],
-    role: 'doctor',
-  }).populate({ path: 'doctorInfo' });
-
-  const recommendDoctors = await User.find({
-    role: 'doctor',
-  }).populate({
-    path: 'doctorInfo',
-    match: { major: { $eq: doctor.doctorInfo[0].major } },
-  });
-  if (!recommendDoctors) {
-    res.status(404).json({
-      status: 'failed',
-      message: 'Can not found the recommendDoctors that request',
-    });
-  } else
-    res.status(200).json({
-      status: 'success',
-      length: recommendDoctors.length,
-      data: recommendDoctors,
-    });
 });
