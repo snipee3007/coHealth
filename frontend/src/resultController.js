@@ -528,7 +528,10 @@ const getRecentCalculate = async function () {
     }
   } catch (err) {
     Loader.destroy();
-    if (err.status == 400 && err.response.data.data.length == 0) {
+    if (
+      err.status == 400 &&
+      err.response.data.message.startsWith('No calculation before')
+    ) {
       window.location = '/calculate';
     }
   }
