@@ -4,29 +4,46 @@ const path = require('path');
 
 const apiRouter = require('./backend/routers/apiRoutes.js');
 const renderRouter = require('./backend/routers/renderRoute.js');
-
 const globalErrorHandler = require('./backend/controllers/errorController.js');
-const authController = require('./backend/controllers/authController.js');
+
+// Limit number of access
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour!',
+});
+
+// Just for 404 not found page
 const templateController = require('./backend/controllers/templateController.js');
 const app = express();
+app.use(express.json());
+
+// Request IP
+const requestIp = require('request-ip');
+app.use(requestIp.mw());
+
+// Parse cookie to json
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 const bodyParser = require('body-parser');
-
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'frontend/template'));
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(express.static(path.join(__dirname, `frontend`)));
-
-const cookieParser = require('cookie-parser');
-
-app.use(express.json());
-app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('/api', limiter);
+
 app.use('/', renderRouter);
 app.use('/api', apiRouter);
+
 app.use('*', templateController.getNotFoundTemplate);
 
+// Use Global Error Handler
 app.use(globalErrorHandler);
 
 module.exports = app;

@@ -26,6 +26,7 @@
     "debounce": "^2.2.0",
     "dotenv": "^16.5.0",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.5.0",
     "express-session": "^1.17.3",
     "googleapis": "^148.0.0",
     "html-to-text": "^9.0.5",
@@ -41,6 +42,7 @@
     "postcss-cli": "^11.0.0",
     "pug": "^3.0.3",
     "punycode": "^2.3.1",
+    "request-ip": "^3.3.0",
     "rimraf": "^6.0.1",
     "serverless-http": "^3.2.0",
     "sharp": "^0.33.5",
@@ -50,7 +52,9 @@
     "speakeasy": "^2.0.0",
     "swiper": "^11.2.1",
     "tailwindcss": "^4.0.8",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "eslintConfig": {
     "extends": [

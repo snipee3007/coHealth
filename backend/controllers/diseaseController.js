@@ -4,13 +4,11 @@ const AppError = require('../utils/appError.js');
 const fs = require('fs');
 const { spawn } = require('child_process');
 const path = require('path');
+const returnData = require('../utils/returnData.js');
 
 exports.getAllDiseases = catchAsync(async (req, res, next) => {
-  const Diseases = await Disease.find({}).lean();
-  res.status(200).json({
-    status: 'success',
-    data: Diseases,
-  });
+  const diseases = await Disease.find({}).lean();
+  returnData(req, res, 200, diseases);
 });
 
 exports.getDetailsDisease = catchAsync(async (req, res, next) => {
@@ -19,10 +17,7 @@ exports.getDetailsDisease = catchAsync(async (req, res, next) => {
   const disease = await Disease.findOne({
     name: name,
   }).lean();
-  res.status(200).json({
-    status: 'success',
-    data: disease,
-  });
+  returnData(req, res, 200, disease);
 });
 
 exports.createDisease = catchAsync(async (req, res, next) => {
@@ -96,44 +91,19 @@ exports.createDisease = catchAsync(async (req, res, next) => {
     // );
   }
 
-  try {
-    const inserted = await Disease.insertMany(allDiseases);
-
-    res.status(200).json({
-      status: 'success',
-      results: inserted.length,
-      data: inserted,
-    });
-  } catch (error) {
-    console.error('Lỗi khi thêm dữ liệu bệnh:', error);
-
-    // Chi tiết hơn về lỗi validation
-    if (error.name === 'ValidationError') {
-      const validationErrors = Object.keys(error.errors).map((key) => ({
-        field: key,
-        message: error.errors[key].message,
-      }));
-
-      return next(
-        new AppError(`Lỗi xác thực dữ liệu: ${error.message}`, 400, {
-          validationErrors,
-        })
-      );
-    }
-
-    return next(error);
-  }
+  const inserted = await Disease.insertMany(allDiseases);
+  returnData(req, res, 200, inserted);
 });
-exports.predictDisease = async (req, res) => {
+
+exports.predictDisease = catchAsync(async (req, res, next) => {
   // Lấy danh sách triệu chứng từ request
   const { symptoms } = req.body;
   // console.log(symptoms);
 
   if (!symptoms || !Array.isArray(symptoms) || symptoms.length === 0) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Please provide the symptoms!',
-    });
+    return next(
+      new AppError('No symptom provided! Please provide some symptoms', 400)
+    );
   }
 
   // Chuyển mảng triệu chứng thành JSON string để truyền vào Python
@@ -175,16 +145,13 @@ exports.predictDisease = async (req, res) => {
     console.log('Python stderr error:', error);
 
     if (code !== 0) {
-      console.error(`Lỗi khi chạy Python script (${code}): ${error}`);
+      console.error(`Error in run Python script (${code}): ${error}`);
 
       // Thử phân tích lỗi JSON nếu có
       try {
         const errorJson = JSON.parse(data);
         if (errorJson.error) {
-          return res.status(400).json({
-            status: 'fail',
-            message: errorJson.error,
-          });
+          return next(new AppError(errorJson.error, 400));
         }
       } catch (e) {
         // Không phải JSON, tiếp tục xử lý
@@ -192,64 +159,39 @@ exports.predictDisease = async (req, res) => {
 
       // Kiểm tra lỗi phổ biến
       if (error.includes('FileNotFoundError')) {
-        return res.status(500).json({
-          status: 'error',
-          message: 'Can not find the neccessary model!',
-          details: error,
-        });
+        return next(new AppError('Can not find the neccessary model!', 400));
       }
 
       if (error.includes('Symptom') && error.includes('are not in dataset')) {
-        return res.status(400).json({
-          status: 'fail',
-          message: 'Invalid Symptom!',
-          details: error,
-        });
+        return next(new AppError('Invalid Symptoms', 400));
       }
 
-      return res.status(400).json({
-        status: 'error',
-        message:
+      return next(
+        new AppError(
           'There is some error in predict process! Please try again later!',
-        error: error,
-      });
+          400
+        )
+      );
     }
 
-    try {
-      // Parse kết quả JSON từ Python
-      // console.log(data);
-      const predictions = JSON.parse(data);
+    // Parse kết quả JSON từ Python
+    // console.log(data);
+    const predictions = JSON.parse(data);
 
-      if (predictions.error) {
-        return res.status(400).json({
-          status: 'fail',
-          message: predictions.error,
-        });
-      }
-
-      // Format kết quả để hiển thị phần trăm
-      const formattedPredictions = {};
-      for (const [disease, probability] of Object.entries(predictions)) {
-        formattedPredictions[disease] = `${(probability * 100).toFixed(2)}%`;
-      }
-
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          input_symptoms: symptoms,
-          predictions: formattedPredictions,
-          raw_predictions: predictions,
-        },
-      });
-    } catch (e) {
-      console.error('Lỗi khi xử lý kết quả từ Python:', e);
-      console.error('Raw data from Python:', data);
-      return res.status(500).json({
-        status: 'error',
-        message: 'Lỗi khi xử lý kết quả từ Python',
-        details: e.message,
-        rawData: data,
-      });
+    if (predictions.error) {
+      return next(new AppError(predictions.error, 400));
     }
+
+    // Format kết quả để hiển thị phần trăm
+    const formattedPredictions = {};
+    for (const [disease, probability] of Object.entries(predictions)) {
+      formattedPredictions[disease] = `${(probability * 100).toFixed(2)}%`;
+    }
+
+    return returnData(req, res, 200, {
+      input_symptoms: symptoms,
+      predictions: formattedPredictions,
+      raw_predictions: predictions,
+    });
   });
-};
+});

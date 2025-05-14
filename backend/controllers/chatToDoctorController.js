@@ -6,6 +6,7 @@ const Doctor = require('./../models/doctors_schema.js');
 const ChatRoom = require('./../models/chatRoom_schema.js');
 const ChatLog = require('./../models/chatLog_schema.js');
 const errorController = require('./errorController.js');
+const returnData = require('../utils/returnData.js');
 
 exports.createChatRoom = catchAsync(async (req, res, next) => {
   const doctorSlug = req.body.slug;
@@ -20,21 +21,27 @@ exports.createChatRoom = catchAsync(async (req, res, next) => {
   // })
 
   if (!firstUser || !secondUser) {
-    return res.status(400).json({
-      status: 'failed',
-      message: 'User not found',
-    });
+    return returnData(
+      req,
+      res,
+      400,
+      {},
+      'Can not found user with provided slug!'
+    );
   } else if (secondUser.role !== 'doctor') {
-    return res.status(400).json({
-      status: 'failed',
-      message: 'The room must have 1 doctor and 1 user',
-    });
+    return returnData(
+      req,
+      res,
+      400,
+      {},
+      'The room must have at most 1 doctor!'
+    );
   } else {
     const room = await ChatRoom.findOne({
       memberID: { $all: [firstUser._id, secondUser._id] },
     });
     // console.log(room);
-    if (room) return res.status(204).json();
+    if (room) return returnData(req, res, 204, {});
 
     let result = '';
     const characters =
@@ -49,10 +56,7 @@ exports.createChatRoom = catchAsync(async (req, res, next) => {
       memberID: [firstUser._id, secondUser._id],
       roomCode: result,
     });
-    res.status(200).json({
-      status: 'success',
-      data: newRoom,
-    });
+    returnData(req, res, 200, newRoom);
   }
 });
 
@@ -75,14 +79,6 @@ exports.getAllChatRoomByUserID = catchAsync(async (req, res, next) => {
       })
       .lean();
     if (rooms) {
-      // console.log(room[0].memberID[0].fullname)
-      // res.status(200).json({
-      //   status: 'success',
-      //   data: {
-      //     room,
-      //   },
-      // });
-      // sort trong js là tính giá trị 2 thứ trừ nhau, dương thì đổi chỗ
       rooms.sort((a, b) => {
         const lastMsgA = a.message?.[a.message.length - 1]?.date || 0;
         const lastMsgB = b.message?.[b.message.length - 1]?.date || 0;
@@ -110,12 +106,7 @@ exports.getThisChatRoom = catchAsync(async (req, res, next) => {
     });
     if (room.length > 0) {
       // console.log(room[0].memberID[0].fullname)
-      res.status(200).json({
-        status: 'success',
-        data: {
-          room,
-        },
-      });
+      returnData(req, res, 200, { room });
       next();
     } else {
       // res.status(401).json({
@@ -137,89 +128,71 @@ exports.getThisChatRoom = catchAsync(async (req, res, next) => {
 
 exports.getMessageInRoom = catchAsync(async (req, res, next) => {
   const roomCode = req.params.roomCode;
-  try {
-    const room = await ChatRoom.findOne({
-      roomCode: roomCode,
+  const room = await ChatRoom.findOne({
+    roomCode: roomCode,
+  })
+    .populate({
+      path: 'memberID',
+      select: 'fullname image slug status lastSeen',
     })
-      .populate({
-        path: 'memberID',
-        select: 'fullname image slug status lastSeen',
-      })
-      .populate({
-        path: 'message',
-        populate: {
-          path: 'senderID',
-          select: 'email fullname image slug',
-        },
-      })
-      .lean();
+    .populate({
+      path: 'message',
+      populate: {
+        path: 'senderID',
+        select: 'email fullname image slug',
+      },
+    })
+    .lean();
 
-    if (room) {
-      // Update notification
-      await Notification.findOneAndUpdate(
-        {
-          chatRoom: room._id,
-          'to.targetID': req.user._id,
+  if (room) {
+    // Update notification
+    await Notification.findOneAndUpdate(
+      {
+        chatRoom: room._id,
+        'to.targetID': req.user._id,
+      },
+      {
+        $set: {
+          'to.$[element].haveRead': true,
         },
-        {
-          $set: {
-            'to.$[element].haveRead': true,
-          },
-        },
-        { arrayFilters: [{ 'element.targetID': req.user._id }] }
-      );
-      res.status(200).json({
-        status: 'success',
-        data: room,
-      });
-    } else {
-      res.status(400).json({
-        status: 'failed',
-        message: 'This room is not created',
-      });
-      res.end();
-    }
-  } catch {
-    res.status(400).json({
-      status: 'failed',
-      message: 'Can not find chat room',
-    });
-    res.end();
+      },
+      { arrayFilters: [{ 'element.targetID': req.user._id }] }
+    );
+    returnData(req, res, 200, room);
+  } else {
+    returnData(
+      req,
+      res,
+      400,
+      {},
+      'The provided room has not been created! Please try again!'
+    );
   }
 });
 
 exports.createMessage = catchAsync(async (req, res, next) => {
-  try {
-    // get chatroom
-    const roomCode = req.body.roomCode;
-    const message = req.body.message;
+  // get chatroom
+  const roomCode = req.body.roomCode;
+  const message = req.body.message;
 
-    const user = req.user;
-    const room = await ChatRoom.findOne({
-      roomCode: roomCode,
+  const user = req.user;
+  const room = await ChatRoom.findOne({
+    roomCode: roomCode,
+  });
+  if (!room) {
+    returnData(
+      req,
+      res,
+      400,
+      {},
+      'Can not find chat room with provided room code!'
+    );
+  } else {
+    const newMessage = await ChatLog.create({
+      senderID: user._id,
+      message: message,
+      roomID: room._id,
     });
-    if (!room) {
-      res.status(400).json({
-        status: 'failed',
-        message: 'Can not find this chat room',
-      });
-      res.end();
-    } else {
-      const newMessage = await ChatLog.create({
-        senderID: user._id,
-        message: message,
-        roomID: room._id,
-      });
-      res.status(200).json({
-        status: 'success',
-        data: newMessage,
-      });
-    }
-  } catch (err) {
-    res.status(404).json({
-      status: 'failed',
-      message: err.message,
-    });
-    res.end();
+    returnData(req, res, 200, newMessage);
   }
 });

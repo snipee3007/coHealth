@@ -1,30 +1,27 @@
 const Comment = require('./../models/commentsSchema.js');
 const catchAsync = require('../utils/catchAsync.js');
+const returnData = require('../utils/returnData.js');
 
 exports.createComment = catchAsync(async (req, res, next) => {
   const { message, newsID } = req.body;
   const userID = req.user.id;
   const data = await Comment.create({ message, newsID, userID });
-  res.status(201).json({
-    status: 'success',
-    data,
-  });
+  returnData(req, res, 201, data);
 });
 
 exports.deleteComment = catchAsync(async (req, res, next) => {
   const data = await Comment.findById(req.params.id);
   if (data) {
     await Comment.deleteOne(data._id);
-    res.status(204).json({
-      status: 'success',
-      message: 'Delete successful!',
-    });
+    returnData(req, res, 204, {}, 'Delete comment successful');
   } else {
-    res.status(400).json({
-      status: 'failed',
-      message:
-        'This comment is no longer exist! Please try different comments!',
-    });
+    returnData(
+      req,
+      res,
+      400,
+      {},
+      'This comment is no longer exist! Please try different comments!'
+    );
   }
 });
 

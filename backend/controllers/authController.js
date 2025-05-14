@@ -6,6 +6,7 @@ const AppError = require('./../utils/appError.js');
 const crypto = require('crypto');
 const speakeasy = require('speakeasy');
 const Email = require('../utils/email.js');
+const returnData = require('../utils/returnData.js');
 const signToken = (id) => {
   // console.log(process.env.JWT_EXPIRES_IN);
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -13,7 +14,7 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = async (user, statusCode, res) => {
+const createSendToken = async (user, statusCode, req, res) => {
   // console.log(user);
 
   const token = signToken(user._id);
@@ -35,14 +36,7 @@ const createSendToken = async (user, statusCode, res) => {
   // console.log('New user: ', user);
 
   user.password = undefined;
-
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    data: {
-      user,
-    },
-  });
+  returnData(req, res, statusCode, { user, token });
 };
 
 exports.signUp = catchAsync(async (req, res, next) => {
@@ -73,7 +67,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
     image,
   });
 
-  await createSendToken(newUser, 201, res);
+  await createSendToken(newUser, 201, req, res);
 });
 
 exports.signIn = catchAsync(async (req, res, next) => {
@@ -95,7 +89,7 @@ exports.signIn = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email/username or password', 401));
   }
 
-  await createSendToken(user, 200, res);
+  await createSendToken(user, 200, req, res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -189,9 +183,9 @@ exports.signOut = catchAsync(async (req, res, next) => {
     );
   }
   // sau đó thì xóa cookie như bình thường
-
   res.clearCookie('jwt');
-  res.status(204).json();
+
+  returnData(req, res, 204, {});
 });
 
 exports.getOTP = catchAsync(async function (req, res, next) {
@@ -221,10 +215,13 @@ exports.getOTP = catchAsync(async function (req, res, next) {
       email: data.email,
     };
     await new Email(user).sendOTP();
-    res.status(200).json({
-      status: 'success',
-      message: `Đã gửi mã OTP qua email ${data.email} thành công`,
-    });
+    returnData(
+      req,
+      res,
+      200,
+      {},
+      `Đã gửi mã OTP qua email ${data.email} thành công`
+    );
   } catch (err) {
     console.log(err);
     return next(
@@ -270,10 +267,13 @@ exports.restrictToAPI = (role) => {
       }
     }
     if (!authenticate) {
-      res.status(401).json({
-        status: 'failed',
-        message: 'Bạn không có quyền sử dụng tính năng này!',
-      });
+      returnData(
+        req,
+        res,
+        401,
+        {},
+        'You do not have permission to use this features!'
+      );
     } else {
       next();
     }
@@ -310,10 +310,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
       'host'
     )}/resetPassword/${resetToken}`;
     await new Email(user, resetURL).sendPasswordReset();
-    res.status(200).json({
-      status: 'success',
-      message: 'Token has been sent through email!',
-    });
+    returnData(req, res, 200, {}, 'Token has been sent through email!');
   } catch (err) {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
@@ -375,7 +372,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   // 4) Log the user in, send JWT
   await user.save();
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -395,5 +392,5 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save();
 
   // 4) Log user in, send JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });

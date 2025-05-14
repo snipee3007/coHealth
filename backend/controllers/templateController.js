@@ -6,6 +6,7 @@ const CalculateHistory = require('./../models/calculateHistory_schema.js');
 const Doctor = require('./../models/doctors_schema.js');
 const Comment = require('./../models/commentsSchema.js');
 const Exercise = require('./../models/exerciseSchema.js');
+const logger = require('../utils/logger.js');
 
 // const AdultCompendium = require('../models/adultCompendium_schema.js');
 
@@ -253,7 +254,7 @@ exports.getDoctorItemTemplate = catchAsync(async (req, res, next) => {
       recommendDoctors,
     });
   } else {
-    notFoundPage(res);
+    notFoundPage(req, res);
   }
 });
 
@@ -297,10 +298,16 @@ exports.getSymptomCheckerTemplate = async (req, res) => {
 };
 
 exports.getNotFoundTemplate = (req, res) => {
-  notFoundPage(res);
+  notFoundPage(req, res);
 };
 
-const notFoundPage = function (res) {
+const notFoundPage = function (req, res) {
+  logger.error({
+    ip: req.clientIp,
+    method: req.method,
+    message: 'Page not Found',
+    url: req.originalUrl,
+  });
   res.status(404).render('notFound', {
     title: 'Page Not Found',
   });

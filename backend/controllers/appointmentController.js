@@ -2,7 +2,7 @@ const catchAsync = require('./../utils/catchAsync.js');
 const Appointment = require('../models/appointments_schema.js');
 const User = require('../models/users_schema.js');
 const crypto = require('crypto');
-
+const returnData = require('../utils/returnData.js');
 function generateToken() {
   return crypto.randomBytes(16).toString('hex'); // 16 bytes = 32 ký tự hex
 }
@@ -12,20 +12,20 @@ exports.createAppointment = catchAsync(async (req, res, next) => {
     fullname: req.body.docFullname,
   }).populate({ path: 'doctorInfo' });
   if (!doctors) {
-    res.status(400).json({
-      status: 'fail',
-      message: 'Can not find this doctor',
-    });
+    return next(new AppError('Can not find this doctor!', 400));
   }
   const matchDoctor = doctors.find(
     (doctor) =>
       doctor.doctorInfo[0] && doctor.doctorInfo[0].major === req.body.specialty
   );
   if (!matchDoctor) {
-    res.status(400).json({
-      status: 'fail',
-      message: 'Can not find this doctor because wrong major!',
-    });
+    returnData(
+      req,
+      res,
+      400,
+      {},
+      'Can not find this doctor because the provide major is different!'
+    );
   } else {
     const userID = req.user ? req.user._id : null;
     const appointment = await Appointment.create({
@@ -38,10 +38,7 @@ exports.createAppointment = catchAsync(async (req, res, next) => {
       userID: userID,
       appointmentCode: generateToken(),
     });
-    res.status(200).json({
-      status: 'success',
-      data: appointment,
-    });
+    returnData(req, res, 200, appointment);
   }
 });
 
@@ -54,8 +51,5 @@ exports.getAllAppointment = catchAsync(async (req, res, next) => {
     select: 'fullname',
     populate: { path: 'doctorInfo' },
   });
-  res.status(200).json({
-    status: 'success',
-    data: appointments,
-  });
+  returnData(req, res, 200, appointments);
 });
