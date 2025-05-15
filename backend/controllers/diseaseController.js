@@ -1,6 +1,7 @@
 const Disease = require('../models/disease_schema.js');
 const catchAsync = require('../utils/catchAsync.js');
 const AppError = require('../utils/appError.js');
+const Symptom = require('../models/symptom_schema.js');
 const fs = require('fs');
 const { spawn } = require('child_process');
 const path = require('path');
@@ -82,15 +83,6 @@ exports.createDisease = catchAsync(async (req, res, next) => {
     );
   }
 
-  // Log cấu trúc dữ liệu để kiểm tra
-  // console.log(`Tổng số dữ liệu bệnh hợp lệ: ${allDiseases.length}`);
-  if (allDiseases.length > 0) {
-    // console.log(
-    //   'Mẫu dữ liệu đầu tiên:',
-    //   JSON.stringify(allDiseases[0], null, 2)
-    // );
-  }
-
   const inserted = await Disease.insertMany(allDiseases);
   returnData(req, res, 200, inserted);
 });
@@ -105,6 +97,15 @@ exports.predictDisease = catchAsync(async (req, res, next) => {
       new AppError('No symptom provided! Please provide some symptoms', 400)
     );
   }
+
+  symptoms.forEach(async (symptom) => {
+    const checkSymptom = await Symptom.findOne({
+      symptom: symptom,
+    });
+    if (!checkSymptom) {
+      return next(new AppError(`${symptom} symptom is not provided`, 400));
+    }
+  });
 
   // Chuyển mảng triệu chứng thành JSON string để truyền vào Python
   const symptomsJson = JSON.stringify(symptoms);
@@ -174,23 +175,25 @@ exports.predictDisease = catchAsync(async (req, res, next) => {
       );
     }
 
-    // Parse kết quả JSON từ Python
-    // console.log(data);
-    const predictions = JSON.parse(data);
+    const cleanedData = data.trim();
+
+    // Tìm chuỗi JSON trong dữ liệu đầu ra (nếu có dữ liệu khác xen lẫn)
+    let jsonStart = cleanedData.indexOf('{');
+    let jsonEnd = cleanedData.lastIndexOf('}');
+
+    if (jsonStart === -1 || jsonEnd === -1) {
+      throw new Error('Invalid JSON format in Python output');
+    }
+
+    const jsonData = cleanedData.substring(jsonStart, jsonEnd + 1);
+    const predictions = JSON.parse(jsonData);
 
     if (predictions.error) {
       return next(new AppError(predictions.error, 400));
     }
 
-    // Format kết quả để hiển thị phần trăm
-    const formattedPredictions = {};
-    for (const [disease, probability] of Object.entries(predictions)) {
-      formattedPredictions[disease] = `${(probability * 100).toFixed(2)}%`;
-    }
-
     return returnData(req, res, 200, {
       input_symptoms: symptoms,
-      predictions: formattedPredictions,
       raw_predictions: predictions,
     });
   });

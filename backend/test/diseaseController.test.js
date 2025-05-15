@@ -322,11 +322,11 @@ describe('Disease Controller', () => {
         status: 'success',
         data: {
           input_symptoms: mockSymptoms,
-          predictions: {
-            'Common Cold': '75.00%',
-            Flu: '20.00%',
-            'COVID-19': '5.00%',
-          },
+          // predictions: {
+          //   'Common Cold': '75.00%',
+          //   Flu: '20.00%',
+          //   'COVID-19': '5.00%',
+          // },
           raw_predictions: {
             'Common Cold': 0.75,
             Flu: 0.2,
