@@ -8,10 +8,8 @@ router
   .post(authController.protect, notificationController.updateReadNotification)
   .delete(
     authController.protect,
-    authController.restrictToAPI(
-      ['admin'],
-      notificationController.deleteNotifition
-    )
+    authController.restrictToAPI(['admin']),
+    notificationController.deleteNotifition
   );
 
 module.exports = router;
