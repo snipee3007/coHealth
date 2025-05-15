@@ -9,7 +9,7 @@ router
   .delete(
     authController.protect,
     authController.restrictToAPI(['admin']),
-    notificationController.deleteNotifition
+    notificationController.deleteNotification
   );
 
 module.exports = router;
