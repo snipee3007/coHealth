@@ -89,16 +89,16 @@ class ListOfChat {
 
         // xóa hết toán bộ đoạn chat khi chuyển người
         const parentElement = document.querySelector('.listOfChat');
-        // while (parentElement.firstChild) {
-        //   parentElement.removeChild(parentElement.firstChild);
-        // }
-        // const parentElementChatBoxInfo = document.querySelector('.chatBoxInfo');
-        // while (parentElementChatBoxInfo.firstChild) {
-        //   parentElementChatBoxInfo.removeChild(
-        //     parentElementChatBoxInfo.firstChild
-        //   );
-        // }
-        parentElement.innerHTML = '';
+        while (parentElement.firstChild) {
+          parentElement.removeChild(parentElement.firstChild);
+        }
+        const parentElementChatBoxInfo = document.querySelector('.chatBoxInfo');
+        while (parentElementChatBoxInfo.firstChild) {
+          parentElementChatBoxInfo.removeChild(
+            parentElementChatBoxInfo.firstChild
+          );
+        }
+        //parentElement.innerHTML = '';
         buttons.forEach((insideButton) => {
           insideButton.classList.remove('chatItemActive');
         });
