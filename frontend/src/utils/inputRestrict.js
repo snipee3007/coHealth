@@ -9,7 +9,10 @@ const restrictFunction = (inputField, regex) => {
       if (inputField.value) {
         if (e.data && e.data.match(new RegExp(regex))) {
           e.preventDefault();
-          inputField.value = inputField.value.slice(0, -1);
+          inputField.value = inputField.value.replace(
+            new RegExp(regex, 'g'),
+            ''
+          );
         } else if (event == 'paste') {
           let paste = (e.clipboardData || window.clipboardData).getData('text');
           e.preventDefault();

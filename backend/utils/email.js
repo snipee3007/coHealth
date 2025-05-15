@@ -7,7 +7,8 @@ module.exports = class Email {
     this.to = user.email;
     this.url = url;
     this.from = `coHealth <${process.env.EMAIL_FROM}>`;
-    this.otp = user.otp;
+    this.username = user.fullname;
+    this.password = user.password;
   }
 
   newTransport() {
@@ -32,7 +33,8 @@ module.exports = class Email {
         emailSubject: this.emailSubject,
         url: this.url,
         subject,
-        otp: this.otp,
+        password: this.password,
+        username: this.username,
       }
     );
     // 2) Define email options
@@ -48,9 +50,9 @@ module.exports = class Email {
     await this.newTransport().sendMail(mailOptions);
   }
 
-  async sendOTP() {
-    this.emailSubject = 'Verify Your Account';
-    await this.send('otp', `Your verification code is: ${this.otp}`);
+  async sendNewPassword() {
+    this.emailSubject = 'Your password to coHealth account';
+    await this.send('newPassword', `coHealth account's passoword`);
   }
 
   async sendPasswordReset() {

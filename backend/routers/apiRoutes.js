@@ -44,6 +44,20 @@ router
 router.use('/comment', commentRoutes);
 
 // HOSPITAL API
+router
+  .route('/hospital')
+  .post(
+    authController.protect,
+    authController.restrictToAPI(['admin']),
+    hospitalsController.createHospital
+  );
+router
+  .route('/hospital/:id')
+  .delete(
+    authController.protect,
+    authController.restrictToAPI(['admin']),
+    hospitalsController.deleteHospital
+  );
 router.route('/hospitals').get(hospitalsController.getAllHospitals);
 router
   .route('/hospitals/nearest')

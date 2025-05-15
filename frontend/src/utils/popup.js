@@ -66,19 +66,19 @@ const renderAlertTemplate = function ({ message = '' }) {
     <div class="alertOverlay w-full min-h-screen fixed z-40 flex items-center justify-center font-Cormorant opacity-0 pointer-events-none duration-100 bg-black/50">
       <div class="alertBox flex flex-col gap-4 bg-white w-1/2 translate-y-10 py-10 items-center rounded-xl duration-100">
         <svg class="w-24 h-24">
-          <use href="/images/png/icons.svg#orange-info"></use>
+          <use href="/images/png/icons.svg#info"></use>
         </svg>
       <div class="alertMessage text-2xl w-2/3 text-center">
         ${message}
       </div>
       <div class="alertConfirm flex flex-1 justify-between w-2/3">
         <div class="cancelAlertButton flex items-center text-xl gap-4 cursor-pointer">
-          <img class="w-8 h-8" src="/images/failed.png" alt="failed icon"/>
-          <p>Quay lại</p>
+          <img class="w-8 h-8" src="/images/png/failed.png" alt="failed icon"/>
+          <p>Cancel</p>
         </div>
         <div class="confirmAlertButton flex items-center text-xl gap-4 cursor-pointer">
-          <img class="w-8 h-8" src="/images/success.png" alt="success icon"/>
-          <p>Xác nhận</p>
+          <img class="w-8 h-8" src="/images/png/success.png" alt="success icon"/>
+          <p>Confirm</p>
         </div>
       </div>
     </div>
@@ -88,9 +88,9 @@ const renderAlertTemplate = function ({ message = '' }) {
 const renderAlert = (message) => {
   return new Promise((resolve, reject) => {
     const template = renderAlertTemplate({
-      message: 'Bạn có chắc chắ muốn xóa bài học này không?',
+      message,
     });
-    const body = document.querySelector('.body');
+    const body = document.querySelector('body');
     body.insertAdjacentHTML('afterbegin', template);
     toggleAlertPopup();
     document

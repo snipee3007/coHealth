@@ -303,6 +303,20 @@ exports.getSymptomCheckerTemplate = async (req, res) => {
   });
 };
 
+exports.getAdminTemplate = async (req, res) => {
+  const doctorList = await User.find({ role: 'doctor' })
+    .populate('doctorInfo')
+    .lean();
+  const userList = await User.find({ role: 'user' }).lean();
+  const hospitalList = await Hospital.find({}).lean();
+  res.status(200).render('admin', {
+    title: 'Admin',
+    doctorList,
+    userList,
+    hospitalList,
+  });
+};
+
 exports.getNotFoundTemplate = (req, res) => {
   logger.error({
     ip: req.clientIp,

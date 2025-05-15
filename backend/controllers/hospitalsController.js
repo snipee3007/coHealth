@@ -1,8 +1,9 @@
-const catchAsync = require('../utils/catchAsync');
-const returnData = require('../utils/returnData');
-const Hospitals = require('./../models/hospitals_schema');
+const AppError = require('../utils/appError.js');
+const catchAsync = require('../utils/catchAsync.js');
+const returnData = require('../utils/returnData.js');
+const Hospitals = require('./../models/hospitals_schema.js');
 
-exports.getAllNearestHospitals = catchAsync(async (req, res) => {
+exports.getAllNearestHospitals = catchAsync(async (req, res, next) => {
   // dùng dấu ? thì xài query -> dùng cái / là params
   const lat = req.query.lat;
   const long = req.query.long;
@@ -33,7 +34,45 @@ exports.getAllNearestHospitals = catchAsync(async (req, res) => {
   returnData(req, res, 200, data);
 });
 
-exports.getAllHospitals = catchAsync(async (req, res) => {
+exports.getAllHospitals = catchAsync(async (req, res, next) => {
   const data = await Hospitals.find();
   returnData(req, res, 200, data);
+});
+
+exports.deleteHospital = catchAsync(async (req, res, next) => {
+  const hospital = await Hospitals.findById(req.params.id);
+  if (hospital) {
+    await Hospitals.findByIdAndDelete(req.params.id);
+    returnData(
+      req,
+      res,
+      204,
+      { name: hospital.name, userID: req.user.id },
+      'Delete Hospital Successful'
+    );
+  } else
+    return next(
+      new AppError(
+        'Can not find hospital with provided id! Please try different id!',
+        400
+      )
+    );
+});
+
+exports.createHospital = catchAsync(async (req, res, next) => {
+  const body = req.body;
+  const hospitalIdx = await Hospitals.find({}).distinct('id');
+  let idx;
+  for (let i = 1; i <= hospitalIdx.length; ++i) {
+    console.log(hospitalIdx.includes(i));
+    if (!hospitalIdx.includes(i)) {
+      idx = i;
+      break;
+    }
+  }
+  if (!idx) idx = hospitalIdx.length + 1;
+  body.id = idx;
+  console.log(body);
+  await Hospitals.create(body);
+  returnData(req, res, 200, body);
 });

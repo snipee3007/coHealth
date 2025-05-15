@@ -55,7 +55,13 @@ exports.signUp = catchAsync(async (req, res, next) => {
   // console.log(req.body);
 
   // Perform validation, sanitation, etc.
-
+  if (yearOfBirth > new Date(Date.now()).getFullYear()) {
+    return next(
+      new AppError(
+        'The year of birth is invalid! Please try different year of birth!'
+      )
+    );
+  }
   // Create a new user instance with the provided data
   const newUser = await User.create({
     email,
@@ -65,6 +71,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
     fullname,
     confirmPassword,
     image,
+    lastSeen: Date.now(),
   });
 
   await createSendToken(newUser, 201, req, res);

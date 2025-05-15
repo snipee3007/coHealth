@@ -107,4 +107,10 @@ router.get(
   template.getSymptomCheckerTemplate
 );
 
+router.get(
+  '/admin',
+  authController.restrictTo(['admin']),
+  template.getAdminTemplate
+);
+
 module.exports = router;

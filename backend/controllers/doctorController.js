@@ -1,3 +1,6 @@
+const crypto = require('crypto');
+const rimraf = require('rimraf');
+
 const User = require('../models/users_schema.js');
 const catchAsync = require('../utils/catchAsync.js');
 const AppError = require('../utils/appError.js');
@@ -10,9 +13,8 @@ const ChatLog = require('../models/chatLog_schema.js');
 const Comment = require('../models/commentsSchema.js');
 const News = require('../models/news_schema.js');
 const Notification = require('../models/notificationSchema.js');
-const rimraf = require('rimraf');
 const SymptomHistory = require('../models/symptomHistory_schema.js');
-
+const Email = require('./../utils/email.js');
 exports.getDoctors = catchAsync(async (req, res, next) => {
   const doctorsList = await User.find({
     role: 'doctor',
@@ -50,9 +52,12 @@ exports.getDoctor = catchAsync(async (req, res, next) => {
 exports.createDoctor = catchAsync(async (req, res, next) => {
   const doctor = req.body;
   if (doctor.role.includes('doctor')) {
-    if (doctor.gender == 'male') doctor.image = 'menAnonymous.png';
-    else if (doctor.gender == 'female') doctor.image = 'womanAnonymous.png';
+    if (doctor.gender == 'male') doctor.image = 'menAnonymous.jpg';
+    else if (doctor.gender == 'female') doctor.image = 'womanAnonymous.jpg';
 
+    doctor.password = crypto.randomBytes(16).toString('hex');
+    doctor.confirmPassword = doctor.password;
+    await new Email(doctor).sendNewPassword();
     const newDoctor = await User.create({
       email: doctor.email,
       password: doctor.password,
@@ -62,6 +67,8 @@ exports.createDoctor = catchAsync(async (req, res, next) => {
       phoneNumber: doctor.phoneNumber,
       yearOfBirth: doctor.yearOfBirth,
       role: doctor.role,
+      image: doctor.image,
+      lastSeen: Date.now(),
     });
     // console.log(newDoctor);
     const doctorExtend = await Doctor.create({
@@ -117,7 +124,13 @@ exports.deleteDoctor = catchAsync(async (req, res, next) => {
   await Comment.deleteMany({ userID: user._id });
 
   // Delete all news from this doctor
-  await News.deleteMany({ userID: user._id });
+  const doctorNews = await News.find({ userID: user._id });
+  for (let i = 0; i < doctorNews.length; ++i) {
+    rimraf.manual(`frontend/images/news/${doctorNews[i].slug}`);
+    await Comment.deleteMany({ newsID: doctorNews[i]._id });
+    await Notification.deleteMany({ newsID: doctorNews[i]._id });
+    await News.findByIdAndDelete(doctorNews[i]._id);
+  }
 
   // Delete all Notification from this doctor
   await Notification.deleteMany({

@@ -1,0 +1,146 @@
+extend base
+
+block append header 
+    script(defer, type="module" src="/src/adminController.js") 
+
+block body
+    .mx-auto(class="w-9/10").font-Alice.pt-8.pb-12
+        p.text-2xl.font-bold Doctor List
+        .max-h-64.overflow-y-auto.mt-4
+            table.doctorList(class='w-9/10').mx-auto.table-auto
+                thead.doctorColumnLabel
+                    tr.sticky.top-0.bg-white
+                        th.px-2.py-1 No
+                        th.px-2.py-1 Fullname 
+                        th.px-2.py-1 Email 
+                        th.px-2.py-1 Gender
+                        th.px-2.py-1 Working At
+                        th.px-2.py-1 Status
+                        th.px-2.py-1 Last seen
+                        th.px-2.py-1 Option
+                tbody
+                    each doctor, idx in doctorList
+                        tr.doctorItem(data-slug=doctor.slug data-fullname=doctor.fullname)
+                            td.px-2.py-2.text-center= idx + 1
+                            td.px-2.py-2= doctor.fullname 
+                            td.px-2.py-2= doctor.email 
+                            td.px-2.py-2.text-center= doctor.gender 
+                            td.px-2.py-2= doctor.doctorInfo[0].workAt
+                            td.px-2.py-2.text-center= doctor.status
+                            - lastSeenDate = new Date(doctor.lastSeen)
+                            td.px-2.py-2.text-center= `${lastSeenDate.getDate().toString().padStart(2,0)}/${(lastSeenDate.getMonth() + 1).toString().padStart(2,0)}/${lastSeenDate.getFullYear()}`
+                            td.px-2.py-2.cursor-pointer.deleteDoctor
+                                div.flex.justify-center
+                                    svg.w-4.h-4
+                                        use(href='/images/png/icons.svg#trashcan')
+        .flex.flex-1.justify-center 
+            button.addDoctorButton.linearBackground.text-white.mt-8.px-2.py-1.rounded-xl.cursor-pointer + Add more doctor
+        form.doctorForm(method='post').hidden.mt-8.flex.flex-col.items-center.gap-4
+            .grid.grid-cols-8.gap-8
+                .email.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Email:
+                    input(name='email' placeholder='Email...' maxLength=128 required).w-full.inputCheck
+                .fullname.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Fullname:
+                    input(name='fullname' placeholder='Fullname...' maxLength=128 required).w-full.inputCheck
+                .gender.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Gender:
+                    select.w-full#gender(name='gender' required class='bg-[#EAF0F7]').rounded-lg.px-4.py-2.inputCheck
+                        option(value="" disabled selected) Gender...
+                        option(value="male" ) Male
+                        option(value="female" ) Female
+                .phoneNumber.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Phone Number:
+                    input(name='phoneNumber' placeholder='Phone Number...' maxLength=10 required).w-full.inputCheck
+                .yearOfBirth.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Year Of Birth:
+                    input(name='yearOfBirth' type="number" placeholder='Year Of Birth...' required max=9999).w-full.inputCheck
+                .major.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Major:
+                    input(name='major'  placeholder='Major...' required maxLength=64).w-full.inputCheck
+                .workAt.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Work At:
+                    input(name='workAt' placeholder='Working at...' required maxLength=64).w-full.inputCheck
+                .yearEXP.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Year Experience:
+                    input(name='yearEXP' placeholder='Year Experience...' type="number" required min=0 max=99).w-full.inputCheck
+            button(tpye='submit').submitButton.cursor-pointer.px-4.py-1.linearBackground.text-white.font-Alice.rounded-xl Add Doctor
+        
+
+        p.text-2xl.font-bold.pt-12 User List
+        .max-h-64.overflow-y-auto.mt-4
+            table.hospitalList(class='w-9/10').mx-auto.table-auto
+                thead.userColumnLabel
+                    tr.sticky.top-0.bg-white
+                        th.px-2.py-1 No
+                        th.px-2.py-1 Fullname 
+                        th.px-2.py-1 Email 
+                        th.px-2.py-1 Gender
+                        th.px-2.py-1 Status
+                        th.px-2.py-1 Last seen
+                        th.px-2.py-1 Option
+                tbody
+                    each user, idx in userList
+                        tr.userItem(data-slug=user.slug data-fullname=user.fullname)
+                            td.px-2.py-2.text-center= idx + 1
+                            td.px-2.py-2= user.fullname 
+                            td.px-2.py-2= user.email 
+                            td.px-2.py-2.text-center= user.gender 
+                            td.px-2.py-2.text-center= user.status
+                            - lastSeenDate = new Date(user.lastSeen)
+                            td.px-2.py-2.text-center= `${lastSeenDate.getDate().toString().padStart(2,0)}/${(lastSeenDate.getMonth() + 1).toString().padStart(2,0)}/${lastSeenDate.getFullYear()}`
+                            td.px-2.py-2.cursor-pointer.deleteUser
+                                div.flex.justify-center
+                                    svg.w-4.h-4
+                                        use(href='/images/png/icons.svg#trashcan')
+        
+        p.text-2xl.font-bold.pt-12 Hospital List
+        .max-h-64.overflow-y-auto.mt-4
+            table.hospitalList(class='w-9/10').mx-auto.table-auto
+                thead.userColumnLabel
+                    tr.sticky.top-0.bg-white
+                        th.px-2.py-1 No
+                        th.px-2.py-1 Name 
+                        th.px-2.py-1 Address 
+                        th.px-2.py-1 Web
+                        th.px-2.py-1 Phone
+                        th.px-2.py-1 Option
+                tbody
+                    each hospital,idx in hospitalList
+                        tr.hospitalItem(data-id=hospital._id data-name=hospital.name)
+                            td.px-2.py-2.text-center= idx + 1
+                            td.px-2.py-2= hospital.name 
+                            td.px-2.py-2= hospital.address 
+                            td.px-2.py-2= hospital.web 
+                            td.px-2.py-2= hospital.phone
+                            td.px-2.py-2.cursor-pointer.deleteHospital
+                                div.flex.justify-center
+                                    svg.w-4.h-4
+                                        use(href='/images/png/icons.svg#trashcan')
+        .flex.flex-1.justify-center
+            button.addHospitalButton.linearBackground.text-white.mt-8.px-2.py-1.rounded-xl.cursor-pointer + Add more hospital
+        form.hospitalForm(method='post').hidden.mt-8.flex.flex-col.items-center.gap-4
+            .grid.grid-cols-7.gap-8
+                .name.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Name:
+                    input(name='name' placeholder='Name' maxLength=128 required).w-full.inputCheck
+                .image.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Image:
+                    input(name='image' placeholder='Image' maxLength=128 required).w-full.inputCheck
+                .address.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Address:
+                    input(name='address' placeholder='Address' maxLength=128 required).w-full.inputCheck
+                .web.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Website:
+                    input(name='web' placeholder='Website' maxLength=128 required).w-full.inputCheck
+                .phone.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Phone Number:
+                    input(name='phone' placeholder='Phone Number' maxLength=10).w-full.inputCheck
+                .lat.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Latitude:
+                    input(name='latitude'  type="number" placeholder='Latitude' required step='any').w-full.inputCheck
+                .lng.flex.flex-col.form_row.gap-2
+                    label.font-DM-Sans Longitude:
+                    input(name='longitude' type="number" placeholder='Longititude' required step='any').w-full.inputCheck
+            p.italic.font-Alice Please upload the image to #[a(href="https://postimages.org").underline Postimages] and copy the image link to the image field.
+            button(tpye='submit').submitButton.cursor-pointer.px-4.py-1.linearBackground.text-white.font-Alice.rounded-xl Add Hospital

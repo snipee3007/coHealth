@@ -5,6 +5,13 @@ const rimraf = require('rimraf');
 
 const User = require('./../models/users_schema.js');
 const Doctor = require('./../models/doctors_schema.js');
+const Appointment = require('./../models/appointments_schema.js');
+const ChatRoom = require('./../models/chatRoom_schema.js');
+const ChatLog = require('./../models/chatLog_schema.js');
+const CalculateHistory = require('./../models/calculateHistory_schema.js');
+const SymptomHistory = require('./../models/symptomHistory_schema.js');
+const Comment = require('./../models/commentsSchema.js');
+const Notification = require('./../models/notificationSchema.js');
 const catchAsync = require('./../utils/catchAsync.js');
 const AppError = require('./../utils/appError.js');
 const returnData = require('../utils/returnData.js');
@@ -110,16 +117,13 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   if (!user)
     return next(
       new AppError(
-        'Can not find doctor with provided slug. Please try different name!',
+        'Can not find user with provided slug. Please try different name!',
         400
       )
     );
-  if (!user.role.includes('doctor')) {
+  if (!user.role.includes('user')) {
     return next(
-      new AppError(
-        'Target user is not a doctor! Please try different user!',
-        400
-      )
+      new AppError('Target user is not a user! Please try different user!', 400)
     );
   }
 
