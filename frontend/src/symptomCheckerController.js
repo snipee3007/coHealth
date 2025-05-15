@@ -365,7 +365,7 @@ class SymptomChecker {
           });
           const data = res.data.data;
 
-          let dataArray = Object.entries(data.predictions);
+          let dataArray = Object.entries(data.raw_predictions);
           const currentUser = document.querySelector("input[name='user']");
           if (currentUser) {
             const tmp = await axios({
@@ -393,7 +393,7 @@ class SymptomChecker {
     const backgroundColor = ['bg-violet-400', 'bg-indigo-400', 'bg-blue-400'];
     // Update prediction buttons with data
     for (let i = 0; i < dataArray.length; i++) {
-      if (dataArray[i][1] === '0.00%') continue;
+      if (dataArray[i][1] == 0) continue;
       else {
         let html = `
         <button class="border-b-2 mb-12 ${
@@ -402,15 +402,20 @@ class SymptomChecker {
             <p class="content-center text-3xl font-ABeeZee p-4 border-b-2">${formatDiseaseName(
               dataArray[i][0]
             )}</p>
-            <p class="font-Roboto p-4 text-xl">Predictions: Predictions ${
+            <p class="font-Roboto p-4 text-xl">Predictions: ${
               dataArray[i][1]
-            }</p>
+            }%</p>
           </button>`;
         document
           .querySelector('#top3Diseases')
           .insertAdjacentHTML('beforeend', html);
       }
     }
+    let html = `<p class="content-center text-3xl font-ABeeZee text-purple-500 p-4 border-b-2 text-justify">
+      There are just predictions, we suggest you should go to the hospital for the best outcome! Find nearest hospital around you now! Or you can chat with our doctor!</p>`;
+    document
+      .querySelector('#top3Diseases')
+      .insertAdjacentHTML('beforeend', html);
 
     // Switch to step 2
     document.querySelector('.stepInformation .step1').classList.add('hidden');
