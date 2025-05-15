@@ -258,9 +258,9 @@ const mainCalculateFunction = async function ({
       );
     let bee; // Basal energy expenditure
     if (gender == 'male') {
-      bee = 298 + 3.8 * age + 456.4 * (height / 100) + 10.12 * weight;
+      bee = 293 - 3.8 * age + 456.4 * (height / 100) + 10.12 * weight;
     } else if (gender == 'female') {
-      bee = 247 + 2.67 * age + 401.5 * (height / 100) + 8.6 * weight;
+      bee = 247 - 2.67 * age + 401.5 * (height / 100) + 8.6 * weight;
     }
     let deltaPAL = 1.1; // Total Caloric cost of the activity
 
