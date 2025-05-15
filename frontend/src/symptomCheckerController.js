@@ -412,7 +412,10 @@ class SymptomChecker {
       }
     }
     let html = `<p class="content-center text-3xl font-ABeeZee text-purple-500 p-4 border-b-2 text-justify">
-      There are just predictions, we suggest you should go to the hospital for the best outcome! Find nearest hospital around you now! Or you can chat with our doctor!</p>`;
+      There are just predictions, we suggest you should go to the hospital for the best outcome! Find nearest hospital around you 
+      <a href='/hospital' class = 'font-italic font-bold hover:underline'>now!</a> Or you can chat with our doctor 
+      <a href='/doctor' class = 'font-italic font-bold hover:underline'>now!</a>
+      </p>`;
     document
       .querySelector('#top3Diseases')
       .insertAdjacentHTML('beforeend', html);
