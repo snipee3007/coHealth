@@ -309,11 +309,14 @@ exports.getAdminTemplate = async (req, res) => {
     .lean();
   const userList = await User.find({ role: 'user' }).lean();
   const hospitalList = await Hospital.find({}).lean();
+  const newsList = await News.find({}).lean();
+  // console.log(newsList);
   res.status(200).render('admin', {
     title: 'Admin',
     doctorList,
     userList,
     hospitalList,
+    newsList,
   });
 };
 

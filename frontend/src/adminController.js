@@ -7,6 +7,7 @@ class Admin {
     this.#deleteDoctor();
     this.#deleteUser();
     this.#deleteHospital();
+    this.#deleteNews();
     this.#addHospital();
     this.#addDoctor();
   }
@@ -61,13 +62,30 @@ class Admin {
             }`
           );
           if (response) {
-            deleteHospital(e.target.closest('.hospitalItem').dataset['id']);
+            deleteHospital(e.target.closest('.hospitalItem').dataset['slug']);
           }
         }.bind(this)
       );
     });
   }
-
+  #deleteNews() {
+    const deleteNewsButton = document.querySelectorAll('.deleteNews');
+    deleteNewsButton.forEach((button) => {
+      button.addEventListener(
+        'click',
+        async function (e) {
+          const response = await renderAlert(
+            `Do you want to delete ${
+              e.target.closest('.newsListItem').dataset['title']
+            }`
+          );
+          if (response) {
+            deleteNews(e.target.closest('.newsListItem').dataset['slug']);
+          }
+        }.bind(this)
+      );
+    });
+  }
   #addDoctor() {
     document
       .querySelector('.addDoctorButton')
@@ -256,7 +274,7 @@ const deleteHospital = async function (id) {
       url: `/api/hospital/${id}`,
     });
     Loader.destroy();
-    if (res.status == 200) {
+    if (res.status == 204) {
       renderPopup(
         res.status,
         'Delete Hospital',
@@ -271,6 +289,28 @@ const deleteHospital = async function (id) {
       'Delete Hospital',
       err.response.data.message
     );
+  }
+};
+
+const deleteNews = async function (slug) {
+  try {
+    Loader.create();
+    const res = await axios({
+      method: 'delete',
+      url: `/api/news/${slug}`,
+    });
+    Loader.destroy();
+    if (res.status == 204) {
+      renderPopup(
+        res.status,
+        'Delete News',
+        'Delete news from database successful!',
+        'reload'
+      );
+    }
+  } catch (err) {
+    Loader.destroy();
+    renderPopup(err.response.status, 'Delete News', err.response.data.message);
   }
 };
 

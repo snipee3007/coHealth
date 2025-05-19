@@ -144,3 +144,27 @@ block body
                     input(name='longitude' type="number" placeholder='Longititude' required step='any').w-full.inputCheck
             p.italic.font-Alice Please upload the image to #[a(href="https://postimages.org").underline Postimages] and copy the image link to the image field.
             button(tpye='submit').submitButton.cursor-pointer.px-4.py-1.linearBackground.text-white.font-Alice.rounded-xl Add Hospital
+
+        p.text-2xl.font-bold.pt-12 News List
+        .max-h-64.overflow-y-auto.mt-4
+            table.newsList(class='w-9/10').mx-auto.table-auto
+                thead.userColumnLabel
+                    tr.sticky.top-0.bg-white
+                        th.px-2.py-1 No
+                        th.px-2.py-1 Title 
+                        th.px-2.py-1 Category 
+                        th.px-2.py-1 Visit
+                        th.px-2.py-1 Comments
+                        th.px-2.py-1 Option
+                tbody
+                    each news,idx in newsList
+                        tr.newsListItem(data-slug=news.slug data-title=news.title)
+                            td.px-2.py-2.text-center= idx + 1
+                            td.px-2.py-2= news.title 
+                            td.px-2.py-2= news.category 
+                            td.px-2.py-2.text-center= news.visit 
+                            td.px-2.py-2.text-center= news.commentsResult
+                            td.px-2.py-2.cursor-pointer.deleteNews
+                                div.flex.justify-center
+                                    svg.w-4.h-4
+                                        use(href='/images/png/icons.svg#trashcan')

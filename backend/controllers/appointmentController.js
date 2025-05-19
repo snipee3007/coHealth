@@ -76,7 +76,6 @@ exports.deleteAppointment = catchAsync(async (req, res, next) => {
 exports.getBookedAppointment = catchAsync(async (req, res, next) => {
   const { doctorID, email } = req.query;
   const personalBookedAppointment = await Appointment.find({
-    doctorID,
     email,
     time: { $gte: Date.now() },
   });

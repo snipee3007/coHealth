@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 const removeAscent = require('./../utils/removeAscent.js');
+const Comment = require('./commentsSchema.js');
 const relativeNewsSchema = new mongoose.Schema({
   slug: {
     type: String,
@@ -127,6 +128,7 @@ const newsSchema = new mongoose.Schema(
       min: [0, 'The likes number must not below 0!'],
       default: 0,
     },
+    commentsResult: { type: Number },
   },
   {
     timestamps: {},
@@ -155,6 +157,7 @@ newsSchema.pre('save', function (next) {
 // Recommend posts
 newsSchema.post(/^findOne/, async function (result) {
   if (!result) return;
+  // Relative Post
   const categoryList = result.category;
   const relativeNews = [];
   const allCategorySubList = shuffle(subArray(categoryList));
@@ -195,6 +198,15 @@ newsSchema.post(/^findOne/, async function (result) {
   }
   result.relativeNews = relativeNews;
   return result;
+});
+
+newsSchema.post(/^find/, async function (results) {
+  // Comment Result
+  for (let i = 0; i < results.length; ++i) {
+    const comments = await Comment.find({ newsID: results[i]._id });
+    results[i].commentsResult = comments.length;
+  }
+  return results;
 });
 
 // HELPER FUNCTION

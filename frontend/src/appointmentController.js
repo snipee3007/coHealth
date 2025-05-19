@@ -383,10 +383,17 @@ class Appointment {
                   pickedDate.getMonth() + 1
                 }-${pickedDate.getDate()} ${hours}:${minutes}`
               );
-              console.log(time, buttonDate);
+              const doctor = document.querySelector('select#doctorList');
               if (
                 time.getTime() - 1000 * 60 * 60 <= buttonDate.getTime() &&
-                time.getTime() + 1000 * 60 * 60 >= buttonDate.getTime()
+                time.getTime() + 1000 * 60 * 60 >= buttonDate.getTime() &&
+                doctor.value == appointment.doctorID
+              ) {
+                disableButtonDate(button);
+              } else if (
+                time.getTime() - 1000 * 60 * 30 <= buttonDate.getTime() &&
+                time.getTime() + 1000 * 60 * 30 >= buttonDate.getTime() &&
+                doctor.value !== appointment.doctorID
               ) {
                 disableButtonDate(button);
               }
