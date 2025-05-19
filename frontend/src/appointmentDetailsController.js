@@ -4,7 +4,7 @@ const updateStatusAppointment = async function (appointmentCode, status) {
   try {
     Loader.create();
     const res = await axios({
-      method: 'update',
+      method: 'patch',
       url: '/api/appointment',
       data: {
         appointmentCode,
