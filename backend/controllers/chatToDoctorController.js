@@ -46,6 +46,7 @@ exports.createChatRoom = catchAsync(async (req, res, next) => {
     });
     returnData(req, res, 200, newRoom);
   }
+  next(new AppError('Unknown Error! Please try again!', 500));
 });
 
 exports.getAllChatRoomByUserID = catchAsync(async (req, res, next) => {
