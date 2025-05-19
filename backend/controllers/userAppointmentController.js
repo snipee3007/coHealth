@@ -2,6 +2,7 @@ const catchAsync = require('./../utils/catchAsync.js');
 const Appointment = require('../models/appointments_schema.js');
 const User = require('../models/users_schema.js');
 const nodemailer = require('nodemailer');
+const AppError = require('../utils/appError');
 
 const dotenv = require('dotenv');
 const returnData = require('../utils/returnData.js');

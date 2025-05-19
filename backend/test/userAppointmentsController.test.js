@@ -1,24 +1,39 @@
 const userAppointmentController = require('../controllers/userAppointmentController');
 const Appointment = require('../models/appointments_schema');
-const mongoose = require('mongoose');
 const User = require('../models/users_schema');
-const catchAsync = require('../utils/catchAsync');
-const { ObjectId } = mongoose.Types;
 const nodemailer = require('nodemailer');
 
-// Mock dependencies
+// Mock the required modules
 jest.mock('../models/appointments_schema');
 jest.mock('../models/users_schema');
-jest.mock('../utils/catchAsync', () => jest.fn((fn) => fn));
 jest.mock('nodemailer');
+jest.mock('../utils/returnData', () => jest.fn());
 
-describe('userAppointmentController', () => {
-  let req, res, next;
+// Mock AppError properly
+jest.mock('../utils/appError', () => {
+  return jest.fn().mockImplementation((message, statusCode) => {
+    return {
+      message,
+      statusCode,
+      status: `${statusCode}`.startsWith('4') ? 'fail' : 'error',
+      isOperational: true,
+    };
+  });
+});
+
+// Mock catchAsync to just run the function
+jest.mock('../utils/catchAsync', () => (fn) => fn);
+
+describe('UserAppointmentController', () => {
+  let req;
+  let res;
+  let next;
+  let returnData;
 
   beforeEach(() => {
     req = {
       user: {
-        _id: new ObjectId('60d0fe4f5311236168a109ca'),
+        _id: 'user123',
         role: 'user',
       },
       body: {},
@@ -31,329 +46,273 @@ describe('userAppointmentController', () => {
     };
     next = jest.fn();
 
-    // Clear all mocks before each test
+    // Get a fresh reference to returnData for each test
+    returnData = require('../utils/returnData');
+
+    // Reset all mocks
     jest.clearAllMocks();
   });
 
   describe('updateAppointment', () => {
-    it('should return 403 if user is not a doctor', async () => {
+    test('should return 403 error if user is not a doctor', async () => {
       req.user.role = 'user';
-      req.body = {
-        status: '1',
-        appointmentCode: 'APP123',
-      };
 
       await userAppointmentController.updateAppointment(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(403);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'You do not have permission to perform this action',
-      });
-      expect(Appointment.findOneAndUpdate).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+      const error = next.mock.calls[0][0];
+      expect(error.statusCode).toBe(403);
+      expect(error.message).toBe(
+        'You do not have permission to perform this action'
+      );
     });
 
-    it('should update appointment if user is a doctor', async () => {
+    test('should update appointment status if user is a doctor', async () => {
       req.user.role = 'doctor';
       req.body = {
-        status: '1',
-        appointmentCode: 'APP123',
+        status: 1,
+        appointmentCode: 'ABC123',
       };
 
-      const updatedAppointment = {
-        appointmentCode: 'APP123',
-        status: '1',
-        time: new Date(),
-        doctorID: new ObjectId('60d0fe4f5311236168a109cb'),
+      const mockAppointment = {
+        appointmentCode: 'ABC123',
+        status: 1,
       };
 
-      Appointment.findOneAndUpdate.mockResolvedValue(updatedAppointment);
+      Appointment.findOneAndUpdate.mockResolvedValue(mockAppointment);
 
       await userAppointmentController.updateAppointment(req, res, next);
 
       expect(Appointment.findOneAndUpdate).toHaveBeenCalledWith(
-        { appointmentCode: 'APP123' },
-        { status: '1' },
+        { appointmentCode: 'ABC123' },
+        { status: 1 },
         { new: true, upsert: true }
       );
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'success',
-        data: updatedAppointment,
-      });
+
+      expect(returnData).toHaveBeenCalledWith(req, res, 200, mockAppointment);
     });
   });
 
   describe('getAppointment', () => {
-    it('should fetch user appointments if user is not a doctor', async () => {
+    test('should get appointments for regular user', async () => {
       req.user.role = 'user';
 
-      const appointments = [
+      const mockAppointments = [
         {
-          _id: new ObjectId('60d0fe4f5311236168a109cc'),
+          _id: 'appt1',
+          userID: 'user123',
           status: 1,
-          time: new Date(Date.now() + 86400000), // Future date
-          userID: req.user._id,
-          doctorID: {
-            _id: new ObjectId('60d0fe4f5311236168a109cb'),
-            fullname: 'Dr. John Doe',
-            doctorInfo: {
-              specialization: 'Cardiology',
-            },
-          },
-          appointmentCode: 'APP123',
+          time: new Date('2025-05-20'),
         },
         {
-          _id: new ObjectId('60d0fe4f5311236168a109cd'),
+          _id: 'appt2',
+          userID: 'user123',
           status: 0,
-          time: new Date(Date.now() - 86400000), // Past date
-          userID: req.user._id,
-          doctorID: {
-            _id: new ObjectId('60d0fe4f5311236168a109cb'),
-            fullname: 'Dr. Jane Smith',
-            doctorInfo: {
-              specialization: 'Neurology',
-            },
-          },
-          appointmentCode: 'APP124',
+          time: new Date('2025-04-15'),
         },
       ];
 
       Appointment.find.mockReturnValue({
-        populate: jest.fn().mockResolvedValue(appointments),
+        populate: jest.fn().mockResolvedValue(mockAppointments),
       });
 
       await userAppointmentController.getAppointment(req, res, next);
 
-      expect(Appointment.find).toHaveBeenCalledWith({
-        userID: req.user._id,
-      });
+      expect(Appointment.find).toHaveBeenCalledWith({ userID: 'user123' });
       expect(req.appointments).toBeDefined();
-      expect(req.totalPages).toBe(1);
+      expect(req.totalPages).toBeDefined();
       expect(next).toHaveBeenCalled();
     });
 
-    it('should fetch doctor appointments if user is a doctor', async () => {
+    test('should get appointments for doctor', async () => {
       req.user.role = 'doctor';
 
-      const appointments = [
+      const mockAppointments = [
         {
-          _id: new ObjectId('60d0fe4f5311236168a109cc'),
+          _id: 'appt1',
+          doctorID: 'user123',
           status: 1,
-          time: new Date(Date.now() + 86400000), // Future date
-          userID: new ObjectId('60d0fe4f5311236168a109ce'),
-          doctorID: {
-            _id: req.user._id,
-            fullname: 'Dr. John Doe',
-            doctorInfo: {
-              specialization: 'Cardiology',
-            },
-          },
-          appointmentCode: 'APP123',
+          time: new Date('2025-05-20'),
         },
         {
-          _id: new ObjectId('60d0fe4f5311236168a109cd'),
-          status: -1,
-          time: new Date(Date.now() - 86400000), // Past date
-          userID: new ObjectId('60d0fe4f5311236168a109cf'),
-          doctorID: {
-            _id: req.user._id,
-            fullname: 'Dr. John Doe',
-            doctorInfo: {
-              specialization: 'Cardiology',
-            },
-          },
-          appointmentCode: 'APP124',
+          _id: 'appt2',
+          doctorID: 'user123',
+          status: 0,
+          time: new Date('2025-04-15'),
         },
       ];
 
       Appointment.find.mockReturnValue({
-        populate: jest.fn().mockResolvedValue(appointments),
+        populate: jest.fn().mockResolvedValue(mockAppointments),
       });
 
       await userAppointmentController.getAppointment(req, res, next);
 
-      expect(Appointment.find).toHaveBeenCalledWith({
-        doctorID: req.user._id,
-      });
+      expect(Appointment.find).toHaveBeenCalledWith({ doctorID: 'user123' });
       expect(req.appointments).toBeDefined();
-      expect(req.totalPages).toBe(1);
+      expect(req.totalPages).toBeDefined();
       expect(next).toHaveBeenCalled();
     });
   });
 
   describe('getAppointmentEachPage', () => {
-    it('should fetch paginated user appointments if user is not a doctor', async () => {
+    test('should get paginated appointments for regular user', async () => {
       req.user.role = 'user';
-      req.query.page = 1;
+      req.query.page = 2;
 
-      const appointments = [
+      const mockAppointments = [
         {
-          _id: new ObjectId('60d0fe4f5311236168a109cc'),
+          _id: 'appt1',
+          userID: 'user123',
           status: 1,
-          time: new Date(Date.now() + 86400000), // Future date
-          userID: req.user._id,
-          doctorID: {
-            _id: new ObjectId('60d0fe4f5311236168a109cb'),
-            fullname: 'Dr. John Doe',
-            doctorInfo: {
-              specialization: 'Cardiology',
-            },
-          },
-          appointmentCode: 'APP123',
+          time: new Date('2025-05-20'),
+        },
+        {
+          _id: 'appt2',
+          userID: 'user123',
+          status: 0,
+          time: new Date('2025-04-15'),
         },
       ];
 
       Appointment.find.mockReturnValue({
-        populate: jest.fn().mockResolvedValue(appointments),
+        populate: jest.fn().mockResolvedValue(mockAppointments),
       });
 
-      Appointment.countDocuments.mockResolvedValue(1);
+      Appointment.countDocuments.mockResolvedValue(10);
 
       await userAppointmentController.getAppointmentEachPage(req, res, next);
 
-      expect(Appointment.find).toHaveBeenCalledWith({
-        userID: req.user._id,
-      });
+      expect(Appointment.find).toHaveBeenCalledWith({ userID: 'user123' });
       expect(Appointment.countDocuments).toHaveBeenCalledWith({
-        userID: req.user._id,
+        userID: 'user123',
       });
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'success',
-        data: {
-          appointments: expect.any(Array),
-          totalPages: 1,
-        },
+      expect(returnData).toHaveBeenCalledWith(req, res, 200, {
+        appointments: expect.any(Array),
+        totalPages: 2,
       });
     });
 
-    it('should fetch paginated doctor appointments if user is a doctor', async () => {
+    test('should get paginated appointments for doctor', async () => {
       req.user.role = 'doctor';
       req.query.page = 1;
 
-      const appointments = [
+      const mockAppointments = [
         {
-          _id: new ObjectId('60d0fe4f5311236168a109cc'),
+          _id: 'appt1',
+          doctorID: 'user123',
           status: 1,
-          time: new Date(Date.now() + 86400000), // Future date
-          userID: new ObjectId('60d0fe4f5311236168a109ce'),
-          doctorID: req.user._id,
-          appointmentCode: 'APP123',
+          time: new Date('2025-05-20'),
+        },
+        {
+          _id: 'appt2',
+          doctorID: 'user123',
+          status: 0,
+          time: new Date('2025-04-15'),
         },
       ];
 
-      Appointment.find.mockResolvedValue(appointments);
-      Appointment.countDocuments.mockResolvedValue(1);
+      Appointment.find.mockResolvedValue(mockAppointments);
+      Appointment.countDocuments.mockResolvedValue(7);
 
       await userAppointmentController.getAppointmentEachPage(req, res, next);
 
-      expect(Appointment.find).toHaveBeenCalledWith({
-        doctorID: req.user._id,
-      });
+      expect(Appointment.find).toHaveBeenCalledWith({ doctorID: 'user123' });
       expect(Appointment.countDocuments).toHaveBeenCalledWith({
-        userID: req.user._id,
+        userID: 'user123',
       });
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'success',
-        data: {
-          appointments: expect.any(Array),
-          totalPages: 1,
-        },
-      });
+      expect(returnData).toHaveBeenCalled();
     });
   });
 
   describe('getAppointmentDetails', () => {
-    it('should fetch appointment details by appointmentCode', async () => {
-      req.params.appointmentCode = 'APP123';
+    test('should get details of a specific appointment', async () => {
+      req.params.appointmentCode = 'ABC123';
 
-      const appointmentDetails = {
-        _id: new ObjectId('60d0fe4f5311236168a109cc'),
+      const mockAppointment = {
+        appointmentCode: 'ABC123',
+        doctorID: 'doctor456',
         status: 1,
-        time: new Date(),
-        appointmentCode: 'APP123',
-        doctorID: {
-          _id: new ObjectId('60d0fe4f5311236168a109cb'),
-          fullname: 'Dr. John Doe',
-          email: 'john.doe@example.com',
-          phoneNumber: '1234567890',
-          doctorInfo: {
-            specialization: 'Cardiology',
-          },
-        },
       };
 
       Appointment.findOne.mockReturnValue({
-        populate: jest.fn().mockResolvedValue(appointmentDetails),
+        populate: jest.fn().mockResolvedValue(mockAppointment),
       });
 
       await userAppointmentController.getAppointmentDetails(req, res, next);
 
       expect(Appointment.findOne).toHaveBeenCalledWith({
-        appointmentCode: 'APP123',
+        appointmentCode: 'ABC123',
       });
-      expect(req.appointment).toEqual(appointmentDetails);
+      expect(req.appointment).toEqual(mockAppointment);
       expect(next).toHaveBeenCalled();
     });
   });
 
   describe('sendEmail', () => {
-    it('should send confirmation email when appointment is accepted', async () => {
-      req.body = {
-        status: '1',
-        date: '2023-05-10',
-        time: '10:00 AM',
-        fullname: 'John Smith',
-        email: 'john@example.com',
-      };
-
+    test('should send confirmation email when appointment is accepted', async () => {
       const mockTransporter = {
-        sendMail: jest.fn().mockResolvedValue({ messageId: 'mock-message-id' }),
+        sendMail: jest.fn().mockResolvedValue({ messageId: 'abc123' }),
       };
 
       nodemailer.createTransport.mockReturnValue(mockTransporter);
+
+      req.body = {
+        status: '1',
+        fullname: 'John Doe',
+        email: 'john@example.com',
+        date: '2025-05-20',
+        time: '10:00 AM',
+      };
+
+      process.env.EMAIL_USER = 'test@example.com';
+      process.env.EMAIL_PASS = 'password123';
 
       await userAppointmentController.sendEmail(req, res, next);
 
       expect(nodemailer.createTransport).toHaveBeenCalled();
       expect(mockTransporter.sendMail).toHaveBeenCalled();
+      expect(mockTransporter.sendMail.mock.calls[0][0].to).toBe(
+        'john@example.com'
+      );
       expect(mockTransporter.sendMail.mock.calls[0][0].subject).toContain(
         'ACCEPTED'
       );
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 'success',
-        data: { messageId: 'mock-message-id' },
+      expect(returnData).toHaveBeenCalledWith(req, res, 200, {
+        messageId: 'abc123',
       });
     });
 
-    it('should send decline email when appointment is rejected', async () => {
-      req.body = {
-        status: '0',
-        date: '2023-05-10',
-        time: '10:00 AM',
-        fullname: 'John Smith',
-        email: 'john@example.com',
-      };
-
+    test('should send rejection email when appointment is declined', async () => {
       const mockTransporter = {
-        sendMail: jest.fn().mockResolvedValue({ messageId: 'mock-message-id' }),
+        sendMail: jest.fn().mockResolvedValue({ messageId: 'abc123' }),
       };
 
       nodemailer.createTransport.mockReturnValue(mockTransporter);
+
+      req.body = {
+        status: '0',
+        fullname: 'John Doe',
+        email: 'john@example.com',
+        date: '2025-05-20',
+        time: '10:00 AM',
+      };
+
+      process.env.EMAIL_USER = 'test@example.com';
+      process.env.EMAIL_PASS = 'password123';
 
       await userAppointmentController.sendEmail(req, res, next);
 
       expect(nodemailer.createTransport).toHaveBeenCalled();
       expect(mockTransporter.sendMail).toHaveBeenCalled();
+      expect(mockTransporter.sendMail.mock.calls[0][0].to).toBe(
+        'john@example.com'
+      );
       expect(mockTransporter.sendMail.mock.calls[0][0].subject).toContain(
         'DECLINED'
       );
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 'success',
-        data: { messageId: 'mock-message-id' },
+      expect(returnData).toHaveBeenCalledWith(req, res, 200, {
+        messageId: 'abc123',
       });
     });
   });

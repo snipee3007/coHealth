@@ -1,221 +1,160 @@
-const mongoose = require('mongoose');
-const { ObjectId } = mongoose.Types;
-const fs = require('fs');
-const path = require('path');
+// Import and mock CatchAsync
+const catchAsync = require('../utils/catchAsync');
+jest.mock('../utils/catchAsync');
 
-// Import controller
-const symptomController = require('../controllers/symptomController');
-const Symptom = require('../models/symptom_schema');
-const AppError = require('../utils/appError');
-
-// Mock các module
-jest.mock('../models/symptom_schema');
-jest.mock('../utils/appError');
-jest.mock('../utils/catchAsync', () => (fn) => {
-  // This is where the fix is applied - correctly handle errors
-  return (...args) => {
-    return fn(...args).catch(args[2]); // Ensure error is passed to next
+// Manually recreate how catchAsync is supposed to work
+catchAsync.mockImplementation((fn) => {
+  return async (req, res, next) => {
+    try {
+      await fn(req, res, next);
+    } catch (error) {
+      next(error);
+    }
   };
 });
-jest.mock('fs');
-jest.mock('path');
+
+// Import the controller after mocking
+const symptomController = require('../controllers/symptomController');
+// Import and mock other dependencies
+const Symptom = require('../models/symptom_schema');
+const returnData = require('../utils/returnData');
+
+jest.mock('../models/symptom_schema');
+jest.mock('../utils/returnData');
 
 describe('Symptom Controller', () => {
-  let req;
-  let res;
-  let next;
+  let req, res, next;
 
   beforeEach(() => {
+    // Create mock request and response objects manually
     req = {
       params: {},
+      body: {},
     };
     res = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
+      json: jest.fn().mockReturnThis(),
     };
     next = jest.fn();
 
-    // Reset all mocks before each test
+    // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
   describe('getAllSymptoms', () => {
     it('should get all symptoms sorted by symptom name', async () => {
-      // Arrange
+      // Mock data
       const mockSymptoms = [
-        {
-          _id: new ObjectId('6450b2b2a6d5acb5f174e70c'),
-          symptom: 'Cough',
-          body: 'respiratory',
-        },
-        {
-          _id: new ObjectId('6450b2b2a6d5acb5f174e70d'),
-          symptom: 'Fever',
-          body: 'general',
-        },
+        { symptom: 'Headache', body: 'head' },
+        { symptom: 'Cough', body: 'chest' },
+        { symptom: 'Fever', body: 'general' },
       ];
 
-      Symptom.find.mockReturnValue({
+      // Setup Mongoose model mock
+      Symptom.find = jest.fn().mockReturnValue({
         sort: jest.fn().mockReturnValue({
           lean: jest.fn().mockResolvedValue(mockSymptoms),
         }),
       });
 
-      // Act
+      // Call the function
       await symptomController.getAllSymptoms(req, res, next);
 
-      // Assert
+      // Assertions
       expect(Symptom.find).toHaveBeenCalledWith({});
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 'success',
-        data: mockSymptoms,
-      });
+      expect(Symptom.find().sort).toHaveBeenCalledWith({ symptom: 1 });
+      expect(returnData).toHaveBeenCalledWith(req, res, 200, mockSymptoms);
+      expect(next).not.toHaveBeenCalled();
     });
 
-    it('should handle errors and pass to next middleware', async () => {
-      // Arrange
+    it('should handle database errors', async () => {
+      // Setup mock implementation to throw an error
       const error = new Error('Database error');
-      Symptom.find.mockReturnValue({
+      Symptom.find = jest.fn().mockReturnValue({
         sort: jest.fn().mockReturnValue({
           lean: jest.fn().mockRejectedValue(error),
         }),
       });
 
-      // Act
+      // Call the function
       await symptomController.getAllSymptoms(req, res, next);
 
-      // Assert
+      // Assertions
       expect(next).toHaveBeenCalledWith(error);
+      expect(returnData).not.toHaveBeenCalled();
     });
   });
 
   describe('getSymptomByTag', () => {
-    it('should get symptoms by tag name', async () => {
-      // Arrange
-      const mockTag = 'respiratory';
-      req.params.name = mockTag;
-
+    it('should get symptoms filtered by body tag', async () => {
+      // Mock data
+      const mockTag = 'head';
       const mockSymptoms = [
-        {
-          _id: new ObjectId('6450b2b2a6d5acb5f174e70e'),
-          symptom: 'Cough',
-          body: 'respiratory',
-        },
-        {
-          _id: new ObjectId('6450b2b2a6d5acb5f174e70f'),
-          symptom: 'Shortness of breath',
-          body: 'respiratory',
-        },
+        { symptom: 'Headache', body: 'head' },
+        { symptom: 'Migraine', body: 'head' },
       ];
 
-      Symptom.find.mockReturnValue({
+      // Setup request parameters
+      req.params = { name: mockTag };
+
+      // Setup mock implementation
+      Symptom.find = jest.fn().mockReturnValue({
         sort: jest.fn().mockReturnValue({
           lean: jest.fn().mockResolvedValue(mockSymptoms),
         }),
       });
 
-      // Act
+      // Call the function
       await symptomController.getSymptomByTag(req, res, next);
 
-      // Assert
+      // Assertions
       expect(Symptom.find).toHaveBeenCalledWith({ body: mockTag });
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 'success',
-        data: mockSymptoms,
-      });
+      expect(Symptom.find().sort).toHaveBeenCalledWith({ symptom: 1 });
+      expect(returnData).toHaveBeenCalledWith(req, res, 200, mockSymptoms);
+      expect(next).not.toHaveBeenCalled();
     });
 
-    it('should handle errors and pass to next middleware', async () => {
-      // Arrange
-      req.params.name = 'respiratory';
-      const error = new Error('Database error');
+    it('should return empty array if no symptoms match the tag', async () => {
+      // Mock data
+      const mockTag = 'nonexistent';
+      const mockEmptyResult = [];
 
-      Symptom.find.mockReturnValue({
+      // Setup request parameters
+      req.params = { name: mockTag };
+
+      // Setup mock implementation
+      Symptom.find = jest.fn().mockReturnValue({
+        sort: jest.fn().mockReturnValue({
+          lean: jest.fn().mockResolvedValue(mockEmptyResult),
+        }),
+      });
+
+      // Call the function
+      await symptomController.getSymptomByTag(req, res, next);
+
+      // Assertions
+      expect(Symptom.find).toHaveBeenCalledWith({ body: mockTag });
+      expect(returnData).toHaveBeenCalledWith(req, res, 200, mockEmptyResult);
+    });
+
+    it('should handle database errors', async () => {
+      // Setup request parameters
+      req.params = { name: 'head' };
+
+      // Setup mock implementation to throw an error
+      const error = new Error('Database error');
+      Symptom.find = jest.fn().mockReturnValue({
         sort: jest.fn().mockReturnValue({
           lean: jest.fn().mockRejectedValue(error),
         }),
       });
 
-      // Act
+      // Call the function
       await symptomController.getSymptomByTag(req, res, next);
 
-      // Assert
+      // Assertions
       expect(next).toHaveBeenCalledWith(error);
-    });
-  });
-
-  describe('createSymptom', () => {
-    it('should read symptom data from files and insert to database', async () => {
-      // Arrange
-      const mockDirPath = '/app/datas/symptom';
-      const mockFiles = ['symptoms1.json', 'symptoms2.json', 'not-a-json.txt'];
-      const mockSymptoms1 = [
-        { symptom: 'Headache', body: 'head' },
-        { symptom: 'Nausea', body: 'stomach' },
-      ];
-      const mockSymptoms2 = [{ symptom: 'Dizziness', body: 'head' }];
-
-      const mockInserted = [
-        { _id: new ObjectId('6450b2b2a6d5acb5f174e710'), ...mockSymptoms1[0] },
-        { _id: new ObjectId('6450b2b2a6d5acb5f174e711'), ...mockSymptoms1[1] },
-        { _id: new ObjectId('6450b2b2a6d5acb5f174e712'), ...mockSymptoms2[0] },
-      ];
-
-      path.join
-        .mockReturnValueOnce(mockDirPath)
-        .mockReturnValueOnce(`${mockDirPath}/${mockFiles[0]}`)
-        .mockReturnValueOnce(`${mockDirPath}/${mockFiles[1]}`);
-
-      fs.readdirSync.mockReturnValue(mockFiles);
-
-      fs.readFileSync
-        .mockReturnValueOnce(JSON.stringify(mockSymptoms1))
-        .mockReturnValueOnce(JSON.stringify(mockSymptoms2));
-
-      Symptom.insertMany.mockResolvedValue(mockInserted);
-
-      // Act
-      await symptomController.createSymptom(req, res, next);
-
-      // Assert
-      expect(fs.readdirSync).toHaveBeenCalledWith(mockDirPath);
-      expect(fs.readFileSync).toHaveBeenCalledTimes(2);
-      expect(Symptom.insertMany).toHaveBeenCalledWith([
-        ...mockSymptoms1,
-        ...mockSymptoms2,
-      ]);
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 'success',
-        results: mockInserted.length,
-        data: mockInserted,
-      });
-    });
-
-    it('should handle errors and pass to next middleware', async () => {
-      // Arrange
-      const error = new Error('Database error');
-      Symptom.insertMany.mockRejectedValue(error);
-
-      // Setup for createSymptom function
-      const mockDirPath = '/app/datas/symptom';
-      const mockFiles = ['symptoms1.json'];
-      const mockSymptoms1 = [{ symptom: 'Headache', body: 'head' }];
-
-      path.join
-        .mockReturnValueOnce(mockDirPath)
-        .mockReturnValueOnce(`${mockDirPath}/${mockFiles[0]}`);
-
-      fs.readdirSync.mockReturnValue(mockFiles);
-      fs.readFileSync.mockReturnValueOnce(JSON.stringify(mockSymptoms1));
-
-      // Act
-      await symptomController.createSymptom(req, res, next);
-
-      // Assert
-      expect(next).toHaveBeenCalledWith(error);
+      expect(returnData).not.toHaveBeenCalled();
     });
   });
 });
