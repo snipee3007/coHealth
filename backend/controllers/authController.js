@@ -233,7 +233,7 @@ exports.getOTP = catchAsync(async function (req, res, next) {
       `Đã gửi mã OTP qua email ${data.email} thành công`
     );
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return next(
       new AppError(
         'Có lỗi xảy ra trong việc gửi email! Vui lòng thử lại sau!',
@@ -325,7 +325,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });
-    console.log(err);
+    // console.log(err);
     return next(
       new AppError('There is a error when sending email! Please try again!'),
       500

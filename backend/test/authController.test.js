@@ -257,7 +257,7 @@ describe('Auth Controller', () => {
         gender: 'male',
         yearOfBirth: 1990,
         fullname: 'Test User',
-        image: undefined,
+        image: 'menAnonymous.jpg',
         lastSeen: expect.any(Number),
       });
       expect(jwt.sign).toHaveBeenCalled();

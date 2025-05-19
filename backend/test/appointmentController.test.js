@@ -2,6 +2,7 @@ const userAppointmentController = require('../controllers/userAppointmentControl
 const Appointment = require('../models/appointments_schema');
 const User = require('../models/users_schema');
 const nodemailer = require('nodemailer');
+const mongoose = require('mongoose');
 
 // Mock the required modules
 jest.mock('../models/appointments_schema');
@@ -29,11 +30,17 @@ describe('UserAppointmentController', () => {
   let res;
   let next;
   let returnData;
+  let userId;
+  let doctorId;
 
   beforeEach(() => {
+    // Create new ObjectIds for each test
+    userId = new mongoose.Types.ObjectId();
+    doctorId = new mongoose.Types.ObjectId();
+
     req = {
       user: {
-        _id: 'user123',
+        _id: userId,
         role: 'user',
       },
       body: {},
@@ -99,28 +106,26 @@ describe('UserAppointmentController', () => {
 
       const mockAppointments = [
         {
-          _id: 'appt1',
-          userID: 'user123',
+          _id: new mongoose.Types.ObjectId(),
+          userID: userId,
           status: 1,
           time: new Date('2025-05-20'),
         },
         {
-          _id: 'appt2',
-          userID: 'user123',
+          _id: new mongoose.Types.ObjectId(),
+          userID: userId,
           status: 0,
           time: new Date('2025-04-15'),
         },
       ];
 
-      // Simplify the mock structure to ensure the promise resolves
-      const populateMock = jest.fn().mockResolvedValue(mockAppointments);
       Appointment.find.mockReturnValue({
-        populate: populateMock,
+        populate: jest.fn().mockResolvedValue(mockAppointments),
       });
 
       await userAppointmentController.getAppointment(req, res, next);
 
-      expect(Appointment.find).toHaveBeenCalledWith({ userID: 'user123' });
+      expect(Appointment.find).toHaveBeenCalledWith({ userID: userId });
       expect(req.appointments).toBeDefined();
       expect(req.totalPages).toBeDefined();
       expect(next).toHaveBeenCalled();
@@ -134,35 +139,30 @@ describe('UserAppointmentController', () => {
 
       const mockAppointments = [
         {
-          _id: 'appt1',
-          userID: 'user123',
+          _id: new mongoose.Types.ObjectId(),
+          userID: userId,
           status: 1,
           time: new Date('2025-05-20'),
         },
         {
-          _id: 'appt2',
-          userID: 'user123',
+          _id: new mongoose.Types.ObjectId(),
+          userID: userId,
           status: 0,
           time: new Date('2025-04-15'),
         },
       ];
 
-      // Fix the populate mock to ensure it resolves properly
-      const populateMock = jest.fn().mockResolvedValue(mockAppointments);
       Appointment.find.mockReturnValue({
-        populate: populateMock,
-        skip: jest.fn().mockReturnThis(),
-        limit: jest.fn().mockReturnThis(),
-        sort: jest.fn().mockReturnThis(),
+        populate: jest.fn().mockResolvedValue(mockAppointments),
       });
 
       Appointment.countDocuments.mockResolvedValue(10);
 
       await userAppointmentController.getAppointmentEachPage(req, res, next);
 
-      expect(Appointment.find).toHaveBeenCalledWith({ userID: 'user123' });
+      expect(Appointment.find).toHaveBeenCalledWith({ userID: userId });
       expect(Appointment.countDocuments).toHaveBeenCalledWith({
-        userID: 'user123',
+        userID: userId,
       });
       expect(returnData).toHaveBeenCalledWith(req, res, 200, {
         appointments: expect.any(Array),
@@ -177,14 +177,12 @@ describe('UserAppointmentController', () => {
 
       const mockAppointment = {
         appointmentCode: 'ABC123',
-        doctorID: 'doctor456',
+        doctorID: doctorId,
         status: 1,
       };
 
-      // Ensure proper population mocking
-      const populateMock = jest.fn().mockResolvedValue(mockAppointment);
       Appointment.findOne.mockReturnValue({
-        populate: populateMock,
+        populate: jest.fn().mockResolvedValue(mockAppointment),
       });
 
       await userAppointmentController.getAppointmentDetails(req, res, next);

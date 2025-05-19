@@ -109,7 +109,7 @@ exports.predictDisease = catchAsync(async (req, res, next) => {
 
   // Chuyển mảng triệu chứng thành JSON string để truyền vào Python
   const symptomsJson = JSON.stringify(symptoms);
-  console.log(symptomsJson);
+  // console.log(symptomsJson);
   // Đường dẫn đến script Python
   const pythonScriptPath = path.join(
     __dirname,
@@ -128,25 +128,25 @@ exports.predictDisease = catchAsync(async (req, res, next) => {
   // Xử lý dữ liệu từ Python script
   pythonProcess.stdout.on('data', (chunk) => {
     const chunkStr = chunk.toString();
-    console.log('Python stdout:', chunkStr);
+    // console.log('Python stdout:', chunkStr);
     data += chunkStr;
   });
 
   // Xử lý lỗi từ Python script
   pythonProcess.stderr.on('data', (chunk) => {
     const chunkStr = chunk.toString();
-    console.error('Python stderr:', chunkStr);
+    // console.error('Python stderr:', chunkStr);
     error += chunkStr;
   });
 
   // Khi Python script kết thúc
   pythonProcess.on('close', (code) => {
-    console.log(`Python process exited with code ${code}`);
-    console.log('Python stdout data:', data);
-    console.log('Python stderr error:', error);
+    // console.log(`Python process exited with code ${code}`);
+    // console.log('Python stdout data:', data);
+    // console.log('Python stderr error:', error);
 
     if (code !== 0) {
-      console.error(`Error in run Python script (${code}): ${error}`);
+      // console.error(`Error in run Python script (${code}): ${error}`);
 
       // Thử phân tích lỗi JSON nếu có
       try {
