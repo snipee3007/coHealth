@@ -1,5 +1,3 @@
-const mongoose = require('mongoose');
-const { ObjectId } = mongoose.Types;
 const {
   getAllDiseases,
   getDetailsDisease,
@@ -7,6 +5,7 @@ const {
   predictDisease,
 } = require('../controllers/diseaseController');
 const Disease = require('../models/disease_schema');
+const Symptom = require('../models/symptom_schema');
 const AppError = require('../utils/appError');
 const fs = require('fs');
 const { spawn } = require('child_process');
@@ -14,54 +13,76 @@ const path = require('path');
 
 // Mock dependencies
 jest.mock('../models/disease_schema');
-jest.mock('../utils/appError');
+jest.mock('../models/symptom_schema');
 jest.mock('fs');
 jest.mock('child_process');
 jest.mock('path');
 
+// Mock catchAsync wrapper to properly pass errors to next
+jest.mock('../utils/catchAsync', () => {
+  return (fn) => {
+    return async (req, res, next) => {
+      try {
+        await fn(req, res, next);
+      } catch (error) {
+        next(error);
+      }
+    };
+  };
+});
+
+// Mock dependencies
+jest.mock('../models/disease_schema');
+jest.mock('../models/symptom_schema');
+jest.mock('fs');
+jest.mock('child_process');
+jest.mock('path');
+
+// Mock return data utility
+jest.mock('../utils/returnData', () => {
+  return jest.fn((req, res, statusCode, data) => {
+    res.status(statusCode).json({
+      status: 'success',
+      data,
+    });
+  });
+});
+
 describe('Disease Controller', () => {
-  // Reset all mocks before each test
+  let req;
+  let res;
+  let next;
+
   beforeEach(() => {
+    req = {
+      params: {},
+      body: {},
+    };
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    next = jest.fn();
     jest.clearAllMocks();
   });
 
   describe('getAllDiseases', () => {
-    test('should get all diseases successfully', async () => {
+    it('should get all diseases and return success response', async () => {
       // Mock data
       const mockDiseases = [
-        {
-          _id: new ObjectId('60d5ec59c8c8a52cecdb3471'),
-          name: 'Disease 1',
-          description: 'Description 1',
-          commonSymptoms: ['Symptom 1', 'Symptom 2'],
-          riskFactors: ['Risk 1'],
-        },
-        {
-          _id: new ObjectId('60d5ec59c8c8a52cecdb3472'),
-          name: 'Disease 2',
-          description: 'Description 2',
-          commonSymptoms: ['Symptom 3', 'Symptom 4'],
-          riskFactors: ['Risk 2', 'Risk 3'],
-        },
+        { name: 'Disease 1', description: 'Description 1' },
+        { name: 'Disease 2', description: 'Description 2' },
       ];
 
-      // Setup mocks
+      // Setup mock
       Disease.find.mockReturnValue({
         lean: jest.fn().mockResolvedValue(mockDiseases),
       });
 
-      // Mock request and response
-      const req = {};
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      const next = jest.fn();
-
-      // Call the function
+      // Execute
       await getAllDiseases(req, res, next);
 
-      // Assertions
+      // Assert
       expect(Disease.find).toHaveBeenCalledWith({});
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
@@ -71,62 +92,51 @@ describe('Disease Controller', () => {
       expect(next).not.toHaveBeenCalled();
     });
 
-    // test('should handle errors', async () => {
-    //   // Setup mocks to throw error
-    //   const error = new Error('Database error');
-    //   Disease.find.mockReturnValue({
-    //     lean: jest.fn().mockRejectedValue(error),
-    //   });
+    it('should call next with error if database query fails', async () => {
+      // Setup mock to throw error
+      const error = new Error('Database error');
 
-    //   // Mock request and response
-    //   const req = {};
-    //   const res = {
-    //     status: jest.fn().mockReturnThis(),
-    //     json: jest.fn(),
-    //   };
-    //   const next = jest.fn();
+      // We need to mock the entire chain to ensure the error is thrown properly
+      const mockLeanFn = jest.fn().mockRejectedValue(error);
+      Disease.find.mockReturnValue({ lean: mockLeanFn });
 
-    //   // Call the function
-    //   await getAllDiseases(req, res, next);
+      // Use try-catch to properly test async error handling
+      try {
+        await getAllDiseases(req, res, next);
+      } catch (e) {
+        // The error should be caught by catchAsync, not here
+        console.error('Test error caught:', e);
+      }
 
-    //   // Assertions
-    //   expect(next).toHaveBeenCalledWith(error);
-    //   expect(res.status).not.toHaveBeenCalled();
-    //   expect(res.json).not.toHaveBeenCalled();
-    // });
+      // Assert
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toEqual(error);
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.json).not.toHaveBeenCalled();
+    });
   });
 
   describe('getDetailsDisease', () => {
-    test('should get a specific disease by name', async () => {
+    it('should get disease details by name and return success response', async () => {
       // Mock data
-      const diseaseName = 'Disease 1';
+      const diseaseName = 'Diabetes';
       const mockDisease = {
-        _id: new ObjectId('60d5ec59c8c8a52cecdb3473'),
-        name: diseaseName,
-        description: 'Description for Disease 1',
-        commonSymptoms: ['Symptom 1', 'Symptom 2'],
-        riskFactors: ['Risk 1'],
+        name: 'Diabetes',
+        description: 'A chronic disease related to blood sugar levels',
+        commonSymptoms: ['Frequent urination', 'Increased thirst'],
+        riskFactors: ['Family history', 'Obesity'],
       };
 
-      // Setup mocks
+      // Setup mock
+      req.params.name = diseaseName;
       Disease.findOne.mockReturnValue({
         lean: jest.fn().mockResolvedValue(mockDisease),
       });
 
-      // Mock request and response
-      const req = {
-        params: { name: diseaseName },
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      const next = jest.fn();
-
-      // Call the function
+      // Execute
       await getDetailsDisease(req, res, next);
 
-      // Assertions
+      // Assert
       expect(Disease.findOne).toHaveBeenCalledWith({ name: diseaseName });
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
@@ -136,226 +146,271 @@ describe('Disease Controller', () => {
       expect(next).not.toHaveBeenCalled();
     });
 
-    test('should handle case when disease is not found', async () => {
-      // Setup mocks
-      Disease.findOne.mockReturnValue({
-        lean: jest.fn().mockResolvedValue(null),
-      });
+    it('should call next with error if disease lookup fails', async () => {
+      // Setup mock to throw error
+      req.params.name = 'Unknown';
+      const error = new Error('Database error');
 
-      // Mock request and response
-      const req = {
-        params: { name: 'Non-existent Disease' },
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      const next = jest.fn();
+      // We need to mock the entire chain to ensure the error is thrown properly
+      const mockLeanFn = jest.fn().mockRejectedValue(error);
+      Disease.findOne.mockReturnValue({ lean: mockLeanFn });
 
-      // Call the function
-      await getDetailsDisease(req, res, next);
+      // Use try-catch to properly test async error handling
+      try {
+        await getDetailsDisease(req, res, next);
+      } catch (e) {
+        // The error should be caught by catchAsync, not here
+        console.error('Test error caught:', e);
+      }
 
-      // Assertions
-      expect(Disease.findOne).toHaveBeenCalledWith({
-        name: 'Non-existent Disease',
-      });
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 'success',
-        data: null,
-      });
+      // Assert
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toEqual(error);
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.json).not.toHaveBeenCalled();
     });
   });
 
   describe('createDisease', () => {
-    test('should create diseases from JSON files', async () => {
+    it('should create diseases from JSON files and return success response', async () => {
       // Mock data
-      const mockFiles = ['disease1.json', 'disease2.json', 'data.txt'];
+      const mockFiles = ['disease1.json', 'disease2.json'];
       const mockDisease1 = {
         name: 'Disease 1',
         description: 'Description 1',
         commonSymptoms: ['Symptom 1', 'Symptom 2'],
         riskFactors: ['Risk 1'],
       };
-      const mockDisease2 = [
+      const mockDisease2 = {
+        disease: 'Disease 2',
+        description: 'Description 2',
+      };
+      const mockInserted = [
+        mockDisease1,
         {
-          disease: 'Disease 2',
-          description: 'Description 2',
-          commonSymptoms: ['Symptom 3', 'Symptom 4'],
-        },
-      ];
-
-      // Setup mocks
-      path.join.mockImplementation((...args) => args.join('/'));
-      fs.readdirSync.mockReturnValue(mockFiles);
-      fs.readFileSync
-        .mockReturnValueOnce(JSON.stringify(mockDisease1))
-        .mockReturnValueOnce(JSON.stringify(mockDisease2));
-
-      const insertedData = [
-        {
-          _id: new ObjectId('60d5ec59c8c8a52cecdb3474'),
-          ...mockDisease1,
-        },
-        {
-          _id: new ObjectId('60d5ec59c8c8a52cecdb3475'),
           name: 'Disease 2',
           description: 'Description 2',
-          commonSymptoms: ['Symptom 3', 'Symptom 4'],
+          commonSymptoms: ['Không có thông tin'],
           riskFactors: ['Không có thông tin'],
         },
       ];
 
-      Disease.insertMany.mockResolvedValue(insertedData);
+      // Setup mocks
+      path.join
+        .mockReturnValueOnce('/mock/path/to/diseases') // for folderPath
+        .mockReturnValueOnce('/mock/path/to/diseases/disease1.json') // for first filePath
+        .mockReturnValueOnce('/mock/path/to/diseases/disease2.json'); // for second filePath
 
-      // Mock request and response
-      const req = {};
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      const next = jest.fn();
+      fs.readdirSync.mockReturnValue(mockFiles);
+      fs.readFileSync
+        .mockReturnValueOnce(JSON.stringify([mockDisease1]))
+        .mockReturnValueOnce(JSON.stringify(mockDisease2));
 
-      // Call the function
+      Disease.insertMany.mockResolvedValue(mockInserted);
+
+      // Execute
       await createDisease(req, res, next);
 
-      // Assertions
+      // Assert
       expect(fs.readdirSync).toHaveBeenCalled();
       expect(fs.readFileSync).toHaveBeenCalledTimes(2);
       expect(Disease.insertMany).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         status: 'success',
-        results: 2,
-        data: insertedData,
+        data: mockInserted,
       });
+      expect(next).not.toHaveBeenCalled();
     });
 
-    test('should handle validation errors', async () => {
-      // Mock data
-      const mockFiles = ['disease1.json'];
-      const mockDisease = {
-        name: 'Disease 1',
-        // Missing description which is required
-      };
-
-      // Setup mocks
-      path.join.mockImplementation((...args) => args.join('/'));
+    it('should call next with error if no valid disease data found', async () => {
+      // Setup mocks for empty data scenario
+      const mockFiles = ['empty.json'];
+      path.join.mockReturnValue('/mock/path');
       fs.readdirSync.mockReturnValue(mockFiles);
-      fs.readFileSync.mockReturnValue(JSON.stringify(mockDisease));
+      fs.readFileSync.mockReturnValue('[]');
 
-      const validationError = new mongoose.Error.ValidationError();
-      validationError.errors = {
-        description: { message: 'Description is required' },
-      };
-      Disease.insertMany.mockRejectedValue(validationError);
-
-      // Mock request and response
-      const req = {};
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
-      const next = jest.fn();
-
-      // Call the function
+      // Execute
       await createDisease(req, res, next);
 
-      // Assertions
+      // Assert
       expect(next).toHaveBeenCalled();
-      expect(AppError).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toBeInstanceOf(AppError);
+      expect(next.mock.calls[0][0].message).toContain(
+        'Không tìm thấy dữ liệu bệnh hợp lệ'
+      );
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.json).not.toHaveBeenCalled();
     });
   });
 
   describe('predictDisease', () => {
-    test('should predict diseases based on symptoms', async () => {
+    it('should predict diseases based on symptoms and return success response', async () => {
       // Mock data
-      const mockSymptoms = ['fever', 'cough', 'headache'];
-      const mockPredictionResult = JSON.stringify({
-        'Common Cold': 0.75,
-        Flu: 0.2,
-        'COVID-19': 0.05,
-      });
+      const mockSymptoms = ['headache', 'fever'];
+      const mockPredictions = {
+        diseases: [
+          { name: 'Flu', probability: 0.85 },
+          { name: 'Common Cold', probability: 0.65 },
+        ],
+      };
 
       // Setup mocks
-      path.join.mockImplementation((...args) => args.join('/'));
+      req.body.symptoms = mockSymptoms;
 
-      const mockOn = jest.fn((event, callback) => {
-        if (
-          event === 'data' &&
-          mockOn.mock.calls.filter((call) => call[0] === 'data').length === 1
-        ) {
-          callback(Buffer.from(mockPredictionResult));
-        }
-        return mockOn;
+      // Mock symptom validation
+      Symptom.findOne.mockResolvedValue({ symptom: 'headache' });
+
+      // Mock Python process
+      const mockSpawn = {
+        stdout: { on: jest.fn() },
+        stderr: { on: jest.fn() },
+        on: jest.fn(),
+      };
+
+      spawn.mockReturnValue(mockSpawn);
+      path.join.mockReturnValue('/mock/path/to/python/script.py');
+
+      // Simulate Python process output
+      const stdoutCallback = {};
+      const stderrCallback = {};
+      const closeCallback = {};
+
+      mockSpawn.stdout.on.mockImplementation((event, callback) => {
+        stdoutCallback[event] = callback;
+        return mockSpawn.stdout;
       });
 
-      const mockEventEmitter = {
-        stdout: { on: mockOn },
-        stderr: { on: mockOn },
-        on: (event, callback) => {
-          if (event === 'close') {
-            // Simulate successful completion
-            callback(0);
-          }
-        },
-      };
+      mockSpawn.stderr.on.mockImplementation((event, callback) => {
+        stderrCallback[event] = callback;
+        return mockSpawn.stderr;
+      });
 
-      spawn.mockReturnValue(mockEventEmitter);
+      mockSpawn.on.mockImplementation((event, callback) => {
+        closeCallback[event] = callback;
+        return mockSpawn;
+      });
 
-      // Mock request and response
-      const req = {
-        body: { symptoms: mockSymptoms },
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
+      // Execute
+      const predictPromise = predictDisease(req, res, next);
 
-      // Call the function
-      await predictDisease(req, res);
+      // Simulate Python process output and completion
+      stdoutCallback.data(Buffer.from(JSON.stringify(mockPredictions)));
+      closeCallback.close(0);
 
-      // Assertions
-      expect(spawn).toHaveBeenCalled();
+      // Wait for the function to complete
+      await predictPromise;
+
+      // Assert
+      expect(spawn).toHaveBeenCalledWith('python', [
+        '/mock/path/to/python/script.py',
+        JSON.stringify(mockSymptoms),
+      ]);
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         status: 'success',
         data: {
           input_symptoms: mockSymptoms,
-          // predictions: {
-          //   'Common Cold': '75.00%',
-          //   Flu: '20.00%',
-          //   'COVID-19': '5.00%',
-          // },
-          raw_predictions: {
-            'Common Cold': 0.75,
-            Flu: 0.2,
-            'COVID-19': 0.05,
-          },
+          raw_predictions: mockPredictions,
         },
       });
     });
 
-    test('should handle invalid symptoms input', async () => {
-      // Setup request with invalid symptoms
-      const req = {
-        body: { symptoms: [] }, // Empty symptoms array
-      };
-      const res = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
-      };
+    it('should call next with error if no symptoms provided', async () => {
+      // Setup empty symptoms
+      req.body.symptoms = [];
 
-      // Call the function
-      await predictDisease(req, res);
+      // Execute
+      await predictDisease(req, res, next);
 
-      // Assertions
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({
-        status: 'fail',
-        message: 'Vui lòng cung cấp danh sách triệu chứng',
+      // Assert
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toBeInstanceOf(AppError);
+      expect(next.mock.calls[0][0].message).toContain('No symptom provided');
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.json).not.toHaveBeenCalled();
+    });
+
+    it('should call next with error if invalid symptom provided', async () => {
+      // Setup invalid symptom
+      req.body.symptoms = ['nonexistentsymptom'];
+
+      // Mock symptom validation to return null (symptom not found)
+      Symptom.findOne.mockResolvedValue(null);
+
+      // Execute
+      await predictDisease(req, res, next);
+
+      // Assert
+      expect(Symptom.findOne).toHaveBeenCalledWith({
+        symptom: 'nonexistentsymptom',
       });
-      expect(spawn).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toBeInstanceOf(AppError);
+      expect(next.mock.calls[0][0].message).toContain(
+        'symptom is not provided'
+      );
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.json).not.toHaveBeenCalled();
+    });
+
+    it('should call next with error if Python process fails', async () => {
+      // Mock data
+      req.body.symptoms = ['headache', 'fever'];
+
+      // Mock symptom validation
+      Symptom.findOne.mockResolvedValue({ symptom: 'headache' });
+
+      // Mock Python process
+      const mockSpawn = {
+        stdout: { on: jest.fn() },
+        stderr: { on: jest.fn() },
+        on: jest.fn(),
+      };
+
+      spawn.mockReturnValue(mockSpawn);
+
+      // Simulate Python process output
+      const stdoutCallback = {};
+      const stderrCallback = {};
+      const closeCallback = {};
+
+      mockSpawn.stdout.on.mockImplementation((event, callback) => {
+        stdoutCallback[event] = callback;
+        return mockSpawn.stdout;
+      });
+
+      mockSpawn.stderr.on.mockImplementation((event, callback) => {
+        stderrCallback[event] = callback;
+        return mockSpawn.stderr;
+      });
+
+      mockSpawn.on.mockImplementation((event, callback) => {
+        closeCallback[event] = callback;
+        return mockSpawn;
+      });
+
+      // Execute
+      const predictPromise = predictDisease(req, res, next);
+
+      // Simulate Python process error and failure
+      stderrCallback.data(
+        Buffer.from('FileNotFoundError: No such file or directory')
+      );
+
+      // Need to emit the close event with error code to complete the function execution
+      closeCallback.close(1);
+
+      // Wait for the function to complete
+      await predictPromise;
+
+      // Assert
+      expect(next).toHaveBeenCalled();
+      const error = next.mock.calls[0][0];
+      expect(error).toBeInstanceOf(AppError);
+      expect(error.message).toContain('Can not find the neccessary model');
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.json).not.toHaveBeenCalled();
     });
   });
 });
