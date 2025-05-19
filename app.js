@@ -1,7 +1,7 @@
 const express = require('express');
 const sessions = require('express-session');
 const path = require('path');
-
+const scheduleController = require('./backend/controllers/scheduleController.js');
 const apiRouter = require('./backend/routers/apiRoutes.js');
 const renderRouter = require('./backend/routers/renderRoute.js');
 const globalErrorHandler = require('./backend/controllers/errorController.js');
@@ -36,6 +36,7 @@ app.use(express.static(path.join(__dirname, `frontend`)));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(scheduleController.cancelAppointment);
 app.use('/api', limiter);
 
 app.use('/', renderRouter);

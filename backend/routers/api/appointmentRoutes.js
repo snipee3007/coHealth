@@ -2,8 +2,6 @@ const express = require('express');
 const authController = require('../../controllers/authController.js');
 const appointmentController = require('./../../controllers/appointmentController.js');
 const userAppointmentController = require('./../../controllers/userAppointmentController.js');
-const appointment = require('../../models/appointments_schema.js');
-
 const router = express.Router();
 
 // Create new appointment
@@ -31,6 +29,7 @@ router.get(
 router.post(
   '/sendEmail',
   authController.protect,
+  authController.restrictToAPI(['doctor', 'admin']),
   userAppointmentController.sendEmail
 );
 
@@ -41,4 +40,5 @@ router
     authController.restrictToAPI(['admin']),
     appointmentController.deleteAppointment
   );
+
 module.exports = router;

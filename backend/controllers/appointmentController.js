@@ -17,6 +17,7 @@ exports.createAppointment = catchAsync(async (req, res, next) => {
   }
 
   const userID = req.user ? req.user._id : null;
+  console.log(req.body.time);
   const appointment = await Appointment.create({
     fullname: req.body.fullname,
     email: req.body.email,
