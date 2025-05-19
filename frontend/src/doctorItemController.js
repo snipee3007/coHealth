@@ -24,6 +24,7 @@ class DoctorItem {
           }
         } catch (err) {
           Loader.destroy();
+          console.log(err);
           renderPopup(
             err.response.status,
             'Create chat room',

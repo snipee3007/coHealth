@@ -283,6 +283,7 @@ class Appointment {
         document
           .querySelectorAll('.timeButton')
           .forEach((button) => ableButtonDate(button));
+
         const schedule = document.querySelector('input[name="schedule"]').value;
         const now = new Date(Date.now());
         const pickedDate = new Date(
@@ -339,15 +340,13 @@ class Appointment {
                     pickedDate.getMonth() + 1
                   }-${pickedDate.getDate()} ${hours}:${minutes}`
                 );
+                console.log(buttonDate.getHours());
                 if (buttonDate.getHours() < 10) {
                   disableButtonDate(button);
                 }
               });
             }
           }
-          document
-            .querySelectorAll('.timeButton')
-            .forEach((button) => ableButtonDate(button));
         }
 
         // filter out already booked appointment of other user

@@ -24,6 +24,8 @@ exports.createChatRoom = catchAsync(async (req, res, next) => {
     return next(new AppError('Can not found user with provided slug!', 400));
   } else if (secondUser.role !== 'doctor') {
     return next(new AppError('The room must have at most 1 doctor!', 400));
+  } else if (firstUser.slug == secondUser.slug) {
+    return next(new AppError('Hey! You can not talk to yourself!', 400));
   } else {
     const room = await ChatRoom.findOne({
       memberID: { $all: [firstUser._id, secondUser._id] },
