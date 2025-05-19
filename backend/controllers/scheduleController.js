@@ -31,11 +31,9 @@ exports.cancelAppointment = function (req, res, next) {
             }),
             email: appointment.email,
           });
-          console.log(res);
           await Appointment.findByIdAndUpdate(appointment.id, { status: 0 });
         }
       }
-      console.log(appointments);
     } catch (err) {
       console.log(err);
     }
