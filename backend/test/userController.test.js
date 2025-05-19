@@ -361,39 +361,39 @@ describe('usersController', () => {
       await usersController.deleteUser(req, res, next);
 
       // Log what's happening
-      console.log('========== DIAGNOSTIC INFORMATION ==========');
-      console.log(
-        'deleteUser was called:',
-        deleteUserSpy.mock.calls.length > 0
-      );
-      console.log('User.findOne calls:', User.findOne.mock.calls);
-      console.log(
-        'Appointment.deleteMany calls:',
-        Appointment.deleteMany.mock.calls
-      );
-      console.log(
-        'CalculateHistory.deleteMany calls:',
-        CalculateHistory.deleteMany.mock.calls
-      );
-      console.log('ChatRoom.deleteMany calls:', ChatRoom.deleteMany.mock.calls);
-      console.log('ChatLog.deleteMany calls:', ChatLog.deleteMany.mock.calls);
-      console.log('Comment.deleteMany calls:', Comment.deleteMany.mock.calls);
-      console.log(
-        'Notification.deleteMany calls:',
-        Notification.deleteMany.mock.calls
-      );
-      console.log(
-        'SymptomHistory.deleteMany calls:',
-        SymptomHistory.deleteMany.mock.calls
-      );
-      console.log(
-        'User.findOneAndDelete calls:',
-        User.findOneAndDelete.mock.calls
-      );
-      console.log('rimraf.manual calls:', rimraf.manual.mock.calls);
-      console.log('next function calls:', next.mock.calls);
-      console.log('res.status calls:', res.status.mock.calls);
-      console.log('res.json calls:', res.json.mock.calls);
+      // console.log('========== DIAGNOSTIC INFORMATION ==========');
+      // console.log(
+      //   'deleteUser was called:',
+      //   deleteUserSpy.mock.calls.length > 0
+      // );
+      // console.log('User.findOne calls:', User.findOne.mock.calls);
+      // console.log(
+      //   'Appointment.deleteMany calls:',
+      //   Appointment.deleteMany.mock.calls
+      // );
+      // console.log(
+      //   'CalculateHistory.deleteMany calls:',
+      //   CalculateHistory.deleteMany.mock.calls
+      // );
+      // console.log('ChatRoom.deleteMany calls:', ChatRoom.deleteMany.mock.calls);
+      // console.log('ChatLog.deleteMany calls:', ChatLog.deleteMany.mock.calls);
+      // console.log('Comment.deleteMany calls:', Comment.deleteMany.mock.calls);
+      // console.log(
+      //   'Notification.deleteMany calls:',
+      //   Notification.deleteMany.mock.calls
+      // );
+      // console.log(
+      //   'SymptomHistory.deleteMany calls:',
+      //   SymptomHistory.deleteMany.mock.calls
+      // );
+      // console.log(
+      //   'User.findOneAndDelete calls:',
+      //   User.findOneAndDelete.mock.calls
+      // );
+      // console.log('rimraf.manual calls:', rimraf.manual.mock.calls);
+      // console.log('next function calls:', next.mock.calls);
+      // console.log('res.status calls:', res.status.mock.calls);
+      // console.log('res.json calls:', res.json.mock.calls);
       expect(User.findOne).toHaveBeenCalled();
     });
 
