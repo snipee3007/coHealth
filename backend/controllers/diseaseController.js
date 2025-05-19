@@ -197,6 +197,4 @@ exports.predictDisease = catchAsync(async (req, res, next) => {
       raw_predictions: predictions,
     });
   });
-
-  next(new AppError('Unknown Error on Predict Disease', 500));
 });

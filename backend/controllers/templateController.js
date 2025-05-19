@@ -21,7 +21,7 @@ exports.getNewsTemplate = catchAsync(async (req, res, next) => {
 });
 
 exports.getNewsItemTemplate = catchAsync(async (req, res, next) => {
-  console.log(req.news);
+  // console.log(req.news);
   res.status(200).render('newsItem', {
     title: 'News',
     news: req.news,
