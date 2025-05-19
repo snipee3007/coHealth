@@ -1,4 +1,5 @@
 const catchAsync = require('./../utils/catchAsync.js');
+const AppError = require('./../utils/appError.js');
 const Appointment = require('../models/appointments_schema.js');
 const User = require('../models/users_schema.js');
 const crypto = require('crypto');
@@ -8,37 +9,25 @@ function generateToken() {
 }
 
 exports.createAppointment = catchAsync(async (req, res, next) => {
-  const doctors = await User.find({
-    fullname: req.body.docFullname,
-  }).populate({ path: 'doctorInfo' });
-  if (!doctors) {
+  const doctor = await User.findById(req.body.doctorID).populate({
+    path: 'doctorInfo',
+  });
+  if (!doctor) {
     return next(new AppError('Can not find this doctor!', 400));
   }
-  const matchDoctor = doctors.find(
-    (doctor) =>
-      doctor.doctorInfo[0] && doctor.doctorInfo[0].major === req.body.specialty
-  );
-  if (!matchDoctor) {
-    return next(
-      new AppError(
-        'Can not find this doctor because the provide major is different!',
-        400
-      )
-    );
-  } else {
-    const userID = req.user ? req.user._id : null;
-    const appointment = await Appointment.create({
-      fullname: req.body.fullname,
-      email: req.body.email,
-      phoneNumber: req.body.phoneNumber,
-      doctorID: matchDoctor._id,
-      time: req.body.time,
-      reason: req.body.reason,
-      userID: userID,
-      appointmentCode: generateToken(),
-    });
-    returnData(req, res, 200, appointment);
-  }
+
+  const userID = req.user ? req.user._id : null;
+  const appointment = await Appointment.create({
+    fullname: req.body.fullname,
+    email: req.body.email,
+    phoneNumber: req.body.phoneNumber,
+    doctorID: req.body.doctorID,
+    time: req.body.time,
+    reason: req.body.reason,
+    userID: userID,
+    appointmentCode: generateToken(),
+  });
+  returnData(req, res, 200, appointment);
 });
 
 // hàm này query để tìm coi có trùng giờ ông bác sĩ đó không => tìm những cái cuộc hẹn nó có thời gian xa hơn Date.now() thui
@@ -73,4 +62,20 @@ exports.deleteAppointment = catchAsync(async (req, res, next) => {
     return next(
       new AppError('Can not find appointment with provided id!', 400)
     );
+});
+
+exports.getBookedAppointment = catchAsync(async (req, res, next) => {
+  const { doctorID, email } = req.query;
+  const personalBookedAppointment = await Appointment.find({
+    doctorID,
+    email,
+    time: { $gte: Date.now() },
+  });
+  if (personalBookedAppointment.length > 0) {
+  }
+  const bookedAppointment = await Appointment.find({
+    doctorID,
+    time: { $gte: Date.now() },
+  });
+  returnData(req, res, 200, { personalBookedAppointment, bookedAppointment });
 });

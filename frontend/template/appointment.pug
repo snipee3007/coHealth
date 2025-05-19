@@ -33,12 +33,12 @@ block body
             .flex.flex-col
                 label.text-2xl.font-semibold.my-4(for="major") Specialty 
                 select#specialtyList.border-1.p-2.bg-gray-200.rounded-xl(title='List of Speciality' required)
-                    option(value = 'noInfo' name='specialty' disabled selected) Please select a specialty first
+                    option(value='' name='specialty' disabled selected) Please select a specialty first
                     each major in majors 
                         option(value=major)= major 
                 label.text-2xl.font-semibold.my-4(for="doctor") Doctor
                 select#doctorList.border-1.p-2.bg-gray-200.rounded-xl(title='List of Doctor' required)
-                    option(value='noInfo' name='doctor' disabled selected) Please select a doctor first
+                    option(value='' name='doctor' disabled selected) Please select a doctor first
                     //- thêm các doctor vô đây
                 label.text-2xl.font-semibold.my-4(for="doctor") Reason
                 textarea.border-1.p-2.bg-gray-200.rounded-xl(name="reason", cols="30", rows="10", placeholder='Tell your reason in here') 
@@ -90,22 +90,24 @@ block body
             hr.w-full.my-4(class='border-[#9C9991]')
             p.text-2xl.my-6.time Time
             //- tạo các khung lựa chọn giờ ở đây flex-wrap để tự động xuống dòng
-            #listTime.flex.flex-wrap.gap-x-6.gap-y-4.hidden
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 09:00
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 09:30
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 10:00
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 10:30
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 11:00
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 11:30
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 13:00
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 13:30
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 14:00
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 14:30
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 15:00
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 15:30
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 16:00
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 16:30
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 17:00
-                button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer(type="button") 17:30
+            #listTime.hidden
+                p.mt-4.notice.hidden
+                .timeButtonContainer.flex.flex-wrap.gap-x-6.gap-y-4
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 07:00
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 07:30
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 08:00
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 08:30
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 09:00
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 09:30
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 10:00
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 10:30
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 11:00
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 11:30
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 13:00
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 13:30
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 14:00
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 14:30
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 15:00
+                    button.bg-gray-200.text-center.px-6.py-2.border-1.rounded-xl.cursor-pointer.timeButton(type="button") 15:30
             img(src='./../images/png/appointment.png' alt="appointment-background")
 

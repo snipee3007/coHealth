@@ -7,7 +7,7 @@ const sendAppointment = async function (data) {
     Loader.create();
     const res = await axios({
       method: 'POST',
-      url: '/api/appointment/create',
+      url: '/api/appointment',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -32,22 +32,42 @@ const sendAppointment = async function (data) {
   }
 };
 
-function ableButtonDate(i) {
-  document
-    .querySelector('#listTime')
-    .children[i].classList.remove('cursor-not-allowed');
-  document
-    .querySelector('#listTime')
-    .children[i].classList.remove('opacity-20');
-  document.querySelector('#listTime').children[i].disabled = false;
+function renderNotificationButtonDate() {
+  const buttons = document.querySelectorAll('.timeButton');
+
+  if (
+    buttons.length ==
+    Array.from(buttons).filter((button) => button.disabled == true).length
+  ) {
+    document.querySelector(
+      '#listTime .notice'
+    ).innerHTML = `No available time! Please choose another day.`;
+    document.querySelector('#listTime .notice').classList.remove('hidden');
+    document
+      .querySelector('#listTime .timeButtonContainer')
+      .classList.add('hidden');
+  } else {
+    document.querySelector('#listTime .notice').classList.add('hidden');
+    document
+      .querySelector('#listTime .timeButtonContainer')
+      .classList.remove('hidden');
+  }
 }
 
-function disableButtonDate(i) {
-  document
-    .querySelector('#listTime')
-    .children[i].classList.add('cursor-not-allowed');
-  document.querySelector('#listTime').children[i].classList.add('opacity-20');
-  document.querySelector('#listTime').children[i].disabled = true;
+function ableButtonDate(button) {
+  button.classList.remove('cursor-not-allowed');
+  button.classList.remove('opacity-20');
+  button.classList.add('cursor-pointer');
+  button.disabled = false;
+  renderNotificationButtonDate();
+}
+
+function disableButtonDate(button) {
+  button.classList.add('cursor-not-allowed');
+  button.classList.add('opacity-20');
+  button.classList.remove('cursor-pointer');
+  button.disabled = true;
+  renderNotificationButtonDate();
 }
 
 let arrayTime = [];
@@ -76,17 +96,31 @@ for (let i = 9; i <= 17; i++) {
 }
 class Appointment {
   #time;
-  #listBooked;
+  #bookedAppointment;
   constructor() {
+    this.#renderUserInfo();
+
     this.#listSpecialityAndDoctor();
-    this.#listTime();
+    this.#appointmentTimeManagement();
     this.#getTimeButton();
     this.#sendForm();
     this.#time = '';
-    this.#listBooked = [];
-    this.#getListBooked();
     this.#numberOnlyField();
   }
+
+  #renderUserInfo() {
+    const emailInput = document.querySelector('input[name="email"]');
+    const fullnameInput = document.querySelector('input[name="fullname"]');
+    const phoneNumberInput = document.querySelector(
+      'input[name="phoneNumber"]'
+    );
+    if (!emailInput.value) emailInput.value = localStorage.getItem('email');
+    if (!fullnameInput.value)
+      fullnameInput.value = localStorage.getItem('fullname');
+    if (!phoneNumberInput.value)
+      phoneNumberInput.value = localStorage.getItem('phoneNumber');
+  }
+
   #numberOnlyField() {
     const numberOnlyFields = document.querySelectorAll('.numberOnly');
     numberOnlyFields.forEach((field) => {
@@ -119,177 +153,6 @@ class Appointment {
             e.target.setCustomValidity('');
           }
         });
-      });
-    });
-  }
-
-  async #getListBooked() {
-    Loader.create();
-    const res = await axios({
-      method: 'GET', // viết hoa
-      url: `/api/appointment/get`,
-    });
-    Loader.destroy();
-    const appointments = res.data.data;
-    // de coi la luu vao db co can luu doctorID khong hay luu doctorFullname voi doctorSpecialty thoi
-    appointments.forEach((appointment) =>
-      this.#listBooked.push({
-        fullname: appointment.doctorID.fullname,
-        specialty: appointment.doctorID.doctorInfo[0].major,
-        time: new Date(appointment.time),
-      })
-    );
-    // console.log(this.#listBooked);
-  }
-
-  #listTime() {
-    // chuyển cái input date biến mất khi chọn lại specialty
-    document.querySelector('#specialtyList').addEventListener('change', () => {
-      document.querySelector('input[name="schedule"]').value = '';
-      document.querySelector('#doctorList').value = 'noInfo';
-      document.querySelector('#listTime').classList.add('hidden');
-    });
-
-    const submitDatePicker = document.querySelector('.submitDatepicker');
-    // chọn xong doctor rồi mới hiện lịch cho xài
-    document.querySelector('#doctorList').addEventListener('change', (e) => {
-      document.querySelector('#datepicker').disabled = false;
-      document.querySelector('input[name="schedule"]').value = '';
-
-      submitDatePicker.addEventListener('click', (e) => {
-        const listTime = document.querySelector('#listTime');
-        listTime.classList.remove('hidden');
-
-        const schedule = document.querySelector('input[name="schedule"]').value;
-        const today = new Date();
-        const date = new Date(
-          schedule.split('/')[2],
-          schedule.split('/')[1] - 1,
-          schedule.split('/')[0],
-          23,
-          59
-        );
-        // nếu thời điểm đang xét có ngày lớn hơn mình chọn (ví dụ ngày 14 > ngày 13) thì hiện thông báo rằng phải chọn ngày khác vì hết đặt được
-        if (today > date) {
-          // console.log(today - date);
-          listTime.classList.add('hidden');
-          document.querySelectorAll('.notice').forEach((e) => e.remove());
-          document.querySelector('form .time').insertAdjacentHTML(
-            'beforeend',
-            `
-            <p class='mt-4 notice'>Please choose another day.</p>
-          `
-          );
-        }
-        // nếu như ngày hiện tại là chủ nhật thì khỏi tính - hiện luôn bảng hôm nay cho nghỉ
-        else if (date.getDay() === 0) {
-          document.querySelectorAll('.notice').forEach((e) => e.remove());
-          listTime.classList.add('hidden');
-          document.querySelector('form .time').insertAdjacentHTML(
-            'beforeend',
-            `
-            <p class='mt-4 notice'>Doctors are not working this day. Please choose another day.</p>
-          `
-          );
-        } else {
-          // kiểm tra nếu hôm nay là ngày trùng thì xét giờ hiện tại có lố giờ để đặt lịch hay chưa
-          function checkToday() {
-            // tìm kiếm coi cái giờ hiện tại nó nằm ở vị trí nào trong arrayTime
-            let index = arrayTime.findIndex(checkTime);
-            function checkTime(time) {
-              return time > today;
-            }
-            // nếu giờ hiện tại nó lố giờ trong arrayTime thì
-            if (index == -1) {
-              document.querySelectorAll('.notice').forEach((e) => e.remove());
-              listTime.classList.add('hidden');
-              // console.log(document.querySelector('form .time'))
-              document.querySelector('form .time').insertAdjacentHTML(
-                'beforeend',
-                `
-                <p class='mt-4 notice'>Please choose another day.</p>
-              `
-              );
-            } else {
-              document.querySelectorAll('.notice').forEach((e) => e.remove());
-              if (date.getDay() === 6) {
-                if (index >= 5) {
-                  document.querySelector('form .time').insertAdjacentHTML(
-                    'beforeend',
-                    `
-                    <p class='mt-4 notice'>Please choose another day.</p>
-                  `
-                  );
-                } else {
-                  for (index; index >= 0; index--) {
-                    disableButtonDate(index);
-                  }
-                  for (let i = 6; i < listTime.children.length; i++) {
-                    disableButtonDate(i);
-                  }
-                }
-              } else {
-                for (index; index >= 0; index--) {
-                  disableButtonDate(index);
-                }
-                listTime.classList.remove('hidden');
-              }
-            }
-          }
-          // reset lại tất cả đều chọn được
-          for (let i = 0; i < listTime.children.length; i++) {
-            ableButtonDate(i);
-          }
-          // bắt đầu xét với cùng bác sĩ, cùng chuyên môn, cùng ngày thì 0 được xài nút này
-          const listAppointment = this.#listBooked.filter(
-            (appointment) =>
-              appointment.specialty ==
-                document.querySelector('#specialtyList').value &&
-              appointment.fullname ==
-                document.querySelector('#doctorList').value
-          );
-          listAppointment.forEach((appointment) => {
-            if (
-              appointment.time.getDate() === date.getDate() &&
-              Math.abs(date - appointment.time) / 1000 < 2592000
-            ) {
-              let hour =
-                appointment.time.getHours() === 9
-                  ? '09'
-                  : appointment.time.getHours();
-              let minute = appointment.time.getMinutes() == 0 ? '00' : '30';
-              let time = hour + ':' + minute;
-              // lặp qua các nút, coi cái nào trùng giờ thì cho disabled
-              // console.log(time);
-              document
-                .querySelectorAll('#listTime button')
-                .forEach((button) => {
-                  if (button.textContent.trim() === time) {
-                    button.disabled = true;
-                    button.classList.add('cursor-not-allowed');
-                    button.classList.add('opacity-20');
-                  }
-                });
-            }
-          });
-          // vô điều kiện check cùng ngày để thực hiện hàm checkToday
-          if (
-            date.getDate() === today.getDate() &&
-            Math.abs(date - today) / 1000 < 2592000
-          ) {
-            checkToday();
-          }
-          // nếu không ngày thì
-          else {
-            // nếu vô ngày thứ 7
-            if (date.getDay() === 6) {
-              for (let i = 6; i < listTime.children.length; i++) {
-                disableButtonDate(i);
-              }
-            }
-            document.querySelectorAll('.notice').forEach((e) => e.remove());
-          }
-        }
       });
     });
   }
@@ -332,7 +195,7 @@ class Appointment {
       );
       // console.log(date);
       const specialty = document.querySelector('#specialtyList').value;
-      const docFullname = document.querySelector('#doctorList').value;
+      const doctorID = document.querySelector('#doctorList').value;
       const fullname = document.querySelector('input[name="fullname"]').value;
       const email = document.querySelector('input[name="email"]').value;
       const phoneNumber = document.querySelector(
@@ -341,50 +204,239 @@ class Appointment {
       const reason = document
         .querySelector('textarea[name="reason"]')
         .value.trim();
+
+      localStorage.setItem('email', email);
+      localStorage.setItem('phoneNumber', phoneNumber);
+      localStorage.setItem('fullname', fullname);
+
       const objAppointment = {
         time: date,
-        specialty: specialty,
-        docFullname: docFullname,
-        fullname: fullname,
-        email: email,
-        phoneNumber: phoneNumber,
-        reason: reason,
+        specialty,
+        doctorID,
+        fullname,
+        email,
+        phoneNumber,
+        reason,
       };
       sendAppointment(objAppointment);
     });
   }
 
-  async #listSpecialityAndDoctor() {
-    // canh rồi sửa lại distinct cho cái này
+  #listSpecialityAndDoctor() {
     let speciality = document.querySelector('#specialtyList');
-    let doctor = document.querySelector('#doctorList');
 
-    // document.querySelector('').innerHTML = ''
-    // lấy dữ liệu spec ở trên để lập list bác sĩ
     speciality.addEventListener('change', async function (e) {
-      Loader.create();
-      const doctorData = await axios({
-        method: 'GET',
-        url: `/api/doctor`,
-        params: {
-          major: e.target.value,
-        },
-      });
-      Loader.destroy();
-      const elements = document.querySelectorAll('.delete');
+      const doctorData = await fetchDoctorMajor(e.target.value);
+      const elements = document.querySelectorAll('.doctorListItem');
       elements.forEach((element) => {
         element.remove();
       });
-      doctorData.data.data.forEach((doc) => {
-        doctor.insertAdjacentHTML(
-          'beforeend',
-          `
-          <option value='${doc.fullname}' class='delete'>${doc.fullname}</option>
-        `
-        );
+      doctorData.forEach((doc) => {
+        const option = document.createElement('option');
+        option.value = doc.id;
+        option.classList.add('doctorListItem');
+        option.textContent = doc.fullname;
+        const doctorContainer = document.querySelector('#doctorList');
+        doctorContainer.append(option);
       });
     });
   }
+
+  #appointmentTimeManagement() {
+    // chuyển cái input date biến mất khi chọn lại specialty
+    document.querySelector('#specialtyList').addEventListener('change', () => {
+      document.querySelector('input[name="schedule"]').value = '';
+      document.querySelector('#doctorList').value = '';
+      document.querySelector('#listTime').classList.add('hidden');
+    });
+
+    // chọn xong doctor rồi mới hiện lịch cho xài
+    document.querySelector('#doctorList').addEventListener('change', (e) => {
+      document.querySelector('#datepicker').disabled = false;
+      document.querySelector('input[name="schedule"]').value = '';
+    });
+
+    // Check every time doctor change
+    const doctorContainer = document.querySelector('#doctorList');
+    doctorContainer.addEventListener(
+      'change',
+      async function (e) {
+        const email = document.querySelector('input[name="email"]');
+        const bookedAppointment = await fetchAvailableAppointmentTime(
+          e.target.value,
+          email.value
+        );
+        this.#bookedAppointment = bookedAppointment;
+        console.log(this.#bookedAppointment);
+      }.bind(this)
+    );
+    const submitDatePicker = document.querySelector('.submitDatepicker');
+
+    submitDatePicker.addEventListener(
+      'click',
+      function () {
+        const listTime = document.querySelector('#listTime');
+        listTime.classList.remove('hidden');
+        // reset button
+        document
+          .querySelectorAll('.timeButton')
+          .forEach((button) => ableButtonDate(button));
+        const schedule = document.querySelector('input[name="schedule"]').value;
+        const now = new Date(Date.now());
+        const pickedDate = new Date(
+          schedule.split('/')[2],
+          schedule.split('/')[1] - 1,
+          schedule.split('/')[0]
+        );
+
+        // filter out if pickedDate is currently today
+        if (
+          pickedDate.getDate() == now.getDate() &&
+          pickedDate.getMonth() == now.getMonth() &&
+          pickedDate.getFullYear() == now.getFullYear()
+        ) {
+          document.querySelectorAll('.timeButton').forEach((button) => {
+            const [hours, minutes] = button.textContent.split(':');
+            const buttonDate = new Date(
+              `${pickedDate.getFullYear()}-${
+                pickedDate.getMonth() + 1
+              }-${pickedDate.getDate()} ${hours}:${minutes}`
+            );
+            if (
+              now.getTime() + 1000 * 60 * 60 * 3 >= buttonDate.getTime() ||
+              buttonDate.getHours() < 10
+            ) {
+              disableButtonDate(button);
+            }
+          });
+        }
+
+        // filter out if pickedDate is previous date
+        else if (pickedDate.getTime() < now.getTime()) {
+          document
+            .querySelectorAll('.timeButton')
+            .forEach((button) => disableButtonDate(button));
+        }
+
+        // filter out based on some condition if pickedDate is in the future
+        else {
+          const nextDay = new Date(
+            `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() + 1}`
+          );
+          if (
+            pickedDate.getDate() == nextDay.getDate() &&
+            pickedDate.getMonth() == nextDay.getMonth() &&
+            pickedDate.getFullYear() == nextDay.getFullYear()
+          ) {
+            // filter out if currently booking time has past 22:00 PM
+            if (now.getHours() >= 22) {
+              document.querySelectorAll('.timeButton').forEach((button) => {
+                const [hours, minutes] = button.textContent.split(':');
+                const buttonDate = new Date(
+                  `${pickedDate.getFullYear()}-${
+                    pickedDate.getMonth() + 1
+                  }-${pickedDate.getDate()} ${hours}:${minutes}`
+                );
+                if (buttonDate.getHours() < 10) {
+                  disableButtonDate(button);
+                }
+              });
+            }
+          }
+          document
+            .querySelectorAll('.timeButton')
+            .forEach((button) => ableButtonDate(button));
+        }
+
+        // filter out already booked appointment of other user
+        const bookedAppointment = this.#bookedAppointment.bookedAppointment;
+        bookedAppointment.forEach((appointment) => {
+          const time = new Date(appointment.time);
+          if (
+            time.getDate() == pickedDate.getDate() &&
+            time.getMonth() == pickedDate.getMonth() &&
+            time.getFullYear() == pickedDate.getFullYear()
+          ) {
+            document.querySelectorAll('.timeButton').forEach((button) => {
+              const [hours, minutes] = button.textContent.split(':');
+              if (time.getHours() == hours && time.getMinutes() == minutes) {
+                disableButtonDate(button);
+              }
+            });
+          }
+        });
+
+        // filter out already booked appointment of current user
+        const personalBookedAppointment =
+          this.#bookedAppointment.personalBookedAppointment;
+        personalBookedAppointment.forEach((appointment) => {
+          const time = new Date(appointment.time);
+          if (
+            time.getDate() == pickedDate.getDate() &&
+            time.getMonth() == pickedDate.getMonth() &&
+            time.getFullYear() == pickedDate.getFullYear()
+          ) {
+            document.querySelectorAll('.timeButton').forEach((button) => {
+              const [hours, minutes] = button.textContent.split(':');
+              const buttonDate = new Date(
+                `${pickedDate.getFullYear()}-${
+                  pickedDate.getMonth() + 1
+                }-${pickedDate.getDate()} ${hours}:${minutes}`
+              );
+              console.log(time, buttonDate);
+              if (
+                time.getTime() - 1000 * 60 * 60 <= buttonDate.getTime() &&
+                time.getTime() + 1000 * 60 * 60 >= buttonDate.getTime()
+              ) {
+                disableButtonDate(button);
+              }
+            });
+          }
+        });
+      }.bind(this)
+    );
+  }
 }
+
+const fetchDoctorMajor = async function (major) {
+  try {
+    Loader.create();
+    const doctorData = await axios({
+      method: 'GET',
+      url: `/api/doctor`,
+      params: { major },
+    });
+    Loader.destroy();
+    return doctorData.data.data;
+  } catch (err) {
+    Loader.destroy();
+    renderPopup(
+      err.response.status,
+      'Fetch Doctor Data',
+      err.response.data.message
+    );
+  }
+};
+
+const fetchAvailableAppointmentTime = async function (doctorID, email) {
+  try {
+    Loader.create();
+    const doctorData = await axios({
+      method: 'GET',
+      url: `/api/appointment/booked`,
+      params: { doctorID, email },
+    });
+    Loader.destroy();
+    return doctorData.data.data;
+  } catch (err) {
+    console.log(err);
+    Loader.destroy();
+    renderPopup(
+      err.response.status,
+      'Fetch Doctor Data',
+      err.response.data.message
+    );
+  }
+};
 
 new Appointment();

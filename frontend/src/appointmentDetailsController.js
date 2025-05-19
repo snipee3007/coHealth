@@ -4,8 +4,8 @@ const updateStatusAppointment = async function (appointmentCode, status) {
   try {
     Loader.create();
     const res = await axios({
-      method: 'POST',
-      url: '/api/appointment/update',
+      method: 'update',
+      url: '/api/appointment',
       data: {
         appointmentCode,
         status,

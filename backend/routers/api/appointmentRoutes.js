@@ -6,23 +6,16 @@ const appointment = require('../../models/appointments_schema.js');
 
 const router = express.Router();
 
-// tạo appointment mới
-router.post(
-  '/create',
-  authController.isSignedIn,
-  appointmentController.createAppointment
-);
+// Create new appointment
+router
+  .route('/')
+  .post(authController.isSignedIn, appointmentController.createAppointment);
 
-// lấy dữ tất cả các appointment để làm cái khóa giờ appointment
-router.get(
-  '/get',
-  authController.isSignedIn,
-  appointmentController.getAllAppointment
-);
+router.route('/booked').get(appointmentController.getBookedAppointment);
 
 // chỉ cho bác sĩ chọn là đồng ý hoặc 0 đồng ý cuộc hẹn
-router.post(
-  '/update',
+router.patch(
+  '/',
   authController.protect,
   userAppointmentController.updateAppointment
 );
