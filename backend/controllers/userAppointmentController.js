@@ -3,6 +3,7 @@ const Appointment = require('../models/appointments_schema.js');
 const User = require('../models/users_schema.js');
 const nodemailer = require('nodemailer');
 const AppError = require('../utils/appError');
+const Notification = require('../models/notificationSchema.js');
 
 const dotenv = require('dotenv');
 const returnData = require('../utils/returnData.js');
@@ -98,6 +99,24 @@ exports.getAppointment = catchAsync(async (req, res, next) => {
     const totalPages = Math.ceil(allAppointments.length / 5);
     req.appointments = appointments;
     req.totalPages = totalPages;
+    for (let i = 0; i < allAppointments.length; ++i) {
+      const appointment = allAppointments[i];
+      const notifications = await Notification.find({
+        appointment: appointment.id,
+      });
+      for (let j = 0; j < notifications.length; ++j) {
+        const notification = notifications[j];
+        await Notification.findByIdAndUpdate(
+          notification.id,
+          {
+            $set: {
+              'to.$[element].haveRead': true,
+            },
+          },
+          { arrayFilters: [{ 'element.targetID': req.user._id }] }
+        );
+      }
+    }
   }
   next();
 });

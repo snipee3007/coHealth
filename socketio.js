@@ -138,6 +138,16 @@ io.on('connection', async (socket) => {
       await fetchNotification(socket.broadcast);
     });
 
+    // Appointment Notification
+    socket.on('newAppointment', async (doctorID, appointmentID) => {
+      await socketServerController.notificationOnNewAppointment(
+        currentUser.id,
+        doctorID,
+        appointmentID
+      );
+      await fetchNotification(socket.broadcast);
+    });
+
     // Render Notification
     socket.on('renderNotification', async (userID, cb) => {
       if (userID) {

@@ -4,6 +4,7 @@ const Appointment = require('../models/appointments_schema.js');
 const User = require('../models/users_schema.js');
 const crypto = require('crypto');
 const returnData = require('../utils/returnData.js');
+
 function generateToken() {
   return crypto.randomBytes(16).toString('hex'); // 16 bytes = 32 ký tự hex
 }

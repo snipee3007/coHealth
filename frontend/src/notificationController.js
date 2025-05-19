@@ -26,6 +26,8 @@ class Notification {
           );
         } else if (notification.dataset['type'] == 'message') {
           readNotification(notification.dataset['id'], `/chat`);
+        } else if (notification.dataset['type'] == 'appointment') {
+          readNotification(notification.dataset['id'], `/appointment/list`);
         }
       }
     });

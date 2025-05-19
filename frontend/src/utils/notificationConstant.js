@@ -23,6 +23,13 @@ class Notification {
       message: `News with title "${newsTitle}" has been published! Read it now!`,
     };
   }
+
+  newAppointment() {
+    return {
+      type: 'appointment-create',
+      message: `New appointment has been booked! Check it now!`,
+    };
+  }
   newMessage(nameList) {
     return {
       type: 'message',

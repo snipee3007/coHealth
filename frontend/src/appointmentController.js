@@ -1,5 +1,6 @@
 import { renderPopup } from './utils/popup.js';
 import Loader from './utils/loader.js';
+import Socket from './socketController.js';
 
 const sendAppointment = async function (data) {
   try {
@@ -14,6 +15,7 @@ const sendAppointment = async function (data) {
       data,
     });
     if (res.data.status == 'success') {
+      Socket.newAppointment(res.data.data.doctorID, res.data.data.id);
       renderPopup(
         res.status,
         'Creating appointment',

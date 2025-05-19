@@ -52,6 +52,7 @@ const notificationSchema = new mongoose.Schema(
           'course',
           'news',
           'user',
+          'appointment',
         ],
         message: 'Notification type is unvalid! Please choose another type!',
       },
@@ -88,6 +89,18 @@ const notificationSchema = new mongoose.Schema(
       validate: {
         validator: function (v) {
           if (this.type == 'message') {
+            return !!v;
+          }
+        },
+        message: 'Please input the chatRoomID for this notification!',
+      },
+    },
+    appointment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'appointment',
+      validate: {
+        validator: function (v) {
+          if (this.type == 'appointment') {
             return !!v;
           }
         },

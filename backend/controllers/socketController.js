@@ -3,6 +3,7 @@ const ChatRoom = require('./../models/chatRoom_schema.js');
 const News = require('./../models/news_schema.js');
 const Comment = require('./../models/commentsSchema.js');
 const User = require('./../models/users_schema.js');
+const Appointment = require('./../models/appointments_schema.js');
 
 exports.notificationOnNewMessage = async (senderID, roomCode) => {
   // Find the relevant notification in 1 hours ago
@@ -87,33 +88,45 @@ exports.notificationOnNewComment = async (userID, newsID, content) => {
   }
 };
 
-exports.notificationOnNewReply = async (userID, replyComment, content) => {
-  const comment = await Comment.findById(replyComment);
-  const replyUser = await User.findById(comment.userID);
+exports.notificationOnNewAppointment = async (
+  userID,
+  doctorID,
+  appointmentID
+) => {
+  const appointment = await Appointment.findById(appointmentID);
+  const user = await User.findById(userID);
+  const doctor = await User.findById(doctorID);
   const searchNoti = await Notification.findOne({
-    type: 'reply-comment',
-    'to.targetID': replyUser._id,
-    newsID: comment.newsID,
+    type: 'appointment',
+    'to.targetID': doctor._id,
+    appointmentID: appointment.id,
     updatedAt: { $gte: new Date(Date.now() - 1000 * 60 * 60) },
   });
-  let data;
+
   if (searchNoti) {
-    data = await Notification.findOneAndUpdate(
+    await Notification.findOneAndUpdate(
       {
-        type: 'reply-comment',
-        'to.targetID': replyUser._id,
-        newsID: comment.newsID,
+        type: 'appointment',
+        'to.targetID': doctor._id,
+        appointmentID: appointment.id,
         updatedAt: { $gte: new Date(Date.now() - 1000 * 60 * 60) },
       },
-      { updatedAt: Date.now(), content, $addToSet: { from: userID } }
+      {
+        updatedAt: Date.now(),
+        content,
+        $addToSet: { from: user.id },
+        $set: {
+          'to.$[element].haveRead': false,
+        },
+      },
+      { arrayFilters: [{ 'element.targetID': user.id }] }
     );
   } else {
-    data = await Notification.create({
-      type: 'reply-comment',
-      from: userID,
-      to: { targetID: replyUser._id },
-      content: content,
-      newsID: comment.newsID,
+    await Notification.create({
+      type: 'appointment',
+      from: user.id,
+      to: { targetID: doctor.id },
+      appointment: appointment.id,
     });
   }
 };
