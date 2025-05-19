@@ -52,7 +52,7 @@ block append header
 
 block body
     .min-h-screen
-        .mealPopup.overlay.w-full.min-h-full.absolute.z-30(class='bg-black/50').hidden
+        #mealPopup.mealPopup.overlay.w-full.min-h-full.absolute.z-30(class='bg-black/50').hidden
             .mealPopupContainer.popupContainer(class='w-1/2 bg-[#D9D9D9] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2').flex.flex-1.absolute.rounded-xl.opacity-0.pointer-events-none.duration-200
                 svg.absolute.z-30.h-6.w-6.top-4.left-6.cursor-pointer.closeButton
                     use(href='/images/png/icons.svg#closeButton')
@@ -75,7 +75,7 @@ block body
                                 td 
                                     a.moreInfoLink.font-bold.text-blue-600(target="_blank" href="") Click Here!
 
-        .exercisePopup.overlay.w-full.min-h-full.absolute.z-30(class='bg-black/50').hidden
+        #exercisePopup.exercisePopup.overlay.w-full.min-h-full.absolute.z-30(class='bg-black/50').hidden
             .exercisePopupContainer.popupContainer(class='w-2/3 bg-[#D9D9D9] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2').flex.flex-1.absolute.rounded-xl.opacity-0.pointer-events-none.duration-200
                 svg.absolute.z-30.h-6.w-6.top-4.left-6.cursor-pointer.closeButton
                     use(href='/images/png/icons.svg#closeButton')

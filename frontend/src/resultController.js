@@ -380,6 +380,7 @@ class Result {
           document
             .querySelector('.mealPopupContainer')
             .classList.remove('opacity-0', 'pointer-events-none');
+          document.querySelector('.mealPopupContainer').scrollIntoView();
         }, 200);
       });
 
@@ -497,6 +498,7 @@ class Result {
             document
               .querySelector('.exercisePopupContainer')
               .classList.remove('opacity-0', 'pointer-events-none');
+            document.querySelector('.exercisePopupContainer').scrollIntoView();
           }, 200);
         }.bind(this)
       );
