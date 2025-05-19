@@ -43,7 +43,7 @@ exports.signUp = catchAsync(async (req, res, next) => {
   // console.log('Received POST request at /signUp');
 
   // Extract user input from request body
-  const {
+  let {
     email,
     password,
     gender,

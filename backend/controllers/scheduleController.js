@@ -79,7 +79,7 @@ const sendEmail = async function (data) {
             <p>Please arrive <strong>15 minutes early</strong> to ensure a smooth check-in process.</p>
         `
             : `
-            <p>We regret to inform you that your appointment request has been <strong style="color: red;">declined</strong>. Please contact us to reschedule.</p>
+            <p>We regret to inform you that your appointment request has been <strong style="color: red;">declined</strong> due to this doctor inactivity. Please contact us to reschedule or you can reschedule using our <a href="cohealth.onrender.com/appointment" target="_blank">website</a> .</p>
         `
         }
         
