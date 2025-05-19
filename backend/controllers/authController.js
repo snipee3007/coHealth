@@ -53,7 +53,10 @@ exports.signUp = catchAsync(async (req, res, next) => {
     image,
   } = req.body;
   // console.log(req.body);
-
+  if (!image) {
+    if (gender == 'male') image = 'menAnonymous.jpg';
+    else if (gender == 'female') image = 'womanAnonymous.jpg';
+  }
   // Perform validation, sanitation, etc.
   if (yearOfBirth > new Date(Date.now()).getFullYear()) {
     return next(
