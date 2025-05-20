@@ -19,7 +19,7 @@ router
   );
 router.route('/forgotPassword').post(authController.forgotPassword);
 router.route('/resetPassword/:token').post(authController.resetPassword);
-
+router.route('/').patch(authController.protect, authController.updatePassword);
 //router.('/forgetPassword', usersController.forgetPassword);
 
 module.exports = router;

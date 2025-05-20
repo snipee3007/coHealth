@@ -125,6 +125,23 @@ exports.getResetPasswordTemplate = (req, res) => {
   });
 };
 
+exports.getChangePasswordTemplate = (req, res, next) => {
+  if (req.user) {
+    res.status(200).render('changePassword', {
+      title: 'Đổi mật khẩu',
+    });
+  } else {
+    res.writeHead(
+      302,
+      'You are not signed in! You will be redirect to homepage!',
+      {
+        location: '/',
+      }
+    );
+    return res.end();
+  }
+};
+
 exports.getProfileTemplate = async (req, res) => {
   res.status(200).render('profile', {
     title: 'User Profile',

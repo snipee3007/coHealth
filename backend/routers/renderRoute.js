@@ -107,6 +107,8 @@ router.get(
   template.getSymptomCheckerTemplate
 );
 
+router.get('/changePassword', template.getChangePasswordTemplate);
+
 router.get(
   '/admin',
   authController.restrictTo(['admin']),
