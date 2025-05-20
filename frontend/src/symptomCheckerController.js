@@ -404,7 +404,7 @@ class SymptomChecker {
             )}</p>
             <p class="font-Roboto p-4 text-xl">Predictions: ${
               dataArray[i][1]
-            }%</p>
+            }</p>
           </button>`;
         document
           .querySelector('#top3Diseases')
