@@ -64,7 +64,6 @@ exports.createHospital = catchAsync(async (req, res, next) => {
   const hospitalIdx = await Hospitals.find({}).distinct('id');
   let idx;
   for (let i = 1; i <= hospitalIdx.length; ++i) {
-    console.log(hospitalIdx.includes(i));
     if (!hospitalIdx.includes(i)) {
       idx = i;
       break;
